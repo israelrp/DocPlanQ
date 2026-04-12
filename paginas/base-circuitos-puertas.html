@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Circuitos cuánticos y puertas elementales | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+  <article class="qubits-article-inner">
+
+          <!-- ═══════════════════════════════════════════════════════════ HERO -->
+          <section id="page-body" class="qubits-hero">
+            <div class="qubits-kicker-with-back">
+              <button type="button" class="doc-back-btn" data-i18n-aria-label="doc.backPrevious" aria-label="Volver a la página anterior" onclick="history.back()">
+                <i class="ph ph-arrow-left" aria-hidden="true"></i>
+              </button>
+              <p class="qubits-kicker qubits-kicker--row">
+                <span class="qubits-kicker-segment">Programación cuántica</span>
+                <span class="qubits-kicker-rule" aria-hidden="true"></span>
+                <span class="qubits-kicker-segment">Informática cuántica</span>
+              </p>
+            </div>
+
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img class="qubits-author-photo" src="../images/author-nogueron-mendez-planq.png" width="56" height="56" alt="Retrato de Noguerón Méndez José Antonio" loading="lazy" decoding="async" />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h1 class="qubits-hero-title">Circuitos cuánticos y puertas elementales: del formalismo unitario a la ejecución en hardware</h1>
+
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                La computación cuántica de circuitos constituye el paradigma dominante para expresar algoritmos cuánticos de forma
+                estructurada, verificable y compilable a dispositivos físicos. En este modelo, la evolución de un registro de
+                \(n\) cúbits se describe como la composición secuencial de <strong>puertas cuánticas</strong> — transformaciones
+                unitarias que actúan sobre uno, dos o, excepcionalmente, tres cúbits — intercaladas con operaciones de medición
+                proyectiva. El circuito resultante codifica una matriz unitaria \(U \in \mathrm{U}(2^n)\) que el sistema físico
+                debe reproducir con la mayor fidelidad posible.
+              </p>
+              <p>
+                Este artículo desarrolla la teoría completa de circuitos cuánticos partiendo del formalismo algebraico del grupo
+                \(\mathrm{SU}(2)\), atravesando la construcción de conjuntos universales de puertas, la descomposición y síntesis
+                de operadores multipartitos, los problemas de transpilación y mapeo de conectividad propios de hardware real, las
+                técnicas de optimización que reducen profundidad y conteo de puertas, los circuitos parametrizados para algoritmos
+                variacionales, y la medición con retroalimentación clásica. El recorrido concluye con la cadena de compilación
+                específica de la plataforma <em>Harmoniq</em>, donde el circuito lógico se traduce a pulsos de microondas sobre
+                procesadores superconductores de las familias Hopper y Hermann.
+              </p>
+              <p>
+                El lector encontrará representaciones matriciales explícitas, demostraciones resumidas de los teoremas clave,
+                ecuaciones de descomposición y ejemplos de circuitos con relevancia algorítmica. El objetivo es proporcionar un
+                documento autocontenido y riguroso que sirva tanto como referencia para investigadores como manual avanzado para
+                ingenieros de software cuántico.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 1. MODELO DE CIRCUITOS -->
+          <section id="modelo-circuitos" class="qubits-section">
+            <h2>1 &middot; Modelo de circuitos cuánticos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Un circuito cuántico sobre \(n\) cúbits es un grafo acíclico dirigido (DAG) cuyos nodos representan operaciones
+                — puertas unitarias, barreras o mediciones — y cuyas aristas codifican dependencias de datos (líneas de cúbit) y
+                dependencias clásicas (bits condicionales). Formalmente, la evolución del estado \(|\psi_0\rangle\) a
+                \(|\psi_f\rangle\) se expresa como
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi_f\rangle \;=\; U_L \cdots U_2\, U_1 \;|\psi_0\rangle,
+                  \qquad U_{\text{total}} = \prod_{k=L}^{1} U_k,
+                \]
+              </div>
+              <p>
+                donde cada \(U_k\) es una puerta que actúa sobre un subconjunto de cúbits y se extiende al espacio completo
+                mediante producto tensorial con identidades. El orden de los factores refleja la <strong>convención de
+                ordenamiento temporal</strong>: la primera puerta aplicada al estado aparece a la derecha del producto, la
+                última a la izquierda. Este detalle es crucial porque, en general, las puertas cuánticas no conmutan.
+              </p>
+              <p>
+                Dos métricas caracterizan la estructura de un circuito: la <em>anchura</em> \(n\) — número de cúbits del
+                registro — y la <em>profundidad</em> \(d\) — longitud del camino crítico en el DAG, es decir, el máximo número
+                de capas de puertas que no pueden ejecutarse en paralelo. La profundidad es un indicador directo del tiempo de
+                ejecución en hardware, pues cada capa adicional introduce decoherencia acumulativa proporcional a las tasas de
+                error del dispositivo.
+              </p>
+              <p>
+                Una <strong>capa</strong> (o <em>layer</em>) agrupa las puertas que actúan sobre cúbits disjuntos y, por tanto,
+                pueden ejecutarse simultáneamente. El compilador busca minimizar \(d\) respetando las restricciones de
+                conectividad: si dos cúbits lógicos necesitan interactuar pero no están físicamente acoplados, se deben
+                insertar operaciones SWAP que incrementan la profundidad. La relación entre profundidad lógica y profundidad
+                física es uno de los problemas centrales de la compilación cuántica.
+              </p>
+              <p>
+                La unitariedad del circuito completo garantiza la reversibilidad: para cada \(U_{\text{total}}\) existe
+                \(U_{\text{total}}^\dagger\) que restaura el estado inicial. Esta propiedad, consecuencia directa del postulado
+                de evolución de la mecánica cuántica, distingue la computación cuántica de los modelos clásicos irreversibles y
+                tiene implicaciones profundas en la termodinámica de la información, vinculadas al principio de Landauer y al
+                límite de Margolus–Levitin para la velocidad de cómputo.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Convención de lectura.</strong> En la notación de circuitos, el tiempo fluye de izquierda a derecha.
+                  En la notación algebraica, el operador que se aplica primero aparece a la derecha. Así, el circuito
+                  \(H \to \mathrm{CNOT}\) corresponde al producto matricial \(\mathrm{CNOT} \cdot (H \otimes I)\).
+                </p>
+              </aside>
+
+              <p>
+                La representación DAG permite aplicar técnicas de optimización combinatoria: identificación de sub-DAGs
+                equivalentes, fusión de nodos, eliminación de puertas que se cancelan por ser su propia inversa
+                (\(X^2 = I\), \(H^2 = I\)), y reordenamiento de capas para explotar paralelismo. Algoritmos de planificación
+                como <em>list scheduling</em> y <em>ALAP/ASAP scheduling</em> determinan la asignación temporal óptima sujeta a
+                las restricciones del hardware.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 2. PUERTAS DE UN CÚBIT -->
+          <section id="puertas-un-cubit" class="qubits-section">
+            <h2>2 &middot; Puertas de un cúbit: el grupo SU(2)</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Toda puerta de un cúbit es un elemento del grupo unitario \(\mathrm{U}(2)\). Factorizando la fase global
+                \(e^{i\alpha}\), que es físicamente inobservable, el contenido operacional reside en el grupo especial unitario
+                \(\mathrm{SU}(2)\), cuya álgebra de Lie \(\mathfrak{su}(2)\) está generada por las tres <strong>matrices de
+                Pauli</strong>:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad
+                  Y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad
+                  Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
+                \]
+              </div>
+              <p>
+                Las matrices de Pauli satisfacen las relaciones de anticonmutación
+                \(\{X, Y\} = \{Y, Z\} = \{Z, X\} = 0\) y de conmutación cíclica
+                \([X, Y] = 2iZ\), \([Y, Z] = 2iX\), \([Z, X] = 2iY\). Junto con la identidad
+                \(I\), forman una base ortonormal del espacio de matrices \(2 \times 2\) hermíticas, lo que permite expandir
+                cualquier operador de un cúbit como \(A = a_0 I + a_1 X + a_2 Y + a_3 Z\) con coeficientes reales.
+              </p>
+
+              <h3>2.1 &middot; Puertas de rotación</h3>
+              <p>
+                La exponenciación de las matrices de Pauli produce las <strong>puertas de rotación</strong> que parametrizan
+                rotaciones continuas en la esfera de Bloch:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  R_x(\theta) = e^{-i\theta X/2} = \begin{pmatrix} \cos\frac{\theta}{2} & -i\sin\frac{\theta}{2} \\
+                  -i\sin\frac{\theta}{2} & \cos\frac{\theta}{2} \end{pmatrix},
+                \]
+              </div>
+              <div class="qubits-equation">
+                \[
+                  R_y(\theta) = e^{-i\theta Y/2} = \begin{pmatrix} \cos\frac{\theta}{2} & -\sin\frac{\theta}{2} \\
+                  \sin\frac{\theta}{2} & \cos\frac{\theta}{2} \end{pmatrix},
+                \]
+              </div>
+              <div class="qubits-equation">
+                \[
+                  R_z(\theta) = e^{-i\theta Z/2} = \begin{pmatrix} e^{-i\theta/2} & 0 \\
+                  0 & e^{i\theta/2} \end{pmatrix}.
+                \]
+              </div>
+              <p>
+                Geométricamente, \(R_{\hat{n}}(\theta) = e^{-i\theta\,\hat{n}\cdot\vec{\sigma}/2}\) describe una rotación de
+                ángulo \(\theta\) alrededor del eje \(\hat{n}\) en la esfera de Bloch, donde
+                \(\vec{\sigma} = (X, Y, Z)\). Esta parametrización demuestra la isomorfía local
+                \(\mathrm{SU}(2) \cong \mathrm{SO}(3)\) (salvo el doble recubrimiento: \(R_{\hat{n}}(2\pi) = -I \neq I\)).
+              </p>
+
+              <h3>2.2 &middot; Puertas discretas fundamentales</h3>
+              <p>
+                Las puertas con ángulos específicos tienen nombres estándar y juegan papeles distinguidos en la teoría de
+                universalidad y corrección de errores:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  H = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}, \qquad
+                  S = \begin{pmatrix} 1 & 0 \\ 0 & i \end{pmatrix}, \qquad
+                  T = \begin{pmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{pmatrix}.
+                \]
+              </div>
+              <p>
+                La puerta de <strong>Hadamard</strong> \(H\) transforma la base computacional en la base de Fourier:
+                \(H|0\rangle = |+\rangle\), \(H|1\rangle = |-\rangle\). Es su propia inversa (\(H^2 = I\)) y equivale a una
+                rotación de \(\pi\) alrededor del eje \((\hat{x}+\hat{z})/\sqrt{2}\). Es la puerta más utilizada para crear
+                superposiciones uniformes y aparece como bloque elemental en la transformada cuántica de Fourier, el algoritmo
+                de Grover y la teleportación cuántica.
+              </p>
+              <p>
+                La puerta de <strong>fase</strong> \(S = R_z(\pi/2)\) (módulo fase global) efectúa un cuarto de vuelta alrededor
+                de \(\hat{z}\), mapeando \(|+\rangle \mapsto |{+}i\rangle\). Su raíz cuadrada es la puerta \(T = R_z(\pi/4)\),
+                también llamada <em>puerta \(\pi/8\)</em> porque \(T = e^{i\pi/8} R_z(\pi/4)\). La puerta \(T\) es central en
+                la corrección cuántica de errores topológica: es la puerta no-Clifford más simple, y su síntesis eficiente
+                domina el costo de algoritmos tolerantes a fallos. El número de puertas \(T\) requeridas — el
+                <strong>\(T\)-count</strong> — se ha convertido en la métrica de complejidad más relevante para circuitos
+                tolerantes a errores.
+              </p>
+              <p>
+                Un resultado fundamental de la teoría de grupos establece que cualquier \(U \in \mathrm{SU}(2)\) admite la
+                <strong>descomposición de Euler</strong> \(Z\text{-}Y\text{-}Z\):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  U = e^{i\alpha}\, R_z(\beta)\, R_y(\gamma)\, R_z(\delta),
+                \]
+              </div>
+              <p>
+                para ángulos reales \(\alpha, \beta, \gamma, \delta\). Esta descomposición es la base de toda síntesis
+                de puertas de un cúbit: dado un operador unitario arbitrario, el compilador calcula los tres ángulos de Euler
+                y los expresa en el conjunto nativo del procesador (por ejemplo, \(\{R_z, \sqrt{X}\}\) en hardware
+                superconductor IBM o \(\{R_z, R_{xx}\}\) en iones atrapados).
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Grupo de Clifford.</strong> Las puertas generadas por \(\{H, S, \mathrm{CNOT}\}\) forman el
+                  <em>grupo de Clifford</em>, que normaliza al grupo de Pauli: \(C \sigma C^\dagger \in \mathcal{P}_n\)
+                  para todo \(C\) Clifford y \(\sigma\) Pauli. Los circuitos Clifford son eficientemente simulables
+                  clásicamente (teorema de Gottesman–Knill), por lo que la universalidad requiere al menos una puerta
+                  no-Clifford como \(T\).
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 3. PUERTAS DE DOS CÚBITS -->
+          <section id="puertas-dos-cubits" class="qubits-section">
+            <h2>3 &middot; Puertas de dos cúbits: entrelazamiento controlado</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Las puertas de dos cúbits actúan sobre el espacio \(\mathbb{C}^2 \otimes \mathbb{C}^2 \cong \mathbb{C}^4\) y
+                son las responsables de generar <strong>entrelazamiento</strong> — correlaciones cuánticas sin análogo clásico
+                que constituyen el recurso computacional esencial de la ventaja cuántica. Una puerta de dos cúbits
+                \(U \in \mathrm{U}(4)\) es <em>entrelazadora</em> si y solo si no puede factorizarse como
+                \(U = A \otimes B\) con \(A, B \in \mathrm{U}(2)\).
+              </p>
+
+              <h3>3.1 &middot; CNOT (Controlled-NOT)</h3>
+              <p>
+                La puerta CNOT es la puerta entrelazadora canónica. Actúa condicionando la aplicación de \(X\) sobre el cúbit
+                objetivo al estado del cúbit de control:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathrm{CNOT} = |0\rangle\langle 0| \otimes I + |1\rangle\langle 1| \otimes X
+                  = \begin{pmatrix} 1&0&0&0 \\ 0&1&0&0 \\ 0&0&0&1 \\ 0&0&1&0 \end{pmatrix}.
+                \]
+              </div>
+              <p>
+                En la base computacional: \(|00\rangle \mapsto |00\rangle\), \(|01\rangle \mapsto |01\rangle\),
+                \(|10\rangle \mapsto |11\rangle\), \(|11\rangle \mapsto |10\rangle\). Aplicada tras una Hadamard en el
+                control, crea un estado de Bell:
+                \(\mathrm{CNOT}\,(H \otimes I)|00\rangle = \tfrac{1}{\sqrt{2}}(|00\rangle + |11\rangle) = |\Phi^+\rangle\).
+              </p>
+
+              <h3>3.2 &middot; CZ (Controlled-Z)</h3>
+              <p>
+                La puerta CZ aplica una fase de \(-1\) si y solo si ambos cúbits están en \(|1\rangle\):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathrm{CZ} = |0\rangle\langle 0| \otimes I + |1\rangle\langle 1| \otimes Z
+                  = \begin{pmatrix} 1&0&0&0 \\ 0&1&0&0 \\ 0&0&1&0 \\ 0&0&0&-1 \end{pmatrix}.
+                \]
+              </div>
+              <p>
+                A diferencia de CNOT, la CZ es simétrica respecto al intercambio de control y objetivo:
+                \(\mathrm{CZ}_{ij} = \mathrm{CZ}_{ji}\). Se relaciona con CNOT mediante conjugación por Hadamard:
+                \(\mathrm{CZ} = (I \otimes H)\,\mathrm{CNOT}\,(I \otimes H)\). En muchas arquitecturas superconductoras,
+                la CZ es la puerta nativa de dos cúbits, implementada mediante cruce adiabático de niveles de energía o
+                pulsos de flujo magnético.
+              </p>
+
+              <h3>3.3 &middot; SWAP e iSWAP</h3>
+              <p>
+                La puerta SWAP intercambia los estados de dos cúbits:
+                \(\mathrm{SWAP}|a,b\rangle = |b,a\rangle\). Su representación matricial y descomposición en CNOTs son:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathrm{SWAP} = \begin{pmatrix} 1&0&0&0 \\ 0&0&1&0 \\ 0&1&0&0 \\ 0&0&0&1 \end{pmatrix}
+                  = \mathrm{CNOT}_{12}\,\mathrm{CNOT}_{21}\,\mathrm{CNOT}_{12}.
+                \]
+              </div>
+              <p>
+                La puerta iSWAP añade una fase de \(i\) al intercambio:
+                \(\mathrm{iSWAP}|01\rangle = i|10\rangle\), \(\mathrm{iSWAP}|10\rangle = i|01\rangle\).
+                Es la interacción nativa en muchos procesadores basados en transmon con acoplamiento capacitivo
+                resonante, pues corresponde a la evolución natural del hamiltoniano de intercambio
+                \(H_{\mathrm{XX+YY}} = \tfrac{g}{2}(XX + YY)\) durante un tiempo \(t = \pi/(2g)\).
+              </p>
+
+              <h3>3.4 &middot; Controlled-U y poder entrelazador</h3>
+              <p>
+                La puerta controlada general \(\mathrm{C\text{-}}U\) aplica una unitaria arbitraria \(U\) al objetivo
+                condicionada al control:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathrm{C\text{-}}U = |0\rangle\langle 0| \otimes I + |1\rangle\langle 1| \otimes U
+                  = \begin{pmatrix} I & 0 \\ 0 & U \end{pmatrix}.
+                \]
+              </div>
+              <p>
+                El <strong>poder entrelazador</strong> (<em>entangling power</em>) de una puerta \(U\) se define como la
+                media del entrelazamiento generado sobre todos los estados producto de entrada. Formalmente,
+                \(e_p(U) = \overline{E(U|\phi\rangle \otimes |\chi\rangle)}\), donde \(E\) es una medida de entrelazamiento
+                (por ejemplo, la entropía de von Neumann de la traza parcial) y la media se toma con respecto a la medida de
+                Haar. Para la CNOT, \(e_p(\mathrm{CNOT}) = \tfrac{2}{9}\), que es el máximo para puertas de dos cúbits. La
+                noción de rango de Schmidt de la puerta \(U\), vista como elemento de
+                \(\mathbb{C}^4 \otimes \mathbb{C}^4\), cuantifica su capacidad entrelazadora: las puertas locales tienen
+                rango de Schmidt 1, mientras que CNOT tiene rango 2 (el mínimo para ser entrelazadora).
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Clase de equivalencia local.</strong> Dos puertas de dos cúbits \(U\) y \(V\) son
+                  <em>localmente equivalentes</em> si \(V = (A_1 \otimes A_2)\, U\, (B_1 \otimes B_2)\) para unitarias
+                  de un cúbit \(A_i, B_i\). La descomposición KAK clasifica todas las clases de equivalencia local
+                  mediante tres parámetros canónicos, que determinan unívocamente el poder entrelazador de la puerta.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 4. UNIVERSALIDAD -->
+          <section id="universalidad" class="qubits-section">
+            <h2>4 &middot; Universalidad computacional</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Un conjunto de puertas \(\mathcal{G}\) es <strong>computacionalmente universal</strong> si, para toda
+                unitaria \(U \in \mathrm{U}(2^n)\) y toda precisión \(\varepsilon > 0\), existe un circuito compuesto
+                exclusivamente por puertas de \(\mathcal{G}\) cuya distancia a \(U\) en norma de operador satisface
+                \(\|U - U_{\mathcal{G}}\| < \varepsilon\). Equivalentemente, \(\mathcal{G}\) genera un grupo denso en
+                \(\mathrm{U}(2^n)\) (o \(\mathrm{SU}(2^n)\) si ignoramos fases globales).
+              </p>
+
+              <h3>4.1 &middot; El conjunto \(\{H, T, \mathrm{CNOT}\}\)</h3>
+              <p>
+                El resultado central de universalidad establece que el conjunto finito
+                \(\mathcal{G} = \{H, T, \mathrm{CNOT}\}\) es universal. La demostración procede en dos pasos:
+              </p>
+              <p>
+                <em>Paso 1 (Universalidad de un cúbit).</em> Las puertas \(\{H, T\}\) generan un subgrupo denso de
+                \(\mathrm{SU}(2)\). Esto se verifica observando que \(HTH = R_x(\pi/4)\) y que las composiciones sucesivas
+                de rotaciones alrededor de dos ejes no paralelos (en este caso, \(\hat{z}\) para \(T\) y
+                \((\hat{x}+\hat{z})/\sqrt{2}\) para \(H\)) generan un subgrupo denso de \(\mathrm{SO}(3)\), y por tanto
+                de \(\mathrm{SU}(2)\) vía el doble recubrimiento.
+              </p>
+              <p>
+                <em>Paso 2 (Extensión a \(n\) cúbits).</em> Toda unitaria \(U \in \mathrm{SU}(2^n)\) puede descomponerse
+                en un producto de a lo sumo \(\mathcal{O}(4^n)\) puertas controladas de un cúbit, cada una de las cuales se
+                implementa con puertas de un cúbit y CNOTs. El esquema de Barenco et al. (1995) proporciona la construcción
+                explícita: una puerta \(\mathrm{C\text{-}}U\) arbitraria requiere a lo sumo 2 CNOTs y 4 rotaciones de un
+                cúbit.
+              </p>
+
+              <h3>4.2 &middot; Teorema de Solovay–Kitaev</h3>
+              <p>
+                El <strong>teorema de Solovay–Kitaev</strong> cuantifica la eficiencia de la aproximación: si
+                \(\mathcal{G}\) genera un grupo denso en \(\mathrm{SU}(2)\), entonces cualquier \(U \in \mathrm{SU}(2)\)
+                puede aproximarse con precisión \(\varepsilon\) usando
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathcal{O}\!\left(\log^c\!\left(\frac{1}{\varepsilon}\right)\right) \text{ puertas de } \mathcal{G},
+                  \qquad c \approx 3{.}97,
+                \]
+              </div>
+              <p>
+                lo que constituye una complejidad <em>polilogarítmica</em> en \(1/\varepsilon\). La constante \(c\) ha sido
+                mejorada a \(c \approx 3.97\) mediante refinamientos del algoritmo recursivo original. En la práctica, los
+                compiladores modernos utilizan algoritmos de búsqueda basados en el método de Ross–Selinger (2014), que
+                alcanzan secuencias óptimas o casi óptimas de puertas \(H\) y \(T\) para aproximar rotaciones arbitrarias
+                \(R_z(\theta)\), con un \(T\)-count de \(3\log_2(1/\varepsilon) + \mathcal{O}(\log\log(1/\varepsilon))\).
+              </p>
+              <p>
+                La universalidad tiene consecuencias profundas: implica que un dispositivo cuántico con un conjunto fijo y
+                finito de puertas puede, en principio, realizar <em>cualquier</em> cómputo cuántico. La distinción entre
+                conjuntos universales exactos (como \(\{R_z(\theta), \mathrm{CNOT}\}\) para \(\theta/\pi\) irracional) y
+                conjuntos universales aproximados (como \(\{H, T, \mathrm{CNOT}\}\)) es relevante para la corrección cuántica
+                de errores, donde solo las puertas del grupo de Clifford más \(T\) pueden implementarse transversalmente en
+                códigos estabilizadores.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Conjuntos nativos en hardware.</strong> Los fabricantes implementan conjuntos nativos específicos:
+                  IBM usa \(\{R_z, \sqrt{X}, \mathrm{CNOT}\}\) (o \(\mathrm{ECR}\) en procesadores Eagle+), Google usa
+                  \(\{R_z, \sqrt{W}, \sqrt{\mathrm{iSWAP}}, \mathrm{CZ}\}\), e IonQ usa
+                  \(\{R, R_{xx}\}\). El compilador traduce el circuito del usuario a estas primitivas.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 5. DESCOMPOSICIÓN Y SÍNTESIS -->
+          <section id="descomposicion-sintesis" class="qubits-section">
+            <h2>5 &middot; Descomposición y síntesis de circuitos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>síntesis de circuitos</strong> es el proceso de expresar una unitaria objetivo como un producto de
+                puertas del conjunto universal. Para puertas de un cúbit, la descomposición de Euler
+                \(U = e^{i\alpha} R_z(\beta) R_y(\gamma) R_z(\delta)\) proporciona la solución óptima con exactamente 3
+                rotaciones. Para puertas de dos cúbits, el problema es considerablemente más rico.
+              </p>
+
+              <h3>5.1 &middot; Descomposición KAK</h3>
+              <p>
+                La <strong>descomposición KAK</strong> (Cartan) de \(\mathrm{SU}(4)\) factoriza cualquier puerta de dos cúbits
+                como:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  U = (A_1 \otimes A_2)\;\exp\!\Big[-i\big(c_x\, X \!\otimes\! X + c_y\, Y \!\otimes\! Y + c_z\, Z \!\otimes\! Z\big)\Big]\;(B_1 \otimes B_2),
+                \]
+              </div>
+              <p>
+                donde \(A_i, B_i \in \mathrm{SU}(2)\) son unitarias locales y \((c_x, c_y, c_z)\) son los
+                <strong>invariantes de Weyl</strong> que parametrizan la clase de equivalencia local. El rango geométrico
+                del espacio de parámetros es un tetraedro con vértices correspondientes a la identidad, CNOT, SWAP e iSWAP.
+              </p>
+              <p>
+                La implementación canónica de una puerta arbitraria de dos cúbits requiere a lo sumo <strong>3 CNOTs</strong>
+                y 15 puertas de un cúbit (Vatan y Williams, 2004). Si la puerta pertenece a una clase especial — por ejemplo,
+                si uno de los \(c_i = 0\) — el número de CNOTs puede reducirse a 2 o incluso 1. Las puertas que son
+                localmente equivalentes a CNOT (con \(c_x = \pi/4\), \(c_y = c_z = 0\)) requieren exactamente 1 CNOT.
+              </p>
+
+              <h3>5.2 &middot; Identidades de circuito y cancelación de puertas</h3>
+              <p>
+                Las identidades algebraicas entre puertas permiten simplificaciones sistemáticas. Algunas identidades
+                fundamentales incluyen:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \begin{aligned}
+                    H X H &= Z, \qquad H Z H = X, \\
+                    S X S^\dagger &= Y, \qquad S Z S^\dagger = Z, \\
+                    \mathrm{CNOT}_{12}\,(I \otimes Z)\,\mathrm{CNOT}_{12} &= Z \otimes Z, \\
+                    \mathrm{CNOT}_{12}\,(X \otimes I)\,\mathrm{CNOT}_{12} &= X \otimes X.
+                  \end{aligned}
+                \]
+              </div>
+              <p>
+                La regla de <strong>cancelación</strong> más elemental es \(U U^\dagger = I\): dos puertas adyacentes que son
+                inversas entre sí se eliminan del circuito. Para puertas de rotación, la fusión
+                \(R_z(\alpha) R_z(\beta) = R_z(\alpha + \beta)\) reduce dos puertas a una. Estas reglas, aplicadas
+                iterativamente sobre el DAG del circuito, constituyen la base de los <em>pases de optimización</em> en
+                compiladores como Qiskit, Cirq y el motor de compilación de Harmoniq.
+              </p>
+              <p>
+                Las <strong>relaciones de conmutación</strong> entre puertas también juegan un papel esencial: si dos puertas
+                adyacentes conmutan, pueden reordenarse libremente, lo que a menudo habilita cancelaciones adicionales. Por
+                ejemplo, \(R_z(\alpha)\) conmuta con \(\mathrm{CNOT}\) cuando actúa sobre el cúbit de control, lo que permite
+                mover rotaciones \(Z\) a través de CNOTs y fusionarlas con otras rotaciones \(Z\).
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 6. TRANSPILACIÓN -->
+          <section id="transpilacion-mapeo" class="qubits-section">
+            <h2>6 &middot; Transpilación y mapeo de conectividad</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>transpilación</strong> es el proceso de transformar un circuito cuántico abstracto (lógico) en un
+                circuito equivalente ejecutable en un dispositivo físico específico. Este proceso debe resolver tres problemas
+                fundamentales: la traducción de puertas al conjunto nativo del hardware, la asignación de cúbits lógicos a
+                cúbits físicos (<em>qubit placement</em>), y la inserción de operaciones SWAP para satisfacer las restricciones
+                de conectividad (<em>routing</em>).
+              </p>
+
+              <h3>6.1 &middot; Grafo de acoplamiento</h3>
+              <p>
+                El <strong>grafo de acoplamiento</strong> (o <em>coupling map</em>) \(G = (V, E)\) de un procesador cuántico
+                define qué pares de cúbits físicos pueden ejecutar puertas de dos cúbits. En procesadores superconductores
+                típicos, \(G\) es un grafo planar con grado máximo 3 o 4 (topología heavy-hex en IBM, topología de rejilla
+                cuadrada en Google Sycamore). Si una puerta de dos cúbits del circuito lógico conecta dos cúbits cuya
+                imagen en el mapeo físico no está en \(E\), el compilador debe insertar SWAPs para acercarlos.
+              </p>
+              <p>
+                El problema de encontrar el mapeo óptimo de cúbits y la secuencia mínima de SWAPs es \(\mathrm{NP}\)-completo
+                en general. En la práctica, se emplean heurísticas eficientes:
+              </p>
+              <p>
+                <em>SABRE</em> (Li, Ding y Xie, 2019) realiza un barrido bidireccional del circuito: en cada paso, selecciona
+                el SWAP que minimiza una función de costo basada en la distancia en el grafo de acoplamiento entre los cúbits
+                de las puertas pendientes. El algoritmo alterna barridos hacia adelante y hacia atrás, refinando el mapeo
+                iterativamente. Su complejidad temporal es \(\mathcal{O}(|E| \cdot d \cdot g)\), donde \(d\) es la profundidad
+                y \(g\) el número de puertas de dos cúbits.
+              </p>
+              <p>
+                <em>Asignación inicial.</em> El mapeo inicial de cúbits lógicos a físicos influye significativamente en el
+                número de SWAPs insertados. Estrategias como <em>trivial layout</em> (identidad), <em>dense layout</em>
+                (subcircuito más conectado), y <em>noise-adaptive layout</em> (minimización de la tasa de error ponderada)
+                se combinan con el enrutamiento para producir circuitos de profundidad mínima.
+              </p>
+
+              <h3>6.2 &middot; Sobrecosto de profundidad</h3>
+              <p>
+                Cada SWAP insertado equivale a 3 CNOTs (o 3 CZs según la puerta nativa), incrementando la profundidad del
+                circuito y, por tanto, la decoherencia acumulada. Para un circuito con \(g\) puertas de dos cúbits sobre
+                un grafo de acoplamiento con diámetro \(D\), el peor caso de SWAPs es \(\mathcal{O}(g \cdot D)\). En la
+                práctica, los algoritmos heurísticos logran un sobrecosto mucho menor, pero la relación entre topología
+                del hardware y profundidad del circuito compilado sigue siendo un factor determinante del rendimiento.
+              </p>
+              <p>
+                La tendencia en el diseño de procesadores cuánticos es hacia topologías con mayor conectividad (grafos con
+                menor diámetro y mayor grado promedio), lo que reduce la necesidad de SWAPs al costo de mayor <em>crosstalk</em>
+                entre cúbits. La topología heavy-hex de IBM, por ejemplo, sacrifica conectividad para minimizar errores de
+                <em>crosstalk</em>, mientras que la rejilla cuadrada de Google ofrece mayor conectividad a costa de un calibrado
+                más complejo.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Enrutamiento óptimo vs. heurístico.</strong> Se ha demostrado que el problema de enrutamiento
+                  óptimo (mínimo número de SWAPs) es equivalente al <em>token swapping problem</em> en grafos, que es
+                  \(\mathrm{NP}\)-completo. Sin embargo, para topologías regulares (líneas, rejillas, árboles), existen
+                  algoritmos polinomiales con garantías de aproximación.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 7. OPTIMIZACIÓN -->
+          <section id="optimizacion-circuitos" class="qubits-section">
+            <h2>7 &middot; Optimización de circuitos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La optimización de circuitos cuánticos busca reducir el conteo de puertas, la profundidad y las métricas de
+                error sin alterar la unitaria implementada. Las técnicas se clasifican en <em>locales</em> (actúan sobre
+                subcircuitos pequeños) y <em>globales</em> (consideran la estructura completa del circuito).
+              </p>
+
+              <h3>7.1 &middot; Template matching</h3>
+              <p>
+                El <em>template matching</em> busca subcircuitos que coincidan con patrones predefinidos (<em>templates</em>)
+                y los reemplaza por versiones equivalentes más eficientes. Un template es una identidad de circuito
+                \(C_1 = C_2\) donde \(C_2\) tiene menor costo. Por ejemplo, el template
+                \(\mathrm{CNOT}_{12}\,\mathrm{CNOT}_{12} = I \otimes I\) elimina dos CNOTs redundantes. Las bibliotecas de
+                templates se generan automáticamente mediante búsqueda exhaustiva sobre circuitos pequeños y se aplican
+                mediante coincidencia de patrones sobre el DAG del circuito.
+              </p>
+
+              <h3>7.2 &middot; Optimización peephole</h3>
+              <p>
+                La <strong>optimización peephole</strong> extiende el template matching resintentizando bloques contiguos
+                del circuito. Dado un bloque de \(k\) puertas consecutivas sobre un conjunto de cúbits, el optimizador
+                calcula la unitaria total del bloque y la resintetiza con el número mínimo de puertas nativas. Para bloques
+                de un cúbit, la resíntesis usa la descomposición de Euler. Para bloques de dos cúbits, usa la descomposición
+                KAK. Esta técnica es particularmente efectiva cuando el circuito original contiene redundancias introducidas
+                por la transpilación.
+              </p>
+
+              <h3>7.3 &middot; Análisis de conmutación</h3>
+              <p>
+                El <strong>análisis de conmutación</strong> construye un grafo de conmutación donde las aristas conectan
+                puertas que conmutan. Dos puertas \(U\) y \(V\) conmutan si \(UV = VU\), es decir, si su orden de aplicación
+                es irrelevante. El análisis permite reordenar las puertas del circuito para habilitar cancelaciones y fusiones
+                que no serían posibles en el orden original. Reglas de conmutación eficientes incluyen:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \begin{aligned}
+                    [R_z(\alpha),\, R_z(\beta)] &= 0, \\
+                    [\mathrm{CNOT}_{12},\, R_z(\alpha) \otimes I] &= 0, \\
+                    [\mathrm{CNOT}_{12},\, I \otimes R_x(\beta)] &= 0, \\
+                    [\mathrm{CZ}_{12},\, R_z(\alpha) \otimes I] &= 0, \\
+                    [\mathrm{CZ}_{12},\, I \otimes R_z(\beta)] &= 0.
+                  \end{aligned}
+                \]
+              </div>
+
+              <h3>7.4 &middot; Optimización del \(T\)-count</h3>
+              <p>
+                En el contexto de la computación cuántica tolerante a fallos, la puerta \(T\) es la operación más costosa
+                (requiere <em>destilación de estados mágicos</em> que consume miles de cúbits físicos por cada \(T\) lógica).
+                La optimización del \(T\)-count busca minimizar el número total de puertas \(T\) en un circuito. Técnicas como
+                la <em>síntesis de fases</em> de Amy, Maslov y Mosca (2014) representan subcircuitos sobre la base de Clifford+T
+                como <strong>polinomios de fase</strong> y los optimizan mediante reducción de Gauss sobre \(\mathbb{Z}_8\).
+                Resultados típicos logran reducciones del 30–40% en el \(T\)-count de circuitos aritméticos y oráculos.
+              </p>
+              <p>
+                Otro enfoque es la <em>re-síntesis basada en ZX-calculus</em>, un formalismo diagramático que representa
+                circuitos cuánticos como grafos coloreados (verde/rojo) y aplica reglas de reescritura que preservan la
+                semántica. El ZX-calculus permite simplificaciones no triviales que escapan a los métodos puramente
+                algebraicos, y se ha integrado en compiladores como PyZX y en la cadena de optimización de Harmoniq.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 8. CIRCUITOS PARAMETRIZADOS -->
+          <section id="circuitos-parametrizados" class="qubits-section">
+            <h2>8 &middot; Circuitos parametrizados</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Un <strong>circuito parametrizado</strong> es un circuito cuántico cuyas puertas dependen de un vector de
+                parámetros reales \(\vec{\theta} = (\theta_1, \ldots, \theta_p)\). El circuito define una familia de
+                unitarias \(U(\vec{\theta})\) que, aplicada a un estado fijo \(|0\rangle^{\otimes n}\), produce un
+                <em>ansatz</em> variacional:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi(\vec{\theta})\rangle = U(\vec{\theta})\,|0\rangle^{\otimes n}
+                  = \prod_{l=1}^{L} \left[\prod_{k} e^{-i\theta_{l,k} P_{l,k}} \cdot W_l \right] |0\rangle^{\otimes n},
+                \]
+              </div>
+              <p>
+                donde \(P_{l,k}\) son generadores de Pauli (o productos tensoriales de Paulis) y \(W_l\) son capas fijas de
+                puertas entrelazadoras. Esta estructura es el corazón de los <strong>algoritmos cuánticos
+                variacionales</strong> (VQAs), incluyendo VQE (Variational Quantum Eigensolver), QAOA (Quantum Approximate
+                Optimization Algorithm) y los clasificadores cuánticos variacionales.
+              </p>
+
+              <h3>8.1 &middot; Parameter binding y ejecución</h3>
+              <p>
+                En la práctica, el circuito se compila una vez como un <em>template</em> con parámetros simbólicos y se
+                <em>vincula</em> (<em>binds</em>) a valores concretos en tiempo de ejecución. Esta separación entre
+                compilación y vinculación es crucial para la eficiencia del lazo variacional: el costoso proceso de
+                transpilación y optimización se realiza una sola vez, y cada evaluación del circuito solo requiere sustituir
+                los valores numéricos de los parámetros en las puertas de rotación nativas.
+              </p>
+
+              <h3>8.2 &middot; Regla de desplazamiento de parámetro</h3>
+              <p>
+                El cálculo del gradiente de un valor esperado \(\langle \hat{O} \rangle_{\vec{\theta}} =
+                \langle \psi(\vec{\theta})| \hat{O} |\psi(\vec{\theta})\rangle\) respecto a los parámetros se realiza
+                mediante la <strong>regla de desplazamiento de parámetro</strong> (<em>parameter shift rule</em>).
+                Si la puerta parametrizada tiene la forma \(e^{-i\theta G/2}\) con \(G\) un generador con eigenvalores
+                \(\pm 1\) (como las matrices de Pauli), entonces:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \frac{\partial}{\partial \theta_k} \langle \hat{O} \rangle_{\vec{\theta}}
+                  = \frac{1}{2}\left[ \langle \hat{O} \rangle_{\vec{\theta} + \frac{\pi}{2}\hat{e}_k}
+                  - \langle \hat{O} \rangle_{\vec{\theta} - \frac{\pi}{2}\hat{e}_k} \right],
+                \]
+              </div>
+              <p>
+                donde \(\hat{e}_k\) es el vector unitario en la dirección del \(k\)-ésimo parámetro. Esta regla permite
+                calcular gradientes exactos (hasta ruido estadístico de muestreo) evaluando el circuito dos veces por cada
+                componente del gradiente, lo que resulta en un costo de \(2p\) evaluaciones de circuito para el gradiente
+                completo. Extensiones como la <em>regla de desplazamiento generalizada</em> manejan generadores con espectros
+                más complejos.
+              </p>
+
+              <h3>8.3 &middot; Ansätze hardware-efficient</h3>
+              <p>
+                Los <strong>ansätze hardware-efficient</strong> (HEA) diseñan el circuito parametrizado respetando
+                directamente la conectividad y el conjunto nativo del hardware, evitando el sobrecosto de transpilación.
+                Una estructura típica alterna capas de rotaciones de un cúbit \(R_y(\theta) R_z(\phi)\) con capas de
+                entrelazamiento CZ o CNOT siguiendo la topología del grafo de acoplamiento. La expresividad del ansatz
+                depende del número de capas \(L\) y de la estructura de entrelazamiento: ansätze con demasiados parámetros
+                pueden sufrir <em>barren plateaus</em> (mesetas estériles), donde el gradiente de la función de costo se
+                desvanece exponencialmente con el número de cúbits, haciendo inviable la optimización clásica.
+              </p>
+              <p>
+                La elección del ansatz es un equilibrio entre expresividad (capacidad de representar el estado objetivo),
+                entrenabilidad (magnitud de los gradientes) y eficiencia de hardware (profundidad y conteo de puertas
+                nativas). Estrategias como los <em>ansätze adaptativos</em> (ADAPT-VQE) construyen el circuito
+                incrementalmente, añadiendo operadores del pool que maximizan el gradiente, evitando así los barren plateaus
+                de los HEA genéricos.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Barren plateaus.</strong> McClean et al. (2018) demostraron que para ansätze suficientemente
+                  aleatorios (que forman <em>2-designs</em>), la varianza del gradiente decrece como
+                  \(\mathrm{Var}[\partial_k \langle \hat{O}\rangle] \sim 2^{-n}\). Este resultado establece un límite
+                  fundamental para la escalabilidad de los VQAs con ansätze no estructurados.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 9. MEDICIÓN Y RETROALIMENTACIÓN -->
+          <section id="medicion-retroalimentacion" class="qubits-section">
+            <h2>9 &middot; Medición y retroalimentación clásica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                En el modelo estándar de circuitos, las mediciones ocurren al final del circuito y colapsan el estado cuántico
+                en la base computacional. Sin embargo, los procesadores cuánticos modernos soportan <strong>mediciones a
+                mitad de circuito</strong> (<em>mid-circuit measurements</em>) que proyectan un subconjunto de cúbits sin
+                destruir la coherencia de los demás. El resultado de la medición — un bit clásico — puede utilizarse para
+                condicionar operaciones cuánticas subsiguientes, habilitando la <strong>retroalimentación clásica</strong>
+                (<em>classical feedforward</em>).
+              </p>
+
+              <h3>9.1 &middot; Formalismo de la medición proyectiva</h3>
+              <p>
+                Una medición en la base computacional del cúbit \(k\) se modela como la aplicación de los proyectores
+                \(P_0^{(k)} = |0\rangle\langle 0|_k\) y \(P_1^{(k)} = |1\rangle\langle 1|_k\), con probabilidades
+              </p>
+              <div class="qubits-equation">
+                \[
+                  p(m) = \langle \psi | P_m^{(k)} \otimes I_{\bar{k}} | \psi \rangle, \qquad
+                  |\psi_m\rangle = \frac{P_m^{(k)} |\psi\rangle}{\sqrt{p(m)}}, \quad m \in \{0, 1\}.
+                \]
+              </div>
+              <p>
+                El estado post-medición \(|\psi_m\rangle\) retiene la coherencia de los cúbits no medidos, pero el cúbit
+                medido queda fijado en \(|m\rangle\). Esta propiedad permite utilizar la medición como recurso para crear
+                estados entrelazados de forma determinista (como en la teleportación cuántica) y para implementar corrección
+                cuántica de errores en tiempo real.
+              </p>
+
+              <h3>9.2 &middot; Operaciones condicionales y feedforward</h3>
+              <p>
+                Las <strong>operaciones condicionales</strong> aplican una puerta cuántica solo si un bit clásico tiene un
+                valor específico. La notación habitual es \(\mathrm{if}(c = 1)\; U\), que aplica \(U\) al cúbit objetivo si
+                el resultado de la medición almacenado en el registro clásico \(c\) es 1. En la teleportación cuántica, por
+                ejemplo, las correcciones de Pauli \(X^{m_2} Z^{m_1}\) sobre el cúbit receptor están condicionadas a los
+                resultados de las mediciones de Bell \(m_1, m_2\).
+              </p>
+              <p>
+                El <em>classical feedforward</em> extiende este concepto a computaciones clásicas arbitrarias sobre los
+                resultados de medición antes de la aplicación condicional. Esto habilita protocolos como la <em>corrección
+                de errores en tiempo real</em>, la <em>destilación de estados mágicos</em>, y los
+                <em>circuitos adaptativos</em> donde la estructura del circuito depende dinámicamente de los resultados
+                intermedios.
+              </p>
+
+              <h3>9.3 &middot; Principio de medición diferida</h3>
+              <p>
+                El <strong>principio de medición diferida</strong> establece que cualquier circuito con mediciones a mitad de
+                circuito y operaciones condicionales puede transformarse en un circuito equivalente donde todas las mediciones
+                se difieren al final, reemplazando las operaciones condicionales por puertas controladas cuánticamente. Formalmente,
+                \(\mathrm{if}(c = 1)\; U\) se reemplaza por \(\mathrm{C\text{-}}U\) donde el cúbit que se habría medido actúa
+                como control.
+              </p>
+              <p>
+                Este principio tiene una consecuencia teórica importante: el modelo de circuitos con feedforward clásico no es
+                más poderoso computacionalmente que el modelo sin feedforward. Sin embargo, en la práctica, las mediciones a
+                mitad de circuito con feedforward pueden reducir drásticamente la profundidad y la anchura del circuito. Por
+                ejemplo, ciertos protocolos de corrección de errores requieren \(\mathcal{O}(n)\) cúbits auxiliares con
+                medición diferida, pero solo \(\mathcal{O}(1)\) con feedforward, ya que los cúbits auxiliares pueden
+                reutilizarse tras la medición y reinicialización.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Latencia del feedforward.</strong> En hardware superconductor, el ciclo
+                  medición→decodificación→decisión→aplicación introduce una latencia de 0.5–1.5 μs, durante la cual los
+                  cúbits no medidos sufren decoherencia. Optimizar esta latencia es crítico para la viabilidad de la
+                  corrección cuántica de errores en tiempo real.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 10. DEL CIRCUITO AL HARDWARE -->
+          <section id="circuito-hardware-harmoniq" class="qubits-section">
+            <h2>10 &middot; Del circuito lógico al hardware en Harmoniq</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La plataforma <strong>Harmoniq</strong> implementa una cadena de compilación completa que transforma el
+                circuito lógico del usuario en secuencias de pulsos de microondas ejecutables en procesadores cuánticos
+                superconductores. El flujo de compilación se estructura en cuatro etapas principales: análisis y validación,
+                optimización lógica, transpilación al hardware, y generación de pulsos.
+              </p>
+
+              <h3>10.1 &middot; Análisis y validación</h3>
+              <p>
+                La primera etapa verifica la consistencia del circuito: dimensiones del registro, tipos de puertas soportadas,
+                restricciones de medición, y corrección de las operaciones condicionales. El validador genera un DAG canónico
+                del circuito y detecta subcircuitos triviales (identidades, puertas sin efecto) que pueden eliminarse antes
+                de la optimización.
+              </p>
+
+              <h3>10.2 &middot; Optimización lógica</h3>
+              <p>
+                El optimizador lógico aplica una secuencia configurable de <em>pases de transformación</em> sobre el DAG:
+                cancelación de inversas, fusión de rotaciones adyacentes, template matching, resíntesis peephole de bloques
+                de 1 y 2 cúbits (descomposición Euler y KAK), análisis de conmutación con reordenamiento, y eliminación de
+                barreras redundantes. Los niveles de optimización (0–3) controlan la agresividad: el nivel 0 solo realiza
+                la traducción al conjunto nativo; el nivel 3 aplica todos los pases incluida la resíntesis global.
+              </p>
+
+              <h3>10.3 &middot; Transpilación a familias Hopper y Hermann</h3>
+              <p>
+                Los procesadores de la familia <strong>Hopper</strong> de Harmoniq utilizan el conjunto nativo
+                \(\{R_z, \sqrt{X}, \mathrm{ECR}\}\), donde ECR (<em>Echoed Cross-Resonance</em>) es una puerta de dos
+                cúbits implementada mediante pulsos de <em>cross-resonance</em> seguidos de un eco que cancela errores
+                sistemáticos. Los procesadores de la familia <strong>Hermann</strong> emplean
+                \(\{R_z, \sqrt{X}, \mathrm{CZ}\}\) con topología de conectividad densa tipo heavy-hex.
+              </p>
+              <p>
+                El transpilador mapea cada puerta del circuito lógico al conjunto nativo correspondiente, asigna cúbits
+                lógicos a físicos utilizando el algoritmo de asignación basado en ruido (que pondera las tasas de error
+                \(T_1\), \(T_2\) y las fidelidades de puerta de cada cúbit físico), y ejecuta el enrutamiento SABRE con
+                optimización de profundidad. El resultado es un circuito físico anotado con la información de calibración
+                del dispositivo.
+              </p>
+
+              <h3>10.4 &middot; Control a nivel de pulso</h3>
+              <p>
+                La etapa final traduce cada puerta nativa a una secuencia de <strong>pulsos de microondas</strong> con
+                parámetros calibrados: frecuencia portadora, amplitud, fase, duración y envolvente (gaussiana, DRAG, o
+                formas personalizadas). La puerta \(R_z(\theta)\) se implementa como un <em>frame change</em> virtual
+                (rotación de la fase de referencia del oscilador local) con duración cero y fidelidad perfecta. Las puertas
+                \(\sqrt{X}\) y ECR/CZ requieren pulsos físicos con duraciones típicas de 20–160 ns calibrados diariamente.
+              </p>
+              <p>
+                La ejecución consiste en repetir el circuito un número configurable de veces (<em>shots</em>), típicamente
+                \(10^3\)–\(10^5\), para reconstruir las estadísticas de medición. El resultado es un histograma de conteos
+                sobre las cadenas de bits medidas, que el usuario analiza para extraer valores esperados, distribuciones de
+                probabilidad o resultados algorítmicos. La plataforma Harmoniq ofrece mitigación de errores post-procesamiento
+                (matrix-free measurement error mitigation, zero-noise extrapolation) integrada en el flujo de ejecución.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Presupuesto de coherencia.</strong> Un circuito con profundidad \(d\) y duración por capa
+                  \(\Delta t\) debe satisfacer \(d \cdot \Delta t \ll T_2\), donde \(T_2\) es el tiempo de decoherencia
+                  del cúbit más ruidoso. En los procesadores Hopper actuales, \(T_2 \sim 100\text{–}200\;\mu\text{s}\) y
+                  \(\Delta t \sim 0.3\;\mu\text{s}\) por capa, permitiendo circuitos de profundidad \(\lesssim 300\)
+                  antes de que la decoherencia domine.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ 11. REFERENCIAS -->
+          <section id="referencias-circuitos" class="qubits-section ref-cards-section">
+            <h2>11 &middot; Referencias y lecturas recomendadas</h2>
+            <p class="ref-cards-lead">
+              Selección de monografías, artículos seminales y recursos abiertos con criterio académico: textos fundamentales de
+              computación cuántica, síntesis de circuitos, algoritmos variacionales y arquitecturas de hardware.
+            </p>
+            <div class="ref-cards-grid">
+              <article class="ref-card">
+                <p class="ref-card-source">Nielsen &amp; Chuang</p>
+                <p class="ref-card-book"><em>Quantum Computation and Quantum Information</em> <span class="ref-card-pub">(Cambridge, 10th Anniversary Ed.)</span></p>
+                <p class="ref-card-desc">
+                  Texto canónico de referencia. Cubre circuitos cuánticos, universalidad, Solovay–Kitaev, corrección de errores
+                  y complejidad computacional cuántica con rigor y amplitud enciclopédica.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Barenco et al. (1995)</p>
+                <p class="ref-card-book"><em>Elementary gates for quantum computation</em> <span class="ref-card-pub">(Phys. Rev. A 52, 3457)</span></p>
+                <p class="ref-card-desc">
+                  Artículo seminal que establece la descomposición de unitarias arbitrarias en puertas de uno y dos cúbits,
+                  demostrando la universalidad de conjuntos finitos de puertas.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Vatan &amp; Williams (2004)</p>
+                <p class="ref-card-book"><em>Optimal quantum circuits for general two-qubit gates</em> <span class="ref-card-pub">(Phys. Rev. A 69, 032315)</span></p>
+                <p class="ref-card-desc">
+                  Demostración de que toda unitaria de dos cúbits puede implementarse con a lo sumo 3 CNOTs, junto con la
+                  descomposición KAK explícita.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Li, Ding &amp; Xie (2019)</p>
+                <p class="ref-card-book"><em>Tackling the qubit mapping problem (SABRE)</em> <span class="ref-card-pub">(ASPLOS '19)</span></p>
+                <p class="ref-card-desc">
+                  Algoritmo SABRE para enrutamiento heurístico de circuitos cuánticos en topologías con conectividad restringida,
+                  ampliamente adoptado en compiladores industriales.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/1809.02573" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Amy, Maslov &amp; Mosca (2014)</p>
+                <p class="ref-card-book"><em>Polynomial-time T-count optimization</em> <span class="ref-card-pub">(IEEE Trans. CAD)</span></p>
+                <p class="ref-card-desc">
+                  Algoritmo de optimización del T-count mediante representación como polinomios de fase y reducción sobre
+                  anillos finitos.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">McClean et al. (2018)</p>
+                <p class="ref-card-book"><em>Barren plateaus in quantum neural network training landscapes</em> <span class="ref-card-pub">(Nat. Commun. 9, 4812)</span></p>
+                <p class="ref-card-desc">
+                  Resultado fundamental sobre la desaparición exponencial de gradientes en circuitos variacionales
+                  suficientemente aleatorios, con implicaciones para la escalabilidad de VQAs.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/1803.11173" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Preskill · notas Ph 229</p>
+                <p class="ref-card-book"><em>Quantum computation and information</em> <span class="ref-card-pub">(Caltech)</span></p>
+                <p class="ref-card-desc">
+                  Apuntes de curso de referencia para cúbits, canales cuánticos, complejidad y corrección de errores;
+                  puente entre física teórica y algoritmos cuánticos.
+                </p>
+                <a class="ref-card-open" href="http://theory.caltech.edu/~preskill/ph229/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">arXiv · quant-ph</p>
+                <p class="ref-card-book"><em>Lista «recent» de prepublicaciones</em></p>
+                <p class="ref-card-desc">
+                  Preprints en física cuántica e información cuántica; recurso esencial para seguir la frontera de
+                  resultados, algoritmos y métodos experimentales.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Qiskit Textbook</p>
+                <p class="ref-card-book"><em>Texto abierto con laboratorios interactivos</em></p>
+                <p class="ref-card-desc">
+                  Fundamentos de circuitos cuánticos, visualizaciones de la esfera de Bloch y laboratorios numéricos
+                  para síntesis y optimización de circuitos.
+                </p>
+                <a class="ref-card-open" href="https://learning.quantum.ibm.com/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+            </div>
+            <p class="qubits-prose qubits-prose--academic ref-cards-foot">
+              <a href="fundamento-teorico.html#bases-cuantica">← Volver a Fundamentos teóricos</a>
+            </p>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ ENDMATTER -->
+          <section id="descargar-articulo-circuitos" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row"><dt>Título</dt><dd class="qubits-endmatter-doc-title">Circuitos cuánticos y puertas elementales: del formalismo unitario a la ejecución en hardware</dd></div>
+              <div class="qubits-endmatter-row"><dt>Fecha de elaboración</dt><dd><time datetime="2026-04-10">10 de abril de 2026</time></dd></div>
+              <div class="qubits-endmatter-row"><dt>Autores</dt><dd><span>Noguerón Méndez José Antonio</span><span class="qubits-endmatter-affil">Head of Quantum Product</span></dd></div>
+            </dl>
+            <a id="circuitosArticleDownload" class="qubits-btn-artículo qubits-btn-artículo--disabled" href="#" aria-label="Descargar el artículo completo" aria-disabled="true">
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span>Descargar artículo</span>
+            </a>
+          </section>
+
+  </article>
+</main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#modelo-circuitos" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Modelo de circuitos cuánticos</span>
+          </a>
+          <a href="#puertas-un-cubit" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Puertas de un cúbit: SU(2)</span>
+          </a>
+          <a href="#puertas-dos-cubits" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Puertas de dos cúbits</span>
+          </a>
+          <a href="#universalidad" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Universalidad computacional</span>
+          </a>
+          <a href="#descomposicion-sintesis" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Descomposición y síntesis</span>
+          </a>
+          <a href="#transpilacion-mapeo" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Transpilación y mapeo</span>
+          </a>
+          <a href="#optimizacion-circuitos" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Optimización de circuitos</span>
+          </a>
+          <a href="#circuitos-parametrizados" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Circuitos parametrizados</span>
+          </a>
+          <a href="#medicion-retroalimentacion" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Medición y retroalimentación</span>
+          </a>
+          <a href="#circuito-hardware-harmoniq" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Del circuito al hardware</span>
+          </a>
+          <a href="#referencias-circuitos" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Referencias</span>
+          </a>
+          <a href="#descargar-articulo-circuitos" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Descargar artículo</span>
+          </a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+  </body>
+</html>

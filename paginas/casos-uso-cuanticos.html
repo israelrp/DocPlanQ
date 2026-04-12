@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Casos de uso de la computación cuántica: marco formal y fronteras prácticas | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") {
+            document.body.classList.add("light-mode");
+            document.documentElement.classList.add("light-mode");
+          }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button
+                type="button"
+                class="search-toggle"
+                aria-label="Abrir buscador"
+                data-i18n-aria-label="search.open"
+                aria-expanded="false"
+                aria-controls="searchDropdown"
+              >
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <span data-i18n="search.label">Search</span>
+              </button>
+              <input
+                id="searchInput"
+                class="search-input"
+                type="search"
+                placeholder="Buscar en la documentación..."
+                aria-label="Buscar en la documentación"
+                data-i18n-placeholder="search.placeholder"
+                data-i18n-aria-label="search.placeholder"
+                autocomplete="off"
+              />
+            </div>
+            <div
+              class="search-dropdown"
+              id="searchDropdown"
+              role="dialog"
+              data-i18n-aria-label="search.dialogLabel"
+              hidden
+            >
+              <div class="search-dropdown-panel">
+                <div class="search-dropdown-body">
+                  <div class="search-empty" id="searchEmptyBlock">
+                    <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                    <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                    <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                  </div>
+                  <ul class="search-results-list" id="searchResultsList" hidden></ul>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <a
+          href="https://cloud.planq.com/blog"
+          class="header-platform-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i
+        ></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="fundamento-teorico.html"
+              ><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a
+            >
+            <a class="nav-item" href="../programacion-cuantica.html"
+              ><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a
+            >
+            <a class="nav-item" href="workflow.html"
+              ><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a
+            >
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"
+              ><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a
+            >
+            <a class="nav-item" href="casos-uso-cuanticos.html"
+              ><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a
+            >
+            <a class="nav-item" href="teoria-cuantica.html"
+              ><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a
+            >
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="simuladores.html#page-body"
+                  ><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-functioning"
+                  ><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-computers"
+                  ><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-foundations"
+                  ><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-usage"
+                  ><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a
+                >
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"
+                  ><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a
+                >
+                <a class="nav-sublink" href="compositor.html#entidades"
+                  ><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a
+                >
+                <a class="nav-sublink" href="compositor.html#arquitectura"
+                  ><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="code-examples.html#ios"
+                  ><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#android"
+                  ><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#react"
+                  ><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#python"
+                  ><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a
+                >
+              </div>
+            </div>
+            <a class="nav-item" href="code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+          <section id="page-body" class="qubits-hero">
+            <p class="qubits-kicker qubits-kicker--row">
+              <span class="qubits-kicker-segment">Fundamento teórico</span>
+              <span class="qubits-kicker-rule" aria-hidden="true"></span>
+              <span class="qubits-kicker-segment">Casos de uso</span>
+            </p>
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img
+                    class="qubits-author-photo"
+                    src="../images/author-nogueron-mendez-planq.png"
+                    width="56"
+                    height="56"
+                    alt="Retrato de Noguerón Méndez José Antonio"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h1 class="qubits-hero-title" data-i18n="casos.endmatter.articleTitle">
+              Casos de uso de la computación cuántica: marco formal, aplicaciones y fronteras prácticas
+            </h1>
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                Este documento articula <strong>casos de uso</strong> en el sentido estricto de la ingeniería y la física
+                aplicada: problemas donde la mecánica cuántica —mediante cúbits controlados, evolución (casi) unitaria y
+                muestreo de resultados— promete o ya aporta ventajas sobre flujos clásicos, bajo supuestos explícitos sobre
+                ruido, escala y coste. No es un catálogo comercial ni una promesa de supremacía inmediata; es un mapa
+                <em>académico y humano</em> para leer anuncios, papers y hojas de ruta con criterio.
+              </p>
+              <p>
+                Distinguimos de entrada la era <strong>NISQ</strong> (dispositivos ruidosos, mediana escala) de la visión de
+                <strong>corrección de errores</strong> y cúbits lógicos tolerantes a fallos. Muchas demostraciones actuales
+                pertenecen al primer régimen; las ventajas asintóticas teóricas (p. ej. en factorización o cierta química)
+                presuponen el segundo. Ignorar esa grieta produce expectativas mal calibradas.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame qubits-figure-frame--flush" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg">
+                  <text x="28" y="28" font-size="10" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">Regímenes (esquema)</text>
+                  <rect x="32" y="48" width="140" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <text x="48" y="76" font-size="10" fill="currentColor" opacity="0.8" font-family="system-ui,sans-serif">NISQ</text>
+                  <text x="48" y="92" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">mitigación · variacional</text>
+                  <rect x="190" y="48" width="140" height="56" rx="6" fill="none" stroke="var(--qubits-accent)" stroke-width="1.3" opacity="0.55" />
+                  <text x="210" y="76" font-size="10" fill="currentColor" opacity="0.8" font-family="system-ui,sans-serif">QEC · lógico</text>
+                  <text x="210" y="92" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">umbral · overhead</text>
+                  <rect x="348" y="48" width="140" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.35" />
+                  <text x="368" y="76" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Clásico + HPC</text>
+                  <text x="368" y="92" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">baselines</text>
+                  <path d="M172 76 L190 76" stroke="currentColor" stroke-width="1" opacity="0.35" marker-end="url(#casos-reg-arrow)" />
+                  <path d="M330 76 L348 76" stroke="currentColor" stroke-width="1" opacity="0.35" marker-end="url(#casos-reg-arrow)" />
+                  <defs>
+                    <marker id="casos-reg-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                      <path d="M0,0 L5,2.5 L0,5 Z" fill="currentColor" opacity="0.35" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 1. Transición conceptual de prototipos ruidosos hacia cómputo lógico protegido; el rendimiento clásico
+                sigue siendo referencia obligada en cada caso de uso.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="marco-formal-usos" class="qubits-section">
+            <h2>Marco formal: qué cuenta como «uso» cuántico</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Un caso de uso cuántico, en el lenguaje de la información cuántica, suele reducirse a: (i) preparar un estado
+                en \(\mathcal{H}^{\otimes n}\), (ii) aplicar una secuencia de unitarios locales y de dos cúbits (o un
+                hamiltoniano efectivo continuado en el tiempo), (iii) medir en una base o POVM, (iv) repetir y post-procesar
+                clásicamente. La <em>ventaja</em> puede ser de complejidad muestral, de profundidad de circuito para una
+                precisión dada, o de naturaleza heurística cuando no hay teorema de separación riguroso.
+              </p>
+              <p>
+                Los <strong>sensores y dispositivos cuánticos</strong> que no ejecutan algoritmos digitales —interferómetros
+                atómicos, magnetómetros basados en NV, relojes ópticos— también son «aplicaciones de la mecánica cuántica», pero
+                con otra cadena de valor: no siempre pasan por compilación de circuitos. Este texto prioriza el paradigma
+                <em>gate-based</em> por su centralidad en plataformas cloud y SDKs como los del ecosistema Harmoniq / PlanQ
+                Quantum, sin negar el resto.
+              </p>
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Nota prudente</p>
+              <p>
+                Cuando un informe mezcla «computación cuántica» y «IA cuántica» sin definir oráculos, funciones de coste ni
+                benchmarks clásicos, el lector debería exigir protocolos reproducibles y líneas base declaradas. La buena
+                ciencia tolera la incertidumbre; la mala oculta supuestos bajo marcas registradas.
+              </p>
+            </aside>
+          </section>
+
+          <section id="simulacion-quimica" class="qubits-section">
+            <h2>Simulación química y materiales electrónicos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La química cuántica es, en principio, un problema de muchos electrones en potenciales externos y entre sí. Los
+                métodos variacionales en subespacio (VQE), la estimación de fase cuántica (QPE) ruidosa o ideal, y las
+                descomposiciones de Trotter–Suzuki para \(e^{-iHt}\) constituyen la columna vertebral de los casos de uso
+                <strong>molecular</strong>. La dificultad práctica es triple: profundidad de circuito, calibración y tamaño del
+                sistema que aún cabe en hardware ruidoso.
+              </p>
+              <p>
+                En <strong>materiales</strong>, hamiltonianos de Hubbard y modelos de baja energía en redes cristalinas
+                conectan con física de la materia condensada; la simulación cuántica «digital» compite con métodos clásicos
+                (DMRG, QMC, DFT) según dimensionalidad y estructura de entrelazamiento. No hay un único ganador universal.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 440 120" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="24" y="40" width="88" height="48" rx="4" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.45" />
+                  <text x="36" y="70" font-size="9" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Hamiltoniano H</text>
+                  <path d="M112 64 L148 64" stroke="currentColor" stroke-width="1" opacity="0.4" marker-end="url(#casos-pipe)" />
+                  <rect x="148" y="36" width="100" height="56" rx="4" fill="none" stroke="var(--qubits-accent)" stroke-width="1.2" opacity="0.55" />
+                  <text x="158" y="60" font-size="9" fill="currentColor" opacity="0.8" font-family="system-ui,sans-serif">Circuito / Trotter</text>
+                  <text x="158" y="76" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">VQE · QPE</text>
+                  <path d="M248 64 L284 64" stroke="currentColor" stroke-width="1" opacity="0.4" marker-end="url(#casos-pipe)" />
+                  <rect x="284" y="40" width="88" height="48" rx="4" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.45" />
+                  <text x="296" y="70" font-size="9" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Muestreo ⟨O⟩</text>
+                  <path d="M372 64 L408 64" stroke="currentColor" stroke-width="1" opacity="0.4" marker-end="url(#casos-pipe)" />
+                  <rect x="408" y="40" width="28" height="48" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
+                  <text x="412" y="70" font-size="8" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">c</text>
+                  <defs>
+                    <marker id="casos-pipe" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                      <path d="M0,0 L5,2.5 L0,5 Z" fill="currentColor" opacity="0.35" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 2. Flujo típico: problema de muchos cuerpos → compilación a circuito → mediciones → acumulación clásica de
+                expectativas.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="optimización-combinatoria" class="qubits-section">
+            <h2>Optimización combinatoria y QAOA</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Problemas tipo MaxCut, coloreado de grafos o asignación cuadrática admiten codificación en hamiltonianos de
+                Ising. El <strong>QAOA</strong> alterna operadores de mezcla y de fase guiados por parámetros clásicos
+                optimizados en bucle híbrido. En la práctica, el paisaje de parámetros puede ser rugoso; <em>warm starts</em>
+                clásicos y restricciones de simetría mejoran resultados en instancias industriales pequeñas.
+              </p>
+              <p>
+                La pregunta honesta no es «¿es cuántico?» sino «¿supera, para <em>esta</em> familia de instancias y con
+                <em>este</em> presupuesto de shots, a un solver clásico documentado?». Los concursos y benchmarks recientes
+                muestran que la respuesta depende fuertemente del tamaño, topología y ruido.
+              </p>
+            </div>
+          </section>
+
+          <section id="aritmetica-cuantica" class="qubits-section">
+            <h2>Aritmética cuántica: factorización y logaritmo discreto</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo de <strong>Shor</strong> demuestra que factorización entera y logaritmo discreto están en BQP bajo
+                modelos estándar; la consecuencia criptográfica motivó estándares <em>post-cuánticos</em> basados en retículos y
+                otras primitivas. Implementar Shor a escala que amenace RSA real exige millones de cúbits lógicos de alta
+                fidelidad —órdenes de magnitud más allá del hardware actual.
+              </p>
+              <p>
+                Pedagógicamente, Shor ilustura el valor de la <strong>transformada cuántica de Fourier</strong> y la
+                estimación de fase; estratégicamente, recuerda que la «aplicación» más citada puede ser la más lejana en tiempo
+                de ingeniería.
+              </p>
+            </div>
+          </section>
+
+          <section id="busqueda-oraculos" class="qubits-section">
+            <h2>Búsqueda no estructurada y oráculos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                <strong>Grover</strong> ofrece una aceleración cuadrática en la consulta a un oráculo que marca una solución;
+                cuando el coste de construir el oráculo domina, la ventaja global puede diluirse. Sirve, no obstante, como
+                primitiva didáctica de amplificación de amplitud y aparece como subrutina en otros diseños.
+              </p>
+            </div>
+          </section>
+
+          <section id="criptografia-comunicaciones" class="qubits-section">
+            <h2>Criptografía cuántica y distribución de claves</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Protocolos <strong>BB84</strong> y variantes entrelazadas (p. ej. E91) permiten detectar escuchas en el canal
+                cuántico mediante tasas de error anómalas; la seguridad de la clave final combina leyes físicas con
+                <em>privacy amplification</em> clásica. La criptografía <strong>post-cuántica</strong> (lattice-based, etc.) es
+                complementaria, no sustituto automático: cubre escenarios donde no hay fibra cuántica disponible.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="24" y="48" width="72" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.45" />
+                  <text x="36" y="74" font-size="9" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Alice</text>
+                  <rect x="224" y="48" width="72" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.45" />
+                  <text x="236" y="74" font-size="9" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Bob</text>
+                  <path d="M96 70 L224 70" stroke="var(--qubits-accent)" stroke-width="1.6" opacity="0.5" stroke-dasharray="6 4" />
+                  <text x="120" y="64" font-size="8" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">canal cuántico</text>
+                  <text x="110" y="108" font-size="8" fill="currentColor" opacity="0.45" font-family="system-ui,sans-serif">canal autenticado clásico (público)</text>
+                  <path d="M60 92 L260 108" stroke="currentColor" stroke-width="1" opacity="0.25" />
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 3. Esquema QKD: intercambio cuántico para detección de intrusión más reconciliación y amplificación de
+                privacidad por canales clásicos autenticados.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="metrologia-sensores" class="qubits-section">
+            <h2>Metrología, sensores y ventaja cuántica en estimación</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Estados <em>squeezed</em> y protocolos de estimación con entrelazamiento pueden acercarse al límite de
+                Heisenberg en la varianza de fase bajo modelos de ruido idealizados. En laboratorio, pérdidas y decoherencia
+                rebajan la ganancia; aun así, LIGO y relojes ópticos ilustran cómo la óptica cuántica ya transformó
+                instrumentación de precisión.
+              </p>
+            </div>
+          </section>
+
+          <section id="machine-learning-cuantico" class="qubits-section">
+            <h2>Aprendizaje automático y kernels cuánticos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Los <strong>kernels cuánticos</strong> miden solapamientos de estados de característica en \(\mathcal{H}\) de
+                dimensión exponencialmente grande; la ventaja depende de la inducción de estructura en los datos y de la
+                capacidad de muestrear el kernel con ruido controlado. Los <em>barren plateaus</em> —gradientes exponencialmente
+                pequeños en circuitos aleatorios profundos— advierten contra el entrenamiento ingenuo de ansätze sin
+                arquitectura informada por simetrías o datos.
+              </p>
+            </div>
+          </section>
+
+          <section id="stack-integracion" class="qubits-section">
+            <h2>Stack de software, compilación y ejecución</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Un caso de uso «completo» atraviesa front-end (SDK en Python, Swift, Kotlin…), transpilación a puertas nativas,
+                calendarización en conectividad restringida, mitigación de errores (ZNE, PEC, extrapolación) y orquestación de
+                jobs. Plataformas como Harmoniq abstraen parte de esta cadena, pero el físico responsable debe inspeccionar
+                calibraciones y tasas \(T_1\), \(T_2\) publicadas por el backend.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 460 100" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="16" y="32" width="72" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
+                  <text x="28" y="56" font-size="8" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">SDK</text>
+                  <rect x="104" y="32" width="88" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
+                  <text x="112" y="56" font-size="8" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">Transpiler</text>
+                  <rect x="208" y="32" width="88" height="40" rx="4" fill="none" stroke="var(--qubits-accent)" stroke-width="1.1" opacity="0.5" />
+                  <text x="220" y="56" font-size="8" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Runtime</text>
+                  <rect x="312" y="32" width="72" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4" />
+                  <text x="322" y="56" font-size="8" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">HW</text>
+                  <rect x="400" y="32" width="44" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
+                  <text x="408" y="56" font-size="8" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">↩</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 4. Cadena simplificada desde código hasta hardware y retroalimentación con resultados clásicos.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="criterios-evidencia" class="qubits-section">
+            <h2>Criterios de evidencia y lectura crítica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Ante un nuevo caso de uso, conviene preguntar: ¿cuál es el <strong>baseline clásico</strong> documentado? ¿Se
+                reporta el presupuesto de <strong>shots</strong> y el error de mediciones? ¿El algoritmo escala en profundidad
+                como \(O(\mathrm{poly}(n))\) o explota? ¿Hay demostración en hardware o solo simulación exacta de dimensiones
+                modestas? Las respuestas pobres no invalidan la curiosidad científica, pero sí deben modular el tono de
+                marketing.
+              </p>
+              <p>
+                En conjunto, los cúbits y la mecánica cuántica ofrecen un lenguaje poderoso para modelar naturaleza en escala
+                microscópica; su traducción en <em>producto</em> útil exige honestidad sobre ruido, costes energéticos y
+                talento interdisciplinario. Este texto cierra invitando a leer en paralelo la guía sobre
+                <a href="qubits.html">cúbits</a> y la panorámica de <a href="teoria-cuantica.html">teoría cuántica</a>, donde se
+                detallan formalismo y fenómenos subyacentes.
+              </p>
+            </div>
+          </section>
+
+          <section id="referencias-casos" class="qubits-section qubits-refs">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="qubits-refs-intro qubits-prose--academic">
+              Selección orientativa: monografías, informes de estandarización y plataformas con documentación técnica verificable.
+            </p>
+            <ul class="qubits-ref-grid">
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Nielsen &amp; Chuang</span>
+                  <span class="qubits-ref-desc"
+                    ><em>Quantum Computation and Quantum Information</em>. Base algorítmica y de información cuántica.</span
+                  >
+                </div>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://theory.caltech.edu/~preskill/ph229/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Preskill · Ph 229</span>
+                  <span class="qubits-ref-desc">Notas sobre algoritmos, ruido y QEC.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">NIST · Post-Quantum Cryptography</span>
+                  <span class="qubits-ref-desc">Estandarización de primitivas resistentes a atacantes cuánticos.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://quantum.ibm.com/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">IBM Quantum</span>
+                  <span class="qubits-ref-desc">Documentación de backends y calibración.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">arXiv · quant-ph</span>
+                  <span class="qubits-ref-desc">Literatura reciente en algoritmos y experimentos.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://www.nature.com/natrevphys/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Nature Reviews Physics</span>
+                  <span class="qubits-ref-desc">Revisiones sobre tecnologías cuánticas y fronteras.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section id="descargar-artículo-casos" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title" data-i18n="casos.endmatter.sectionTitle">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row">
+                <dt data-i18n="casos.endmatter.dtTitle">Título</dt>
+                <dd class="qubits-endmatter-doc-title" data-i18n="casos.endmatter.articleTitle">
+                  Casos de uso de la computación cuántica: marco formal, aplicaciones y fronteras prácticas
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt data-i18n="casos.endmatter.dtDate">Fecha de elaboración</dt>
+                <dd>
+                  <time datetime="2026-04-09" data-i18n="casos.endmatter.dateValue">9 de abril de 2026</time>
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt data-i18n="casos.endmatter.dtAuthors">Autores</dt>
+                <dd>
+                  <span data-i18n="casos.endmatter.authorName">Noguerón Méndez José Antonio</span>
+                  <span class="qubits-endmatter-affil" data-i18n="casos.endmatter.authorAffil">Head of Quantum Product</span>
+                </dd>
+              </div>
+            </dl>
+            <a
+              id="casosArticleDownload"
+              class="qubits-btn-artículo qubits-btn-artículo--disabled"
+              href="#"
+              data-i18n-aria-label="casos.download.aria"
+              aria-label="Descargar el artículo completo"
+              aria-disabled="true"
+            >
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span data-i18n="casos.download.button">Descargar artículo</span>
+            </a>
+          </section>
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#marco-formal-usos" class="right-toc-sublink">Marco formal</a>
+          <a href="#simulacion-quimica" class="right-toc-sublink">Simulación química</a>
+          <a href="#optimización-combinatoria" class="right-toc-sublink">Optimización · QAOA</a>
+          <a href="#aritmetica-cuantica" class="right-toc-sublink">Aritmética cuántica</a>
+          <a href="#busqueda-oraculos" class="right-toc-sublink">Búsqueda · Grover</a>
+          <a href="#criptografia-comunicaciones" class="right-toc-sublink">Criptografía · QKD</a>
+          <a href="#metrologia-sensores" class="right-toc-sublink">Metrología</a>
+          <a href="#machine-learning-cuantico" class="right-toc-sublink">ML cuántico</a>
+          <a href="#stack-integracion" class="right-toc-sublink">Stack e integración</a>
+          <a href="#criterios-evidencia" class="right-toc-sublink">Criterios de evidencia</a>
+          <a href="#referencias-casos" class="right-toc-sublink">Referencias</a>
+          <a href="#descargar-artículo-casos" class="right-toc-sublink" data-i18n="casos.download.toc">Descargar</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+      (function () {
+        var CASOS_ARTICLE_PDF_URL = "";
+        var a = document.getElementById("casosArticleDownload");
+        if (!a) return;
+        if (CASOS_ARTICLE_PDF_URL) {
+          a.href = CASOS_ARTICLE_PDF_URL;
+          a.setAttribute("download", "guia-casos-uso-cuánticos-harmoniq.pdf");
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener noreferrer");
+          a.classList.remove("qubits-btn-artículo--disabled");
+          a.removeAttribute("aria-disabled");
+        } else {
+          a.classList.add("qubits-btn-artículo--disabled");
+          a.setAttribute("aria-disabled", "true");
+          a.removeAttribute("download");
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

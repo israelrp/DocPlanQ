@@ -1,0 +1,17 @@
+{
+  "name": "planq-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:search && npm run build:firebase",
+    "build:search": "node scripts/build-search-index.mjs",
+    "build:firebase": "esbuild src/firebase-init.js --bundle --outfile=firebase-init.bundle.js --format=iife --global-name=HarmoniqFirebase --legal-comments=none",
+    "postinstall": "npm run build:firebase"
+  },
+  "dependencies": {
+    "firebase": "^11.6.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

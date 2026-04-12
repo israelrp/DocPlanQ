@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estado de Bell: preparación de un par entrelazado y correlaciones no locales | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=105" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <span data-i18n="search.label">Search</span>
+              </button>
+              <input id="searchInput" class="search-input" type="search" placeholder="Buscar en la documentación..." aria-label="Buscar en la documentación" data-i18n-placeholder="search.placeholder" data-i18n-aria-label="search.placeholder" autocomplete="off" />
+            </div>
+            <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+              <div class="search-dropdown-panel">
+                <div class="search-dropdown-body">
+                  <div class="search-empty" id="searchEmptyBlock">
+                    <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                    <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                    <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                  </div>
+                  <ul class="search-results-list" id="searchResultsList" hidden></ul>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button type="button" class="lang-dropdown-toggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Seleccion de idioma" data-i18n-aria-label="lang.menu">
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button type="button" class="left-nav-toggle" id="leftNavToggle" aria-expanded="true" aria-controls="leftNavPanel">
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item toc-active" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a>
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+
+        <!-- ── HERO ────────────────────────────────────── -->
+        <section id="page-body" class="qubits-hero">
+          <div class="qubits-kicker-with-back">
+            <button
+              type="button"
+              class="doc-back-btn"
+              data-i18n-aria-label="doc.backPrevious"
+              aria-label="Volver a la página anterior"
+              onclick="history.back()"
+            >
+              <i class="ph ph-arrow-left" aria-hidden="true"></i>
+            </button>
+            <p class="qubits-kicker qubits-kicker--row">
+              <span class="qubits-kicker-segment">Fundamento teórico</span>
+              <span class="qubits-kicker-rule" aria-hidden="true"></span>
+              <span class="qubits-kicker-segment">Estado de Bell</span>
+            </p>
+          </div>
+          <div class="qubits-authors" aria-label="Créditos">
+            <p class="qubits-authors-label">Autor</p>
+            <div class="qubits-authors-row">
+              <div class="qubits-author-card">
+                <img
+                  class="qubits-author-photo"
+                  src="../images/author-nogueron-mendez-planq.png"
+                  width="56"
+                  height="56"
+                  alt="Retrato de Noguerón Méndez José Antonio"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="qubits-author-meta">
+                  <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                  <span class="qubits-author-role">Head of Quantum Product</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h1 class="qubits-hero-title">Estado de Bell: preparación de un par entrelazado y correlaciones no locales</h1>
+          <div class="qubits-prose qubits-prose--academic qubits-lead">
+            <p>
+              El <strong>estado de Bell</strong> \(|\Phi^+\rangle\) es el par cuántico entrelazado más
+              sencillo que puede prepararse sobre un sistema de dos cúbits. Su estudio es obligatorio en
+              cualquier introducción a la computación cuántica porque concentra, en apenas dos puertas
+              lógicas, todos los fenómenos que diferencian cualitativamente la mecánica cuántica de la
+              probabilidad clásica: superposición coherente, correlaciones no locales y colapso conjunto
+              en la medición proyectiva.
+            </p>
+            <p>
+              Desde el formalismo de espacios de Hilbert compuestos, \(|\Phi^+\rangle\) carece de
+              factorización en producto tensorial de estados puros locales; el <em>rango de Schmidt</em> es
+              dos y la traza parcial sobre cualquier subsistema coincide con el operador proporcional a la
+              identidad en \(\mathbb{C}^2\). Esa maximalidad de entropía de entrelazamiento explica por qué
+              ningún observador con acceso solo a un cúbit puede predecir con certeza el resultado de una
+              medición en el otro, pese a las correlaciones perfectas cuando se analiza el sistema conjunto.
+              En laboratorios y simuladores (Hopper, Hermann), la distinción entre desviaciones estadísticas
+              y degradación por ruido de puerta resulta central para interpretar histogramas de conteos.
+            </p>
+          </div>
+          <div class="hq-example-meta">
+            <span class="hq-example-meta__item"><i class="ph ph-chart-bar"></i> <strong>Básico</strong></span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-circles-three-plus"></i> 2 cúbits</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-git-branch"></i> 2 puertas</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-cpu"></i> Hopper / Hermann</span>
+          </div>
+        </section>
+
+        <!-- ── FUNDAMENTO TEÓRICO ──────────────────────── -->
+        <section id="bell-theory" class="qubits-section">
+          <h2>Fundamento teórico</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              Sea \(\mathcal{H} = \mathbb{C}^2 \otimes \mathbb{C}^2\) el espacio de Hilbert de dos cúbits.
+              La base computacional estándar es \(\{|00\rangle, |01\rangle, |10\rangle, |11\rangle\}\). Dos
+              sistemas cuánticos \(A\) y \(B\) se dicen <em>entrelazados</em> cuando su estado conjunto
+              no puede factorizarse como producto tensorial de estados individuales:
+              \(|\psi\rangle_{AB} \neq |\alpha\rangle_A \otimes |\beta\rangle_B\).
+            </p>
+            <p>
+              Los cuatro <strong>estados de Bell</strong> (o pares EPR) forman una base ortonormal de
+              \(\mathcal{H}\) compuesta íntegramente por estados entrelazados máximamente:
+            </p>
+          </div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              \[
+                |\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt{2}}, \qquad
+                |\Phi^-\rangle = \frac{|00\rangle - |11\rangle}{\sqrt{2}}
+              \]
+              \[
+                |\Psi^+\rangle = \frac{|01\rangle + |10\rangle}{\sqrt{2}}, \qquad
+                |\Psi^-\rangle = \frac{|01\rangle - |10\rangle}{\sqrt{2}}
+              \]
+            </p>
+          </div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              Este ejemplo prepara \(|\Phi^+\rangle\). Para comprender por qué el circuito de dos puertas
+              lo produce, consideremos el efecto de cada operación por separado.
+            </p>
+            <p>
+              La puerta de Hadamard \(H\) actúa sobre un cúbit único y mapea los estados de la base
+              computacional a superposiciones uniformes:
+              \[H|0\rangle = \frac{|0\rangle + |1\rangle}{\sqrt{2}} \equiv |{+}\rangle, \qquad
+                H|1\rangle = \frac{|0\rangle - |1\rangle}{\sqrt{2}} \equiv |{-}\rangle.\]
+              Aplicada a \(q_0\), el estado del sistema bipartito evoluciona de
+              \(|00\rangle\) a \(|{+}\rangle|0\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |10\rangle)\).
+            </p>
+            <p>
+              La puerta CNOT (\(q_0\) control, \(q_1\) objetivo) voltea \(q_1\) si y solo si \(q_0 = 1\).
+              Su acción sobre la superposición anterior produce:
+              \[
+                \text{CNOT}\,\frac{1}{\sqrt{2}}(|00\rangle + |10\rangle)
+                = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle) = |\Phi^+\rangle.
+              \]
+              En este punto el estado no puede descomponerse en producto; los dos cúbits están máximamente
+              entrelazados. Cualquier medición local de \(q_0\) determina instantáneamente el resultado de
+              \(q_1\), y viceversa, independientemente de la distancia entre ellos.
+            </p>
+          </div>
+          <aside class="qubits-callout">
+            <p class="qubits-callout-label">Correlaciones de medición</p>
+            <p>
+              Cuando se mide \(|\Phi^+\rangle\) en la base \(Z\), los resultados posibles son
+              \(|00\rangle\) y \(|11\rangle\) con probabilidad \(\frac{1}{2}\) cada uno. Nunca se obtiene
+              \(|01\rangle\) ni \(|10\rangle\). Estas correlaciones violan las desigualdades de Bell,
+              descartando explicaciones basadas en variables ocultas locales.
+            </p>
+          </aside>
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Descomposición de Schmidt y matriz de densidad reducida</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Para un estado bipartito \(|\psi\rangle_{AB}\), la <em>descomposición de Schmidt</em> garantiza
+                la existencia de bases ortonormales \(\{|i\rangle_A\}\), \(\{|i\rangle_B\}\) y coeficientes
+                \(\lambda_i \ge 0\) con \(\sum_i \lambda_i^2 = 1\) tales que
+                \(|\psi\rangle = \sum_i \lambda_i |i\rangle_A|i\rangle_B\). El estado es separable (producto)
+                si y solo si un único \(\lambda_i\) es no nulo. Para \(|\Phi^+\rangle\), los coeficientes de
+                Schmidt son ambos \(1/\sqrt{2}\); por tanto el entrelazamiento es maximal en el sentido de
+                entropía de Von Neumann del subsistema.
+              </p>
+              <p>
+                La <strong>matriz de densidad reducida</strong> del subsistema \(A\) se obtiene por traza
+                parcial \(\rho_A = \mathrm{Tr}_B(|\Phi^+\rangle\langle\Phi^+|)\). Un cálculo directo en la
+                base computacional muestra \(\rho_A = \rho_B = \frac{1}{2}I\), es decir, el estado mezclado
+                maximal en un cúbit. La entropía de entrelazamiento
+                \(S(\rho_A) = -\mathrm{Tr}(\rho_A \log_2 \rho_A)\) vale entonces \(1\) bit, cota superior para
+                dos cúbits.
+              </p>
+            </div>
+            <div class="qubits-equation" aria-label="Matriz de densidad del estado Phi+">
+              \[
+                |\Phi^+\rangle\langle\Phi^+| = \frac{1}{2}\bigl( |00\rangle\langle 00| + |00\rangle\langle 11|
+                + |11\rangle\langle 00| + |11\rangle\langle 11| \bigr).
+              \]
+            </div>
+          </section>
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Formalismo EPR, no señalización y desigualdades de Bell</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El argumento Einstein–Podolsky–Rosen interpretaba correlaciones perfectas como evidencia de
+                variables ocultas predeterminadas. Los trabajos de Bell y posteriores demostraron que
+                correlaciones medibles en \(|\Phi^+\rangle\) pueden violar la cota de Bell–CHSH, descartando
+                modelos locales realistas en el sentido estándar. Crucialmente, la <em>no señalización</em>
+                sigue cumpliéndose: la estadística marginal de cada laboratorio no depende de la elección de
+                base del otro; solo las correlaciones conjuntas revelan el carácter cuántico.
+              </p>
+              <p>
+                En protocolos de información cuántica (teleportación, codificación superdensa, QKD basada en
+                entrelazamiento), \(|\Phi^+\rangle\) y sus equivalentes unitarios suelen tomarse como recurso
+                estándar porque cualquier estado de Bell maximiza ciertas capacidades de canal bipartito en
+                dimensión \(2 \times 2\).
+              </p>
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Teorema de no clonación</p>
+              <p>
+                No existe una operación unitaria que produzca dos copias de un estado cuántico desconocido.
+                Por ello, el entrelazamiento distribuido no puede «duplicarse» trivialmente; los protocolos que
+                consumen \(|\Phi^+\rangle\) deben contabilizar el recurso como no reutilizable tras la medición.
+              </p>
+            </aside>
+          </section>
+        </section>
+
+        <!-- ── CIRCUITO ────────────────────────────────── -->
+        <section id="bell-circuit" class="qubits-section">
+          <h2>Circuito cuántico</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El circuito consta de dos puertas y actúa sobre el estado inicial
+              \(|q_0 q_1\rangle = |00\rangle\):
+            </p>
+          </div>
+          <div class="hq-circuit-block" aria-label="Diagrama del circuito estado de Bell">
+<span class="q-l">q₀</span><span class="q-w">: ─</span><span class="q-g">┤H├</span><span class="q-w">─────────</span><span class="q-c">●</span><span class="q-w">─────── </span><span class="q-m">┤M├</span><span class="q-w">────</span>
+<span class="q-l">q₁</span><span class="q-w">: ──────────────────</span><span class="q-c">⊕</span><span class="q-w">─────── </span><span class="q-m">┤M├</span><span class="q-w">────</span>
+
+         <span class="q-w">Paso 1         Paso 2        Paso 3</span>
+         <span class="q-g">Hadamard</span>       <span class="q-c">CNOT</span>         <span class="q-m">Medición</span></div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              <strong>Paso 1 — Hadamard en \(q_0\):</strong> crea la superposición
+              \(\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)\) en el cúbit de control. El estado global pasa
+              de \(|00\rangle\) a \(\frac{1}{\sqrt{2}}(|00\rangle + |10\rangle)\).
+            </p>
+            <p>
+              <strong>Paso 2 — CNOT(\(q_0 \to q_1\)):</strong> condiciona la operación NOT sobre \(q_1\)
+              al valor de \(q_0\). El componente \(|10\rangle\) se transforma en \(|11\rangle\),
+              produciendo \(|\Phi^+\rangle\).
+            </p>
+            <p>
+              <strong>Paso 3 — Medición en base Z:</strong> colapsa el estado a \(|00\rangle\) o
+              \(|11\rangle\) con probabilidad \(\frac{1}{2}\). Ambos cúbits siempre coinciden.
+            </p>
+          </div>
+        </section>
+
+        <!-- ── IMPLEMENTACIÓN ──────────────────────────── -->
+        <section id="bell-impl" class="qubits-section">
+          <h2>Implementación en HarmoniQ</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El mismo circuito se expresa de forma casi idéntica en los cuatro SDKs de HarmoniQ.
+              La única diferencia es la sintaxis nativa de cada lenguaje para listas y llamadas asíncronas.
+              El parámetro <code>provider</code> selecciona el backend; usa <code>"hopper"</code>
+              para prototipos rápidos de 2 cúbits.
+            </p>
+          </div>
+
+          <!-- Swift -->
+          <section id="bell-impl-swift" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/swift.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Swift</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>BellState.swift</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> HarmoniQ
+
+<span class="k">let</span> gates: [<span class="t">Gate</span>] = [
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"cnot"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+]
+
+<span class="k">do</span> {
+    <span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider: <span class="s">"hopper"</span>,
+        shots:    <span class="n">1024</span>,
+        qubits:   <span class="n">2</span>,
+        bits:     <span class="n">2</span>,
+        gates:    gates,
+        basis:    <span class="s">"Z"</span>
+    )
+    <span class="c">// Esperado: {"00": ~512, "11": ~512}</span>
+    <span class="fn">print</span>(result.counts)
+} <span class="k">catch</span> {
+    <span class="fn">print</span>(<span class="s">"Error:"</span>, error)
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- Kotlin -->
+          <section id="bell-impl-kotlin" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/kotlin.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Kotlin</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>BellState.kt</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"cnot"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+)
+
+viewModelScope.<span class="fn">launch</span> {
+    <span class="k">val</span> result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider = <span class="s">"hopper"</span>,
+        shots    = <span class="n">1024</span>,
+        qubits   = <span class="n">2</span>,
+        bits     = <span class="n">2</span>,
+        gates    = gates,
+        basis    = <span class="s">"Z"</span>
+    )
+    <span class="c">// Esperado: {"00": ~512, "11": ~512}</span>
+    <span class="t">Log</span>.<span class="fn">d</span>(<span class="s">"Bell"</span>, <span class="s">"${result.counts}"</span>)
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- React -->
+          <section id="bell-impl-react" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/react.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>React / TypeScript</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>bellState.ts</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> { <span class="t">HarmoniQ</span> } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+<span class="k">import type</span> { <span class="t">Gate</span> } <span class="k">from</span> <span class="s">'@planq/harmoniq'</span>
+
+<span class="k">const</span> gates: <span class="t">Gate</span>[] = [
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">0</span>] },
+  { name: <span class="s">'cnot'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+]
+
+<span class="k">const</span> result = <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>({
+  provider: <span class="s">'hopper'</span>,
+  shots:    <span class="n">1024</span>,
+  qubits:   <span class="n">2</span>,
+  bits:     <span class="n">2</span>,
+  gates,
+  basis:    <span class="s">'Z'</span>,
+})
+<span class="c">// Esperado: { "00": ~512, "11": ~512 }</span>
+console.<span class="fn">log</span>(result.counts)</code></pre>
+            </div>
+          </section>
+
+          <!-- Python -->
+          <section id="bell-impl-python" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/python.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Python</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>bell_state.py</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"cnot"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+]
+
+result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">execute_circuit</span>(
+    provider=<span class="s">"hopper"</span>,
+    shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>,
+    bits=<span class="n">2</span>,
+    gates=gates,
+    basis=<span class="s">"Z"</span>,
+)
+<span class="fn">print</span>(result.counts)       <span class="c"># {"00": ~512, "11": ~512}</span>
+<span class="fn">print</span>(result.most_frequent) <span class="c"># "00" o "11"</span>
+
+<span class="c"># En Jupyter Notebook:</span>
+<span class="c"># result.plot_histogram()</span></code></pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── ANÁLISIS DE RESULTADOS ──────────────────── -->
+        <section id="bell-results" class="qubits-section">
+          <h2>Análisis de resultados</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              Con <code>shots = 1024</code> y ruido de simulación activado (modelo por defecto de Hopper),
+              la distribución observada será aproximadamente:
+            </p>
+          </div>
+          <table class="hq-backends-table">
+            <thead>
+              <tr><th>Estado</th><th>Conteo esperado (ideal)</th><th>Conteo típico (con ruido)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>|00⟩</code></td><td>512</td><td>480 – 530</td></tr>
+              <tr><td><code>|11⟩</code></td><td>512</td><td>480 – 530</td></tr>
+              <tr><td><code>|01⟩</code></td><td>0</td><td>0 – 10</td></tr>
+              <tr><td><code>|10⟩</code></td><td>0</td><td>0 – 10</td></tr>
+            </tbody>
+          </table>
+          <div class="qubits-prose qubits-prose--academic" style="margin-top:16px;">
+            <p>
+              La fracción de resultados en \(\{|01\rangle, |10\rangle\}\) cuantifica el error del
+              simulador. Una tasa inferior al 2% es coherente con las fidelidades de puerta de Hopper
+              (99.8% para puertas de un cúbit, 98.5% para dos cúbits). Para verificar el entrelazamiento
+              formalmente, sería necesario realizar tomografía de estado completa con mediciones en las
+              bases \(X\), \(Y\) y \(Z\).
+            </p>
+            <p>
+              Incrementar <code>shots</code> reduce la incertidumbre estadística de Poisson
+              (\(\sigma \propto 1/\sqrt{N_{\text{shots}}}\)) pero no elimina los errores sistemáticos del
+              hardware. El backend Hermann ofrece mayor fidelidad de puerta de dos cúbits (97.9%) y es
+              preferible para benchmarks de precisión.
+            </p>
+          </div>
+        </section>
+
+        <!-- ── REFERENCIAS ─────────────────────────────── -->
+        <section id="bell-refs" class="qubits-section qubits-refs">
+          <h2>Referencias y lecturas recomendadas</h2>
+          <p class="qubits-refs-intro qubits-prose--academic">
+            La selección siguiente orienta al lector hacia monografías y recursos cuya rigurosidad ha sido
+            contrastada por la comunidad científica; complementa la bibliografía citada al pie de esta guía.
+          </p>
+          <ul class="qubits-ref-grid">
+            <li>
+              <a class="qubits-ref-card" href="https://quantum.ibm.com/" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">IBM Quantum</span>
+                <span class="qubits-ref-desc">Plataforma experimental y documentación orientada a circuitos y calibración.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://qiskit.org/learn" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">Qiskit Textbook</span>
+                <span class="qubits-ref-desc">Texto abierto con derivaciones paso a paso y ejercicios numéricos.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="qubits-ref-card"
+                href="https://learn.microsoft.com/azure/quantum/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="qubits-ref-name">Microsoft Learn · Azure Quantum</span>
+                <span class="qubits-ref-desc">Fundamentos y modelos de programación cuántica en entornos administrados.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">arXiv · quant-ph</span>
+                <span class="qubits-ref-desc">Prepublicaciones recientes en información cuántica y computación cuántica.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://www.nist.gov/quantum-information-science" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">NIST · Quantum information</span>
+                <span class="qubits-ref-desc">Marcos metrológicos y estándares en ciencia cuántica aplicada.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <div class="qubits-ref-card qubits-ref-card--static">
+                <span class="qubits-ref-name">Nielsen &amp; Chuang</span>
+                <span class="qubits-ref-desc"
+                  ><em>Quantum Computation and Quantum Information</em> (Cambridge University Press). Obra de referencia para
+                  demostraciones formales, complejidad cuántica y códigos correctores.</span
+                >
+              </div>
+            </li>
+          </ul>
+          <h3 class="qubits-refs-biblio-title">Bibliografía citada</h3>
+          <ol class="qubits-refs-list">
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[1]</span>
+              <div class="qubits-ref-body">
+                Bell, J. S. (1964). <em>On the Einstein Podolsky Rosen Paradox.</em> Physics Physique Fizika, 1(3), 195–200.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[2]</span>
+              <div class="qubits-ref-body">
+                Einstein, A., Podolsky, B., & Rosen, N. (1935). <em>Can quantum-mechanical description of physical reality be considered complete?</em> Physical Review, 47(10), 777–780.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[3]</span>
+              <div class="qubits-ref-body">
+                Nielsen, M. A., & Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information.</em> Cambridge University Press. Sección 1.3.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[4]</span>
+              <div class="qubits-ref-body">
+                Aspect, A., Grangier, P., & Roger, G. (1982). <em>Experimental realization of Einstein-Podolsky-Rosen-Bohm Gedankenexperiment.</em> Physical Review Letters, 49(2), 91–94.
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section id="descargar-articulo-bell" class="qubits-section qubits-article-endmatter">
+          <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+          <dl class="qubits-endmatter-meta">
+            <div class="qubits-endmatter-row">
+              <dt>Título</dt>
+              <dd class="qubits-endmatter-doc-title">
+                Estado de Bell: preparación de un par entrelazado y correlaciones no locales
+              </dd>
+            </div>
+            <div class="qubits-endmatter-row">
+              <dt>Fecha de elaboración</dt>
+              <dd>
+                <time datetime="2026-03-30">30 de marzo de 2026</time>
+              </dd>
+            </div>
+            <div class="qubits-endmatter-row">
+              <dt>Autores</dt>
+              <dd>
+                <span>Noguerón Méndez José Antonio</span>
+                <span class="qubits-endmatter-affil">Head of Quantum Product</span>
+              </dd>
+            </div>
+          </dl>
+          <a
+            id="bellArticleDownload"
+            class="qubits-btn-artículo qubits-btn-artículo--disabled"
+            href="#"
+            aria-label="Descargar el artículo completo"
+            aria-disabled="true"
+          >
+            <i class="ph ph-download-simple" aria-hidden="true"></i>
+            <span>Descargar artículo</span>
+          </a>
+        </section>
+
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#bell-theory" class="right-toc-sublink">Fundamento teórico</a>
+          <a href="#bell-circuit" class="right-toc-sublink">Circuito cuántico</a>
+          <a href="#bell-impl" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Implementación</span>
+          </a>
+          <a href="#bell-impl-swift" class="right-toc-sublink">Swift</a>
+          <a href="#bell-impl-kotlin" class="right-toc-sublink">Kotlin</a>
+          <a href="#bell-impl-react" class="right-toc-sublink">React</a>
+          <a href="#bell-impl-python" class="right-toc-sublink">Python</a>
+          <a href="#bell-results" class="right-toc-sublink">Análisis de resultados</a>
+          <a href="#bell-refs" class="right-toc-sublink">Referencias y lecturas</a>
+          <a href="#descargar-articulo-bell" class="right-toc-sublink">Descargar artículo</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light"><i class="ph ph-sun"></i></button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system"><i class="ph ph-desktop"></i></button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark"><i class="ph ph-moon"></i></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+              { left: "\\[", right: "\\]", display: true },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+    </script>
+  </body>
+</html>

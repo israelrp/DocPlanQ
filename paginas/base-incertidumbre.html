@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Principio de incertidumbre e incompartibilidad de observables | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+  <article class="qubits-article-inner">
+
+          <!-- ═══════════════════════════════════════════════════════ HERO -->
+          <section id="page-body" class="qubits-hero">
+            <div class="qubits-kicker-with-back">
+              <button type="button" class="doc-back-btn" data-i18n-aria-label="doc.backPrevious" aria-label="Volver a la página anterior" onclick="history.back()">
+                <i class="ph ph-arrow-left" aria-hidden="true"></i>
+              </button>
+              <p class="qubits-kicker qubits-kicker--row">
+                <span class="qubits-kicker-segment">Programación cuántica</span>
+                <span class="qubits-kicker-rule" aria-hidden="true"></span>
+                <span class="qubits-kicker-segment">Mecánica cuántica</span>
+              </p>
+            </div>
+
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img class="qubits-author-photo" src="../images/author-nogueron-mendez-planq.png" width="56" height="56" alt="Retrato de Noguerón Méndez José Antonio" loading="lazy" decoding="async" />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h1 class="qubits-hero-title">Principio de incertidumbre: incompatibilidad de observables y límites fundamentales</h1>
+
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                El <strong>principio de incertidumbre</strong> constituye uno de los pilares axiomáticos de la mecánica cuántica y, lejos de ser una mera curiosidad filosófica, establece restricciones cuantitativas ineludibles sobre la precisión simultánea con que pueden determinarse pares de magnitudes físicas. Desde su formulación original por Werner Heisenberg en 1927, el principio ha evolucionado desde una argumentación heurística basada en el <em>microscopio de rayos gamma</em> hasta un teorema riguroso enraizado en la estructura algebraica de los operadores sobre espacios de Hilbert. En su forma moderna, la desigualdad de Robertson-Schrödinger expresa que el producto de las desviaciones estándar de dos observables cualesquiera nunca puede descender por debajo de una cota fijada por el valor esperado de su conmutador, revelando que la incertidumbre no es un artefacto experimental sino una propiedad intrínseca de la estructura del espacio de estados.
+              </p>
+              <p>
+                Las implicaciones del principio permean la totalidad de la física cuántica contemporánea: desde la estabilidad del átomo de hidrógeno —cuya energía fundamental se obtiene minimizando la suma de energía cinética y potencial sujeta a la cota de Heisenberg— hasta los protocolos de distribución cuántica de claves, donde la complementariedad entre bases mutuamente insesgadas garantiza la detección de espías. En el contexto de la computación cuántica con procesadores NISQ, la incertidumbre aparece de forma operativa en la estimación estadística de valores esperados y en el ruido intrínseco de las compuertas, condicionando el número de repeticiones necesarias para alcanzar una precisión deseada. Este artículo desarrolla el formalismo completo de las relaciones de incertidumbre, desde los fundamentos matemáticos hasta sus consecuencias prácticas en metrología y procesamiento cuántico de información.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §1 OBSERVABLES -->
+          <section id="observables-operadores" class="qubits-section">
+            <h2>Observables y operadores autoadjuntos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                En el formalismo de la mecánica cuántica, toda magnitud física medible —posición, momento, energía, espín— se representa mediante un <strong>operador autoadjunto</strong> (también denominado hermítico) que actúa sobre el espacio de Hilbert \(\mathcal{H}\) del sistema. Un operador \(\hat{A}\) es autoadjunto si satisface \(\hat{A} = \hat{A}^\dagger\), donde \(\hat{A}^\dagger\) denota el adjunto definido por la relación \(\langle \phi | \hat{A}\psi \rangle = \langle \hat{A}^\dagger \phi | \psi \rangle\) para todos los vectores \(|\phi\rangle, |\psi\rangle \in \mathcal{H}\). Esta condición garantiza que todos los autovalores del operador son reales, requisito indispensable para que los resultados de medición correspondan a cantidades físicas observables.
+              </p>
+              <p>
+                El <strong>teorema espectral</strong> proporciona la piedra angular matemática: todo operador autoadjunto \(\hat{A}\) sobre un espacio de Hilbert separable admite una descomposición espectral de la forma
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \hat{A} = \int_{\sigma(\hat{A})} a \, dE(a)
+                \]
+              </div>
+              <p>
+                donde \(\sigma(\hat{A})\) es el espectro del operador y \(\{E(a)\}\) constituye una familia de proyectores espectrales (medida espectral con valores de proyección). En el caso de espectro discreto no degenerado, la descomposición se simplifica a \(\hat{A} = \sum_n a_n |a_n\rangle\langle a_n|\), donde \(\{|a_n\rangle\}\) es una base ortonormal de autoestados con autovalores \(a_n\). El postulado de medición de Born establece que, al medir \(\hat{A}\) sobre un estado \(|\psi\rangle\), la probabilidad de obtener el resultado \(a_n\) es \(p(a_n) = |\langle a_n | \psi \rangle|^2\), y el estado colapsa al autoestado correspondiente.
+              </p>
+              <p>
+                El <strong>valor esperado</strong> de un observable \(\hat{A}\) en el estado \(|\psi\rangle\) se define como
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \langle \hat{A} \rangle_\psi \;=\; \langle \psi | \hat{A} | \psi \rangle \;=\; \sum_n a_n\, |\langle a_n | \psi \rangle|^2
+                \]
+              </div>
+              <p>
+                y la <strong>varianza</strong> queda determinada por \((\Delta A)^2 = \langle \hat{A}^2 \rangle - \langle \hat{A} \rangle^2\). La desviación estándar \(\Delta A = \sqrt{(\Delta A)^2}\) cuantifica la dispersión estadística intrínseca del observable en el estado dado, con independencia de cualquier limitación instrumental. Es fundamental subrayar que \(\Delta A = 0\) si y solo si \(|\psi\rangle\) es un autoestado de \(\hat{A}\); en cualquier otro caso, la medición exhibe una dispersión genuinamente cuántica. Nótese además que para un estado mixto descrito por un operador densidad \(\hat{\rho}\), el valor esperado se generaliza a \(\langle \hat{A} \rangle = \mathrm{Tr}(\hat{\rho}\,\hat{A})\) y la varianza adopta la forma \((\Delta A)^2 = \mathrm{Tr}(\hat{\rho}\,\hat{A}^2) - [\mathrm{Tr}(\hat{\rho}\,\hat{A})]^2\).
+              </p>
+              <p>
+                Para operadores sobre espacios de dimensión infinita —como el operador posición \(\hat{x}\) o el momento \(\hat{p}\) en \(L^2(\mathbb{R})\)— la autoadjunción debe distinguirse cuidadosamente de la mera simetría. Un operador simétrico densamente definido satisface \(\langle \phi | \hat{A}\psi \rangle = \langle \hat{A}\phi | \psi \rangle\) para todo \(|\phi\rangle, |\psi\rangle\) en su dominio, pero solo es autoadjunto cuando además \(\mathrm{Dom}(\hat{A}) = \mathrm{Dom}(\hat{A}^\dagger)\). La distinción es crucial: los operadores meramente simétricos pueden carecer de descomposición espectral completa. El teorema de Stone-von Neumann garantiza que, bajo condiciones de irreducibilidad, las relaciones canónicas de conmutación determinan esencialmente una única representación unitariamente equivalente.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §2 CONMUTADORES -->
+          <section id="conmutadores-algebra" class="qubits-section">
+            <h2>Conmutadores y álgebra de operadores</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El <strong>conmutador</strong> de dos operadores \(\hat{A}\) y \(\hat{B}\) se define como el operador
+              </p>
+              <div class="qubits-equation">
+                \[
+                  [\hat{A}, \hat{B}] \;=\; \hat{A}\hat{B} - \hat{B}\hat{A}
+                \]
+              </div>
+              <p>
+                Este objeto algebraico codifica de manera precisa la noción de <em>incompatibilidad</em> entre observables. Cuando \([\hat{A}, \hat{B}] = 0\), los operadores conmutan y se dice que los observables correspondientes son <strong>compatibles</strong>: existe una base ortonormal de autoestados simultáneos de ambos operadores, de modo que pueden medirse conjuntamente sin perturbación mutua. En caso contrario, \([\hat{A}, \hat{B}] \neq 0\) señala una incompatibilidad fundamental que impide la existencia de autoestados comunes y, como veremos, impone cotas inferiores al producto de sus dispersiones.
+              </p>
+              <p>
+                El conmutador posee propiedades algebraicas notables. Es <em>bilineal</em>, \([\alpha\hat{A}+\beta\hat{B}, \hat{C}] = \alpha[\hat{A},\hat{C}] + \beta[\hat{B},\hat{C}]\), <em>antisimétrico</em>, \([\hat{A},\hat{B}] = -[\hat{B},\hat{A}]\), y satisface la <strong>identidad de Jacobi</strong>:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  [\hat{A},[\hat{B},\hat{C}]] + [\hat{B},[\hat{C},\hat{A}]] + [\hat{C},[\hat{A},\hat{B}]] = 0
+                \]
+              </div>
+              <p>
+                Estas tres propiedades confieren al espacio de operadores la estructura de un <strong>álgebra de Lie</strong>. En particular, las relaciones canónicas de conmutación del par posición-momento,
+              </p>
+              <div class="qubits-equation">
+                \[
+                  [\hat{x}_i, \hat{p}_j] = i\hbar\,\delta_{ij}, \qquad [\hat{x}_i, \hat{x}_j] = 0, \qquad [\hat{p}_i, \hat{p}_j] = 0
+                \]
+              </div>
+              <p>
+                definen el <strong>álgebra de Heisenberg-Weyl</strong>, cuya representación irreducible es esencialmente única (módulo equivalencia unitaria) por el teorema de Stone-von Neumann. Para sistemas de espín, las componentes del momento angular satisfacen \([\hat{J}_i, \hat{J}_j] = i\hbar\,\epsilon_{ijk}\hat{J}_k\), constituyendo el álgebra de Lie \(\mathfrak{su}(2)\). El <strong>anticonmutador</strong> \(\{\hat{A}, \hat{B}\} = \hat{A}\hat{B} + \hat{B}\hat{A}\) complementa al conmutador y permite descomponer el producto de operadores como \(\hat{A}\hat{B} = \tfrac{1}{2}[\hat{A},\hat{B}] + \tfrac{1}{2}\{\hat{A},\hat{B}\}\), descomposición que resultará fundamental en la derivación de la relación de Robertson-Schrödinger.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Compatibilidad y medición conjunta.</strong> Dos observables con conmutador nulo comparten un sistema completo de autoestados comunes. Esto significa que una medición secuencial de \(\hat{A}\) seguida de \(\hat{B}\) produce los mismos resultados estadísticos independientemente del orden, y que existe un observable conjunto \(\hat{C}\) cuyas mediciones simultáneamente determinan los valores de \(\hat{A}\) y \(\hat{B}\).
+                </p>
+              </aside>
+
+              <p>
+                La identidad de Leibniz para conmutadores, \([\hat{A}, \hat{B}\hat{C}] = [\hat{A},\hat{B}]\hat{C} + \hat{B}[\hat{A},\hat{C}]\), permite calcular conmutadores de productos de operadores de forma sistemática. Por ejemplo, para el hamiltoniano del oscilador armónico \(\hat{H} = \hat{p}^2/(2m) + m\omega^2\hat{x}^2/2\), se obtienen inmediatamente \([\hat{H}, \hat{x}] = -i\hbar\hat{p}/m\) y \([\hat{H}, \hat{p}] = i\hbar m\omega^2\hat{x}\), que reproducen las ecuaciones de movimiento de Heisenberg \(d\hat{x}/dt = \hat{p}/m\) y \(d\hat{p}/dt = -m\omega^2\hat{x}\), en perfecta correspondencia con la dinámica clásica.
+              </p>
+              <p>
+                En dimensión finita, especialmente relevante para qubits y registros cuánticos, los observables se representan mediante matrices hermitianas \(A, B \in \mathbb{C}^{d \times d}\). Las matrices de Pauli \(\sigma_x, \sigma_y, \sigma_z\) satisfacen \([\sigma_i, \sigma_j] = 2i\epsilon_{ijk}\sigma_k\), y junto con la identidad forman una base para el espacio de matrices hermitianas \(2 \times 2\). Para un sistema de \(n\) qubits, el espacio de operadores tiene dimensión \(4^n\), y la estructura de conmutación entre productos tensoriales de matrices de Pauli — el <strong>grupo de Pauli</strong> — gobierna las relaciones de incertidumbre de todos los observables del registro.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §3 ROBERTSON-SCHRÖDINGER -->
+          <section id="robertson-schrodinger" class="qubits-section">
+            <h2>Relación de Robertson-Schrödinger</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>desigualdad de Robertson</strong> (1929) establece la relación de incertidumbre más general para un par arbitrario de observables. Para operadores autoadjuntos \(\hat{A}\) y \(\hat{B}\) y cualquier estado normalizado \(|\psi\rangle\), se cumple
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \Delta A \cdot \Delta B \;\geq\; \frac{1}{2}\,\bigl|\langle[\hat{A}, \hat{B}]\rangle\bigr|
+                \]
+              </div>
+              <p>
+                donde \(\Delta A = \sqrt{\langle \hat{A}^2 \rangle - \langle \hat{A} \rangle^2}\) y análogamente para \(\Delta B\). La demostración emplea la desigualdad de Cauchy-Schwarz aplicada a los vectores \(|\alpha\rangle = (\hat{A} - \langle\hat{A}\rangle)|\psi\rangle\) y \(|\beta\rangle = (\hat{B} - \langle\hat{B}\rangle)|\psi\rangle\). Se tiene \((\Delta A)^2(\Delta B)^2 = \langle\alpha|\alpha\rangle\langle\beta|\beta\rangle \geq |\langle\alpha|\beta\rangle|^2\). Puesto que \(\langle\alpha|\beta\rangle\) es en general complejo, se descompone en parte real e imaginaria:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \langle\alpha|\beta\rangle = \frac{1}{2}\langle\{\hat{A}', \hat{B}'\}\rangle + \frac{i}{2}\,\frac{\langle[\hat{A}, \hat{B}]\rangle}{i}
+                \]
+              </div>
+              <p>
+                donde hemos definido \(\hat{A}' = \hat{A} - \langle\hat{A}\rangle\) y \(\hat{B}' = \hat{B} - \langle\hat{B}\rangle\). Al tomar solo el módulo de la parte imaginaria se obtiene la desigualdad de Robertson. Schrödinger (1930) observó que, al retener también la parte real del producto interno, se obtiene una cota más fuerte:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  (\Delta A)^2 (\Delta B)^2 \;\geq\; \frac{1}{4}\bigl|\langle[\hat{A}, \hat{B}]\rangle\bigr|^2 + \frac{1}{4}\bigl|\langle\{\hat{A}', \hat{B}'\}\rangle\bigr|^2
+                \]
+              </div>
+              <p>
+                Esta es la <strong>relación de Robertson-Schrödinger</strong>, que domina estrictamente la de Robertson siempre que el valor esperado del anticonmutador centrado no se anule. La cota de Schrödinger incluye la <em>covarianza cuántica</em> \(C_{AB} = \tfrac{1}{2}\langle\{\hat{A}',\hat{B}'\}\rangle = \tfrac{1}{2}\langle \hat{A}\hat{B} + \hat{B}\hat{A}\rangle - \langle\hat{A}\rangle\langle\hat{B}\rangle\), que captura las correlaciones clásicas entre ambos observables. En notación compacta:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  (\Delta A)^2 (\Delta B)^2 \;\geq\; C_{AB}^2 + \frac{1}{4}\bigl|\langle[\hat{A}, \hat{B}]\rangle\bigr|^2
+                \]
+              </div>
+              <p>
+                Para comprender la saturación, consideremos cuándo se alcanza la igualdad. La desigualdad de Cauchy-Schwarz se satura si y solo si \(|\beta\rangle = \lambda|\alpha\rangle\) para algún \(\lambda \in \mathbb{C}\), es decir, cuando \((\hat{B} - \langle\hat{B}\rangle)|\psi\rangle = \lambda(\hat{A} - \langle\hat{A}\rangle)|\psi\rangle\). Los estados que saturan la relación de Robertson (sin el término del anticonmutador) satisfacen \(\lambda \in i\mathbb{R}\), mientras que la saturación completa de Robertson-Schrödinger admite \(\lambda\) complejo general. Los estados gaussianos comprimidos (<em>squeezed states</em>) proporcionan ejemplos paradigmáticos de saturación con correlaciones no nulas.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Nota sobre la universalidad.</strong> La relación de Robertson-Schrödinger se aplica a <em>cualquier</em> par de observables en <em>cualquier</em> dimensión del espacio de Hilbert, finita o infinita. No presupone ninguna relación canónica entre los operadores; la cota inferior emerge automáticamente del álgebra y de la geometría del producto interno.
+                </p>
+              </aside>
+
+              <p>
+                Resulta instructivo reformular la desigualdad en términos de la <strong>matriz de covarianza cuántica</strong>. Para un vector de operadores \(\hat{\mathbf{R}} = (\hat{A}_1, \hat{A}_2, \ldots, \hat{A}_n)^T\), se define la matriz de covarianza \(\Gamma_{ij} = \tfrac{1}{2}\langle\{\hat{A}_i', \hat{A}_j'\}\rangle\) y la matriz simpléctica \(\Omega_{ij} = -\tfrac{i}{2}\langle[\hat{A}_i, \hat{A}_j]\rangle\). La desigualdad de Robertson-Schrödinger se generaliza entonces a la condición matricial \(\Gamma + i\Omega \geq 0\), que constituye la base del formalismo de <em>estados gaussianos</em> en óptica cuántica y variables continuas.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §4 POSICIÓN-MOMENTO -->
+          <section id="posicion-momento" class="qubits-section">
+            <h2>Relación posición-momento de Heisenberg</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La instancia más célebre del principio de incertidumbre surge al aplicar la relación de Robertson al par canónico posición-momento. Dado que \([\hat{x}, \hat{p}] = i\hbar\), el conmutador es proporcional a la identidad y su valor esperado es independiente del estado:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \Delta x \cdot \Delta p \;\geq\; \frac{\hbar}{2}
+                \]
+              </div>
+              <p>
+                Esta desigualdad fue formulada originalmente por Heisenberg en 1927, aunque su argumento inicial invocaba un experimento mental —el microscopio de rayos gamma— que mezclaba la incertidumbre cuántica intrínseca con la perturbación causada por la medición. La derivación rigurosa a partir del formalismo de operadores, debida a Kennard (1927) y Robertson (1929), muestra que la cota es una propiedad puramente cinemática del espacio de Hilbert, independiente del aparato de medición empleado.
+              </p>
+              <p>
+                Los <strong>estados de mínima incertidumbre</strong> que saturan la desigualdad de Heisenberg son los paquetes de onda gaussianos. En la representación de posición, un estado de mínima incertidumbre centrado en \(x_0\) con momento medio \(p_0\) adopta la forma
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \psi(x) = \left(\frac{1}{2\pi\sigma_x^2}\right)^{1/4} \exp\!\left[-\frac{(x - x_0)^2}{4\sigma_x^2} + \frac{i p_0 x}{\hbar}\right]
+                \]
+              </div>
+              <p>
+                con \(\Delta x = \sigma_x\) y \(\Delta p = \hbar/(2\sigma_x)\), de modo que \(\Delta x \cdot \Delta p = \hbar/2\) exactamente. La transformada de Fourier de este paquete es también una gaussiana con anchura \(\sigma_p = \hbar/(2\sigma_x)\), ilustrando la dualidad posición-momento como una manifestación del principio de incertidumbre.
+              </p>
+              <p>
+                Los <strong>estados coherentes</strong> \(|\alpha\rangle\) del oscilador armónico cuántico —autoestados del operador de aniquilación, \(\hat{a}|\alpha\rangle = \alpha|\alpha\rangle\)— son precisamente estados de mínima incertidumbre con \(\Delta x = \Delta p \cdot (m\omega)^{-1}\) en las variables adimensionales adecuadas, y con \(\Delta x \cdot \Delta p = \hbar/2\). Introducidos por Glauber en 1963, estos estados son los que más se asemejan a las ondas clásicas y desempeñan un papel central en la óptica cuántica. Evolucionan en el tiempo manteniendo su forma gaussiana, con el centro del paquete siguiendo la trayectoria clásica — una propiedad que los convierte en un puente natural entre la mecánica clásica y la cuántica.
+              </p>
+              <p>
+                Es posible construir <strong>estados comprimidos</strong> (<em>squeezed states</em>) que redistribuyen la incertidumbre entre las cuadraturas del campo, reduciendo \(\Delta x\) por debajo del nivel del estado coherente a costa de aumentar \(\Delta p\) (o viceversa), manteniendo siempre \(\Delta x \cdot \Delta p \geq \hbar/2\). Formalmente, un estado comprimido se obtiene aplicando el operador de compresión \(\hat{S}(\xi) = \exp[\tfrac{1}{2}(\xi^*\hat{a}^2 - \xi\hat{a}^{\dagger 2})]\) al estado de vacío. Estos estados encuentran aplicaciones cruciales en interferometría gravitacional (LIGO) y en la mejora de la sensibilidad metrológica más allá del límite cuántico estándar.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Interpretación física.</strong> La relación \(\Delta x \cdot \Delta p \geq \hbar/2\) <em>no</em> afirma que una medición perturba el sistema; es una propiedad del estado cuántico previo a cualquier medición. Cualquier estado preparado con dispersión arbitrariamente pequeña en posición exhibirá necesariamente una dispersión grande en momento, y viceversa, como consecuencia de la estructura del espacio de Hilbert \(L^2(\mathbb{R})\) y la relación de Fourier entre las representaciones de posición y momento.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §5 ENERGÍA-TIEMPO -->
+          <section id="energia-tiempo" class="qubits-section">
+            <h2>Relación energía-tiempo</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La relación de incertidumbre energía-tiempo, frecuentemente escrita como
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \Delta E \cdot \Delta t \;\geq\; \frac{\hbar}{2}
+                \]
+              </div>
+              <p>
+                requiere un tratamiento conceptual distinto al del par posición-momento, dado que en mecánica cuántica no relativista el tiempo no es un observable representado por un operador autoadjunto, sino un parámetro externo de la ecuación de Schrödinger. Por lo tanto, la relación no se deriva directamente de Robertson, y su interpretación ha sido objeto de extenso debate desde los primeros años de la teoría cuántica.
+              </p>
+              <p>
+                La formulación más rigurosa y ampliamente aceptada es la de <strong>Mandelstam y Tamm</strong> (1945). Para un observable arbitrario \(\hat{A}\) que no depende explícitamente del tiempo, la ecuación de movimiento de Heisenberg da \(d\langle\hat{A}\rangle/dt = (i/\hbar)\langle[\hat{H}, \hat{A}]\rangle\). Aplicando la relación de Robertson al par \((\hat{H}, \hat{A})\):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \Delta E \cdot \Delta A \;\geq\; \frac{1}{2}\bigl|\langle[\hat{H}, \hat{A}]\rangle\bigr| \;=\; \frac{\hbar}{2}\left|\frac{d\langle\hat{A}\rangle}{dt}\right|
+                \]
+              </div>
+              <p>
+                Definiendo el <em>tiempo característico</em> de evolución del observable como \(\tau_A = \Delta A / |d\langle\hat{A}\rangle/dt|\), se obtiene \(\Delta E \cdot \tau_A \geq \hbar/2\). Aquí \(\tau_A\) mide el tiempo que el sistema necesita para que el valor esperado de \(\hat{A}\) cambie en una cantidad comparable a su propia dispersión. Puesto que esta relación es válida para todo observable \(\hat{A}\), se define \(\Delta t = \min_{\hat{A}} \tau_A\), obteniendo la relación en su forma habitual.
+              </p>
+              <p>
+                La interpretación de Mandelstam-Tamm conduce directamente al concepto de <strong>límite cuántico de velocidad</strong> (<em>quantum speed limit</em>): existe una cota inferior al tiempo necesario para que un sistema cuántico evolucione desde un estado inicial \(|\psi_0\rangle\) hasta un estado ortogonal \(|\psi_\perp\rangle\). Si \(\Delta E\) es la dispersión de energía del estado inicial, el tiempo mínimo de tránsito satisface
+              </p>
+              <div class="qubits-equation">
+                \[
+                  t_\perp \;\geq\; \frac{\pi\hbar}{2\,\Delta E}
+                \]
+              </div>
+              <p>
+                Esta cota, demostrada originalmente por Mandelstam y Tamm y refinada por Margolus y Levitin, tiene consecuencias profundas: establece un límite fundamental a la velocidad de procesamiento de información cuántica, un bound termodinámico sobre la tasa de operaciones lógicas de cualquier computadora (cuántica o clásica) con energía finita, y conecta la mecánica cuántica con la teoría de la información a través de la noción de capacidad de canal.
+              </p>
+              <p>
+                Otra manifestación clásica de la relación energía-tiempo es la <strong>relación anchura de línea-vida media</strong>. Un estado excitado con vida media \(\tau\) presenta un espectro de emisión con anchura natural \(\Gamma \sim \hbar/\tau\), lo que implica que estados de vida larga emiten líneas espectrales estrechas y viceversa. En espectroscopía atómica, esta relación conecta directamente los tiempos de decaimiento radiativos con las anchuras de las líneas de emisión observadas, y en física de partículas relaciona los anchos de desintegración de resonancias con sus vidas medias a través de \(\Gamma \cdot \tau = \hbar\).
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §6 MUB -->
+          <section id="bases-insesgadas" class="qubits-section">
+            <h2>Bases mutuamente insesgadas (MUB)</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Dos bases ortonormales \(\mathcal{B}_1 = \{|e_i\rangle\}\) y \(\mathcal{B}_2 = \{|f_j\rangle\}\) de un espacio de Hilbert de dimensión \(d\) se denominan <strong>mutuamente insesgadas</strong> (<em>mutually unbiased bases</em>, MUB) si para todo par de vectores base se cumple
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\langle e_i | f_j \rangle|^2 = \frac{1}{d} \qquad \forall\; i, j
+                \]
+              </div>
+              <p>
+                Esta condición significa que si un sistema se prepara en un autoestado de la primera base y se mide en la segunda, todos los resultados son equiprobables — se tiene <em>ignorancia máxima</em>. Las MUB constituyen la manifestación discreta más limpia del principio de incertidumbre: la certeza total en un observable implica la incertidumbre total en el observable conjugado.
+              </p>
+              <p>
+                El ejemplo paradigmático es el sistema de un qubit (\(d = 2\)). Las tres bases de Pauli conforman un conjunto maximal de MUB:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathcal{B}_Z = \{|0\rangle, |1\rangle\}, \quad \mathcal{B}_X = \{|+\rangle, |-\rangle\}, \quad \mathcal{B}_Y = \{|{+i}\rangle, |{-i}\rangle\}
+                \]
+              </div>
+              <p>
+                donde \(|{\pm}\rangle = (|0\rangle \pm |1\rangle)/\sqrt{2}\) y \(|{\pm i}\rangle = (|0\rangle \pm i|1\rangle)/\sqrt{2}\). En dimensión \(d\), el número máximo de MUB es a lo sumo \(d + 1\), y cuando \(d\) es potencia de un primo, se alcanza este máximo mediante construcciones explícitas basadas en cuerpos finitos \(\mathbb{F}_{d}\). Para dimensiones no primas, como \(d = 6\), la determinación del número máximo de MUB permanece como uno de los problemas abiertos más notables de la teoría de la información cuántica.
+              </p>
+              <p>
+                Las MUB desempeñan un papel central en la <strong>distribución cuántica de claves</strong> (QKD). En el protocolo <strong>BB84</strong>, Alice codifica bits aleatorios eligiendo entre dos bases mutuamente insesgadas (típicamente \(\mathcal{B}_Z\) y \(\mathcal{B}_X\)) y envía qubits a Bob, quien mide aleatoriamente en una de las dos bases. Cuando ambos eligen la misma base, obtienen resultados perfectamente correlacionados; cuando eligen bases distintas, los resultados de Bob son completamente aleatorios. Un espía (Eve) que intercepte y remida los qubits inevitablemente introduce errores detectables, precisamente porque la medición en una base insesgada destruye irremediablemente la información codificada en la otra. La seguridad del protocolo descansa directamente sobre el principio de incertidumbre.
+              </p>
+              <p>
+                Más allá de la criptografía, las MUB aparecen en la <strong>tomografía de estados cuánticos</strong>: un conjunto completo de \(d+1\) MUB permite reconstruir un operador densidad \(\hat{\rho}\) de dimensión \(d\) con el mínimo número de configuraciones de medición distintas. En la reconstrucción tomográfica, la probabilidad \(p_{b,k} = \langle f_k^{(b)} | \hat{\rho} | f_k^{(b)} \rangle\) medida para cada base \(b\) y cada resultado \(k\) proporciona información complementaria y maximamente informativa sobre el estado, haciendo que las MUB sean las bases óptimas para la tomografía.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Complementariedad de información.</strong> Si \(|\psi\rangle = |e_k\rangle\) es un autoestado de \(\mathcal{B}_1\), la entropía de Shannon de la distribución de resultados al medir en \(\mathcal{B}_2\) alcanza su máximo \(\log d\). Este principio de complementariedad informacional es la formulación operativa del principio de incertidumbre en el paradigma de la información cuántica.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §7 ENTRÓPICAS -->
+          <section id="incertidumbre-entropica" class="qubits-section">
+            <h2>Relaciones de incertidumbre entrópicas</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Las relaciones de incertidumbre basadas en varianzas, como la de Robertson, presentan limitaciones: la cota depende del estado a través de \(\langle[\hat{A},\hat{B}]\rangle\), que puede anularse incluso para observables genuinamente incompatibles (por ejemplo, para el estado \(|0\rangle\) con \(\hat{A} = \sigma_x\) y \(\hat{B} = \sigma_y\), el conmutador es proporcional a \(\sigma_z\) cuyo valor esperado es \(\pm 1\), pero consideremos \(\hat{A} = \sigma_x\) y \(\hat{B} = \sigma_z\): para el estado \(|+\rangle\) se tiene \(\langle[\sigma_x, \sigma_z]\rangle = 0\)). Las <strong>relaciones de incertidumbre entrópicas</strong> superan esta deficiencia al cuantificar la incertidumbre mediante entropías en lugar de varianzas.
+              </p>
+              <p>
+                Para un observable discreto \(\hat{A}\) con autovalores \(\{a_k\}\) y autoestados \(\{|a_k\rangle\}\), la <strong>entropía de Shannon</strong> de la distribución de resultados de medición se define como
+              </p>
+              <div class="qubits-equation">
+                \[
+                  H(\hat{A})_\psi \;=\; -\sum_k p_k \log p_k, \qquad p_k = |\langle a_k | \psi \rangle|^2
+                \]
+              </div>
+              <p>
+                Deutsch (1983) fue el primero en conjeturar una relación de incertidumbre entrópica, que fue demostrada de forma óptima por <strong>Maassen y Uffink</strong> (1988):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  H(\hat{A})_\psi + H(\hat{B})_\psi \;\geq\; -2\log c(\hat{A}, \hat{B})
+                \]
+              </div>
+              <p>
+                donde \(c(\hat{A}, \hat{B}) = \max_{j,k} |\langle a_j | b_k \rangle|\) es la máxima superposición entre los autoestados de ambos observables y el logaritmo se toma en la base apropiada (base 2 para bits, base natural para nats). Para bases mutuamente insesgadas, \(c = 1/\sqrt{d}\), y la cota se convierte en \(H(\hat{A}) + H(\hat{B}) \geq \log d\), que es independiente del estado y estrictamente positiva siempre que \(d \geq 2\).
+              </p>
+              <p>
+                La superioridad de las relaciones entrópicas radica en varias propiedades. Primero, la cota de Maassen-Uffink depende solo de la <em>estructura geométrica</em> de las bases de medición, no del estado particular del sistema, a diferencia de la relación de Robertson. Segundo, las entropías capturan la forma completa de la distribución de probabilidad, no solo su segundo momento. Tercero, admiten generalizaciones naturales al caso de estados mixtos y mediciones con memoria cuántica: si el sistema \(A\) está entrelazado con una memoria cuántica \(B\), la relación de Maassen-Uffink se refuerza según
+              </p>
+              <div class="qubits-equation">
+                \[
+                  S(\hat{A}|B)_\rho + S(\hat{B}|B)_\rho \;\geq\; \log\frac{1}{c} + S(A|B)_\rho
+                \]
+              </div>
+              <p>
+                donde \(S(\hat{A}|B)_\rho\) es la entropía condicional de von Neumann tras la medición de \(\hat{A}\) en el subsistema, y \(S(A|B)_\rho\) es la entropía condicional del estado previo a la medición. Este resultado, demostrado por Berta, Christandl, Colbeck, Renes y Renner (2010), tiene consecuencias fundamentales: si \(A\) y \(B\) están maximamente entrelazados (\(S(A|B) = -\log d\)), la cota se anula, reflejando que el entrelazamiento puede compensar la incertidumbre.
+              </p>
+              <p>
+                La <strong>entropía de von Neumann</strong> \(S(\hat{\rho}) = -\mathrm{Tr}(\hat{\rho}\log\hat{\rho})\) generaliza la entropía de Shannon al caso de estados mixtos y proporciona la medida natural de incertidumbre en el formalismo de operadores densidad. Las relaciones de incertidumbre entrópicas formuladas en términos de entropías de Rényi, \(H_\alpha(\hat{A}) = (1-\alpha)^{-1}\log\sum_k p_k^\alpha\), ofrecen una familia parametrizada que interpola entre la min-entropía (\(\alpha \to \infty\), relevante para criptografía) y la entropía de Hartley (\(\alpha \to 0\), que cuenta el soporte efectivo de la distribución).
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §8 METROLOGÍA -->
+          <section id="metrologia-cuantica" class="qubits-section">
+            <h2>Implicaciones en metrología cuántica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La metrología cuántica explota las propiedades del principio de incertidumbre para determinar los <strong>límites fundamentales de precisión</strong> en la estimación de parámetros físicos. Consideremos la tarea canónica de estimar una fase \(\theta\) acumulada durante la evolución unitaria \(\hat{U}(\theta) = e^{-i\theta\hat{G}}\), donde \(\hat{G}\) es el generador hermitiano de la transformación. La incertidumbre en la estimación de \(\theta\) está acotada inferiormente por la <strong>cota de Cramér-Rao cuántica</strong>:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \delta\theta \;\geq\; \frac{1}{\sqrt{\nu\, F_Q[\hat{\rho}, \hat{G}]}}
+                \]
+              </div>
+              <p>
+                donde \(\nu\) es el número de repeticiones del experimento y \(F_Q[\hat{\rho}, \hat{G}]\) es la <strong>información cuántica de Fisher</strong> (QFI). Para estados puros, \(F_Q = 4(\Delta G)^2\), lo que relaciona directamente la precisión metrológica con la dispersión del generador y, por extensión, con el principio de incertidumbre.
+              </p>
+              <p>
+                Si se emplean \(N\) partículas independientes (no entrelazadas) como sondas, cada una con dispersión \(\Delta G = \Delta G_0\), la QFI total escala como \(F_Q = N \cdot 4(\Delta G_0)^2\), conduciendo al <strong>límite cuántico estándar</strong> (SQL, <em>standard quantum limit</em>):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \delta\theta_{\mathrm{SQL}} \;=\; \frac{1}{\sqrt{N}} \cdot \frac{1}{2\,\Delta G_0}
+                \]
+              </div>
+              <p>
+                que escala como \(1/\sqrt{N}\) — el comportamiento de <em>shot noise</em> clásico. Sin embargo, utilizando estados entrelazados como el estado de Greenberger-Horne-Zeilinger (GHZ), \(|GHZ\rangle = (|0\rangle^{\otimes N} + |1\rangle^{\otimes N})/\sqrt{2}\), la QFI alcanza \(F_Q = 4N^2(\Delta G_0)^2\), lo que conduce al <strong>límite de Heisenberg</strong>:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \delta\theta_{\mathrm{HL}} \;=\; \frac{1}{N} \cdot \frac{1}{2\,\Delta G_0}
+                \]
+              </div>
+              <p>
+                que representa una mejora cuadrática sobre el SQL. El límite de Heisenberg es la cota fundamental permitida por la mecánica cuántica y no puede superarse sin violar el principio de incertidumbre. La transición del SQL al límite de Heisenberg mediante entrelazamiento constituye una de las demostraciones más directas de la <em>ventaja cuántica</em> en una tarea práctica.
+              </p>
+              <p>
+                Los <strong>estados comprimidos</strong> (<em>squeezed states</em>) ofrecen una vía práctica intermedia. En un interferómetro Mach-Zehnder alimentado con luz comprimida, la sensibilidad de fase mejora con el parámetro de compresión \(r\) según \(\delta\theta \sim e^{-r}/\sqrt{N}\), permitiendo superar el SQL sin requerir estados altamente entrelazados. LIGO utiliza esta técnica desde 2019, inyectando vacío comprimido (<em>squeezed vacuum</em>) en el puerto oscuro del interferómetro para reducir el ruido cuántico de disparo y acercarse al límite de Heisenberg.
+              </p>
+              <p>
+                Es importante señalar que, en presencia de decoherencia, el escalado de Heisenberg \(1/N\) generalmente se degrada. Para canales de pérdida con transmisividad \(\eta\), la cota de Cramér-Rao cuántica transita del escalado de Heisenberg al SQL según \(\delta\theta \geq 1/(\sqrt{N} \cdot 2\Delta G_0 \cdot \sqrt{\eta})\) en el régimen de alta pérdida. Este resultado tiene implicaciones directas para la metrología con procesadores NISQ, donde las tasas de error de compuerta limitan la profundidad de circuito utilizable para la preparación de estados sonda óptimos.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Información de Fisher y curvatura.</strong> La QFI admite una interpretación geométrica como la curvatura de la variedad de estados cuánticos equipada con la métrica de Bures: \(F_Q = 4\,d_{\mathrm{Bures}}^2(\hat{\rho}(\theta), \hat{\rho}(\theta+d\theta))/d\theta^2\). A mayor curvatura, mayor la distinguibilidad estadística entre estados cercanos y, por tanto, mayor la precisión alcanzable.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §9 NISQ -->
+          <section id="nisq-implicaciones" class="qubits-section">
+            <h2>Implicaciones en procesadores NISQ</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                En la era de la computación cuántica de escala intermedia con ruido (<strong>NISQ</strong>, <em>Noisy Intermediate-Scale Quantum</em>), las relaciones de incertidumbre adquieren relevancia operativa directa. Los algoritmos variacionales — como VQE (<em>Variational Quantum Eigensolver</em>) y QAOA (<em>Quantum Approximate Optimization Algorithm</em>) — requieren la estimación de valores esperados \(\langle\hat{O}\rangle = \langle\psi(\boldsymbol{\theta})|\hat{O}|\psi(\boldsymbol{\theta})\rangle\) mediante repetición de mediciones sobre el circuito cuántico parametrizado. La incertidumbre estadística en esta estimación obedece al teorema del límite central:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \epsilon_{\mathrm{est}} = \frac{\Delta O}{\sqrt{N_{\mathrm{shots}}}}
+                \]
+              </div>
+              <p>
+                donde \(\Delta O\) es la desviación estándar del observable en el estado preparado y \(N_{\mathrm{shots}}\) es el número de ejecuciones (disparos) del circuito. Esta relación cuantifica el <em>ruido de disparo</em> (<em>shot noise</em>) inherente a la medición cuántica y establece un compromiso fundamental: para reducir el error de estimación a la mitad, es necesario cuadruplicar el número de disparos. Para un hamiltoniano descompuesto como suma de \(M\) términos de Pauli, \(\hat{H} = \sum_{k=1}^M c_k \hat{P}_k\), el error total en la estimación de la energía escala como
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \epsilon_E \;\leq\; \frac{1}{\sqrt{N_{\mathrm{shots}}}} \sum_{k=1}^M |c_k|\,\Delta P_k
+                \]
+              </div>
+              <p>
+                lo que motiva técnicas de agrupación de términos conmutantes (<em>grouping</em>) y asignación óptima de disparos para minimizar la varianza total.
+              </p>
+              <p>
+                Los <strong>errores de compuerta</strong> en procesadores NISQ introducen una fuente adicional de incertidumbre que se superpone al ruido de disparo. Una compuerta de un qubit imperfecta puede modelarse como una rotación errónea \(\hat{U}_{\mathrm{real}} = e^{-i(\theta+\delta\theta)\hat{n}\cdot\hat{\boldsymbol{\sigma}}/2}\), donde \(\delta\theta\) fluctúa entre ejecuciones. La incertidumbre en el ángulo de rotación se propaga a los valores esperados de los observables posteriores a través de la cadena de compuertas del circuito. Para un circuito de profundidad \(L\) con tasa de error de compuerta \(\epsilon_g\), la fidelidad del estado final escala aproximadamente como \(\mathcal{F} \sim (1 - \epsilon_g)^L\), y la dispersión efectiva del observable medido se amplifica correspondientemente.
+              </p>
+              <p>
+                Los <strong>errores de lectura</strong> (<em>readout errors</em>) constituyen otra manifestación del principio de incertidumbre en la práctica. En procesadores superconductores, la discriminación entre los estados \(|0\rangle\) y \(|1\rangle\) se realiza mediante la medición de la señal reflejada por un resonador acoplado dispersivamente al qubit. La señal integrada durante un tiempo \(T_m\) presenta una relación señal-ruido que crece como \(\mathrm{SNR} \propto \sqrt{T_m}\), pero el tiempo de medición está acotado superiormente por el tiempo de relajación \(T_1\) del qubit. La tasa de error de clasificación típica en dispositivos actuales oscila entre el 0.5% y el 5%, y puede reducirse mediante protocolos de <em>readout error mitigation</em> basados en matrices de confusión calibradas.
+              </p>
+              <p>
+                El diseño de experimentos en procesadores NISQ requiere un equilibrio cuidadoso entre todas estas fuentes de incertidumbre. El presupuesto de error total para la estimación de un valor esperado combina el ruido de disparo (\(\propto 1/\sqrt{N_{\mathrm{shots}}}\)), los errores de compuerta (\(\propto L\epsilon_g\)), los errores de lectura y las contribuciones de decoherencia. La elección del número de disparos \(N_{\mathrm{shots}}\) se determina a partir de la tolerancia al error estadístico:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  N_{\mathrm{shots}} \;\geq\; \frac{(\Delta O)^2}{\epsilon_{\mathrm{target}}^2}
+                \]
+              </div>
+              <p>
+                Para estimaciones de energía con precisión química (\(\epsilon \sim 1.6 \times 10^{-3}\) hartrees) en moléculas moderadas, el número de disparos requerido puede alcanzar \(10^6\)–\(10^9\), lo que constituye un cuello de botella significativo en la ejecución de algoritmos variacionales. Técnicas como la estimación clásica de sombras (<em>classical shadows</em>), el muestreo de Pauli adaptativo y los protocolos de mitigación de errores por extrapolación al ruido cero (<em>zero-noise extrapolation</em>) buscan aliviar estas demandas, redistribuyendo el presupuesto de incertidumbre entre las distintas contribuciones para maximizar la información extraíble por disparo.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Relación práctica: shots y precisión.</strong> Un experimentador que busque estimar \(\langle\hat{Z}\rangle\) con error \(\epsilon = 0.01\) necesita al mínimo \(N_{\mathrm{shots}} \geq (\Delta Z)^2/\epsilon^2 = 1/(0.01)^2 = 10\,000\) disparos (dado que \(\Delta Z \leq 1\) para cualquier estado de un qubit). Para un operador con \(M = 100\) términos de Pauli, el número total de mediciones puede llegar a \(10^6\) o más, dependiendo de la estrategia de agrupación.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ §10 REFERENCIAS -->
+          <section id="referencias" class="qubits-section ref-cards-section">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="ref-cards-lead">
+              Selección de monografías, artículos seminales, apuntes de curso y recursos abiertos sobre relaciones de incertidumbre, metrología cuántica y fundamentos de la teoría cuántica de la información.
+            </p>
+            <div class="ref-cards-grid">
+              <article class="ref-card">
+                <p class="ref-card-source">Sakurai &amp; Napolitano</p>
+                <p class="ref-card-book"><em>Modern Quantum Mechanics</em> <span class="ref-card-pub">(Cambridge, 3.ª ed.)</span></p>
+                <p class="ref-card-desc">
+                  Tratamiento riguroso de postulados, momento angular y la desigualdad de Robertson con demostraciones detalladas; texto de referencia para posgrado.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Cohen-Tannoudji, Diu &amp; Laloë</p>
+                <p class="ref-card-book"><em>Quantum Mechanics</em> <span class="ref-card-pub">(Wiley, 2 vols.)</span></p>
+                <p class="ref-card-desc">Tratado enciclopédico con complementos sobre relaciones de incertidumbre generalizadas, operadores densidad y simetrías.</p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Robertson, H. P. (1929)</p>
+                <p class="ref-card-book"><em>The Uncertainty Principle</em> <span class="ref-card-pub">(Phys. Rev. 34, 163)</span></p>
+                <p class="ref-card-desc">Artículo seminal que establece la relación general de incertidumbre para operadores no conmutantes arbitrarios.</p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Maassen &amp; Uffink (1988)</p>
+                <p class="ref-card-book"><em>Generalized Entropic Uncertainty Relations</em> <span class="ref-card-pub">(Phys. Rev. Lett. 60, 1103)</span></p>
+                <p class="ref-card-desc">Demostración de la cota entrópica óptima basada en la máxima superposición entre bases; cita obligada en incertidumbre entrópica.</p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Coles, Berta, Tomamichel &amp; Wehner (2017)</p>
+                <p class="ref-card-book"><em>Entropic Uncertainty Relations and their Applications</em> <span class="ref-card-pub">(Rev. Mod. Phys. 89, 015002)</span></p>
+                <p class="ref-card-desc">Revisión exhaustiva de relaciones entrópicas con aplicaciones a criptografía, teleportación y memoria cuántica.</p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/1511.04857" target="_blank" rel="noopener noreferrer">Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Giovannetti, Lloyd &amp; Maccone (2011)</p>
+                <p class="ref-card-book"><em>Advances in Quantum Metrology</em> <span class="ref-card-pub">(Nature Photonics 5, 222)</span></p>
+                <p class="ref-card-desc">Revisión del límite de Heisenberg en metrología, información de Fisher cuántica y estrategias con entrelazamiento.</p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Preskill · notas Ph 229</p>
+                <p class="ref-card-book"><em>Quantum Computation and Information</em> <span class="ref-card-pub">(Caltech)</span></p>
+                <p class="ref-card-desc">Apuntes de curso de referencia sobre MUB, canales cuánticos y complejidad; puente entre física y computación.</p>
+                <a class="ref-card-open" href="http://theory.caltech.edu/~preskill/ph229/" target="_blank" rel="noopener noreferrer">Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Tóth &amp; Apellaniz (2014)</p>
+                <p class="ref-card-book"><em>Quantum Metrology from a Quantum Information Science Perspective</em> <span class="ref-card-pub">(J. Phys. A 47, 424006)</span></p>
+                <p class="ref-card-desc">Conexiones entre entrelazamiento, información de Fisher y límites metrológicos; relevante para procesadores NISQ.</p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/1405.4878" target="_blank" rel="noopener noreferrer">Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">arXiv · quant-ph</p>
+                <p class="ref-card-book"><em>Lista «recent» de prepublicaciones</em></p>
+                <p class="ref-card-desc">Preprints en física cuántica e información; frontera de resultados sobre incertidumbre, metrología y procesamiento cuántico.</p>
+                <a class="ref-card-open" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+            </div>
+            <p class="qubits-prose qubits-prose--academic ref-cards-foot"><a href="fundamento-teorico.html#bases-cuantica">← Volver a Fundamentos teóricos</a></p>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════ ENDMATTER -->
+          <section id="descargar-articulo-incertidumbre" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row"><dt>Título</dt><dd class="qubits-endmatter-doc-title">Principio de incertidumbre: incompatibilidad de observables y límites fundamentales</dd></div>
+              <div class="qubits-endmatter-row"><dt>Fecha de elaboración</dt><dd><time datetime="2026-04-10">10 de abril de 2026</time></dd></div>
+              <div class="qubits-endmatter-row"><dt>Autores</dt><dd><span>Noguerón Méndez José Antonio</span><span class="qubits-endmatter-affil">Head of Quantum Product</span></dd></div>
+            </dl>
+            <a id="incertidumbreArticleDownload" class="qubits-btn-artículo qubits-btn-artículo--disabled" href="#" aria-label="Descargar el artículo completo" aria-disabled="true">
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span>Descargar artículo</span>
+            </a>
+          </section>
+
+  </article>
+</main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#observables-operadores" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Observables y operadores</span>
+          </a>
+          <a href="#conmutadores-algebra" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Conmutadores y álgebra</span>
+          </a>
+          <a href="#robertson-schrodinger" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Robertson-Schrödinger</span>
+          </a>
+          <a href="#posicion-momento" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Posición-momento</span>
+          </a>
+          <a href="#energia-tiempo" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Energía-tiempo</span>
+          </a>
+          <a href="#bases-insesgadas" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Bases insesgadas (MUB)</span>
+          </a>
+          <a href="#incertidumbre-entropica" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Incertidumbre entrópica</span>
+          </a>
+          <a href="#metrologia-cuantica" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Metrología cuántica</span>
+          </a>
+          <a href="#nisq-implicaciones" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Procesadores NISQ</span>
+          </a>
+          <a href="#referencias" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Referencias</span>
+          </a>
+          <a href="#descargar-articulo-incertidumbre" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Descargar artículo</span>
+          </a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+  </body>
+</html>

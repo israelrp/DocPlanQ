@@ -1,0 +1,1200 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simuladores cuánticos Harmoniq — Documentación técnica | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") {
+            document.body.classList.add("light-mode");
+            document.documentElement.classList.add("light-mode");
+          }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Artículos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button
+                type="button"
+                class="search-toggle"
+                aria-label="Abrir buscador"
+                data-i18n-aria-label="search.open"
+                aria-expanded="false"
+                aria-controls="searchDropdown"
+              >
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <span data-i18n="search.label">Search</span>
+              </button>
+              <input
+                id="searchInput"
+                class="search-input"
+                type="search"
+                placeholder="Buscar en la documentación..."
+                aria-label="Buscar en la documentación"
+                data-i18n-placeholder="search.placeholder"
+                data-i18n-aria-label="search.placeholder"
+                autocomplete="off"
+              />
+            </div>
+            <div
+              class="search-dropdown"
+              id="searchDropdown"
+              role="dialog"
+              data-i18n-aria-label="search.dialogLabel"
+              hidden
+            >
+              <div class="search-dropdown-panel">
+                <div class="search-dropdown-body">
+                  <div class="search-empty" id="searchEmptyBlock">
+                    <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                    <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                    <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                  </div>
+                  <ul class="search-results-list" id="searchResultsList" hidden></ul>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <a
+          href="https://cloud.planq.com/blog"
+          class="header-platform-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i
+        ></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Selección de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menú lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="fundamento-teorico.html"
+              ><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a
+            >
+            <a class="nav-item" href="../programacion-cuantica.html"
+              ><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a
+            >
+            <a class="nav-item" href="workflow.html"
+              ><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a
+            >
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"
+              ><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a
+            >
+            <a class="nav-item" href="casos-uso-cuanticos.html"
+              ><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a
+            >
+            <a class="nav-item" href="teoria-cuantica.html"
+              ><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a
+            >
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="simuladores.html#page-body"
+                  ><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-functioning"
+                  ><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-computers"
+                  ><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-foundations"
+                  ><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-usage"
+                  ><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a
+                >
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"
+                  ><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a
+                >
+                <a class="nav-sublink" href="compositor.html#entidades"
+                  ><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a
+                >
+                <a class="nav-sublink" href="compositor.html#arquitectura"
+                  ><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="code-examples.html#ios"
+                  ><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#android"
+                  ><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#react"
+                  ><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#python"
+                  ><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a
+                >
+              </div>
+            </div>
+            <a class="nav-item" href="code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- ══════════════════════════════════════════════════════════ ARTÍCULO -->
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+
+          <!-- ── 1. DOCUMENTACIÓN ─ Hero ─────────────────────────────────── -->
+          <section id="page-body" class="qubits-hero">
+            <p class="qubits-kicker qubits-kicker--row">
+              <span class="qubits-kicker-segment">Productos</span>
+              <span class="qubits-kicker-rule" aria-hidden="true"></span>
+              <span class="qubits-kicker-segment">Simuladores</span>
+            </p>
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img
+                    class="qubits-author-photo"
+                    src="../images/author-nogueron-mendez-planq.png"
+                    width="56"
+                    height="56"
+                    alt="Retrato de Noguerón Méndez José Antonio"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h1 class="qubits-hero-title">
+              Simuladores cuánticos Harmoniq: arquitectura, fundamentos físicos y flujo de trabajo
+            </h1>
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                Un <strong>simulador cuántico clásico</strong> es un programa que ejecuta sobre hardware convencional
+                —CPU, GPU o acelerador— la dinámica completa de un sistema cuántico finito, representando el estado
+                del sistema mediante estructuras de datos que codifican amplitudes de probabilidad complejas o
+                distribuciones estadísticas sobre trayectorias. A diferencia de un ordenador cuántico real, el
+                simulador no realiza cómputo cuántico: su función es predecir con exactitud controlable la salida
+                que produciría un dispositivo cuántico ideal o ruidoso, permitiendo validar circuitos, ajustar
+                compiladores y explorar protocolos antes de ejecutar trabajos de pago sobre hardware escaso.
+              </p>
+              <p>
+                La suite de simuladores de Harmoniq y PlanQ Quantum agrupa tres familias metodológicas —simulación
+                exacta de vector de estado o matriz de densidad, contracción de redes tensoriales y Monte Carlo
+                cuántico estocástico— bajo una interfaz unificada que permite cambiar de backend con una sola línea
+                de configuración sin modificar la descripción del circuito. Esta nota técnica describe con detalle
+                cada paradigma, el modelo de ruido adoptado, la correspondencia con los backends de hardware
+                disponibles y las prácticas recomendadas para obtener resultados reproducibles y comparables.
+              </p>
+            </div>
+          </section>
+
+          <!-- ── 2. FUNCIONAMIENTO ───────────────────────────────────────── -->
+          <section id="sim-functioning" class="qubits-section">
+            <h2>Funcionamiento: tres paradigmas de simulación</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La elección del método de simulación no es trivial: determina el costo computacional, la escala
+                máxima manejable y los tipos de errores que pueden modelarse fielmente. Los tres paradigmas que
+                soporta la plataforma Harmoniq se complementan y no se sustituyen; la decisión óptima depende de
+                la profundidad del circuito, el número de cúbits, el grado de entrelazamiento y el tipo de
+                observables de interés.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>2.1 Simulación de vector de estado y matriz de densidad</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El método más directo consiste en representar el estado puro de \(n\) cúbits como un vector
+                  complejo \(|\psi\rangle \in \mathbb{C}^{2^n}\) de \(2^n\) amplitudes. Cada puerta unitaria
+                  \(U\) de un cúbit actúa sobre el subregistro correspondiente, resultando en una operación
+                  que puede implementarse con un coste de \(\mathcal{O}(2^n)\) multiplicaciones complejas.
+                  Para \(n\) cúbits, la memoria necesaria para almacenar el vector de estado es
+                </p>
+                <div class="qubits-equation" aria-label="Memoria del vector de estado">
+                  $$M_{\text{sv}} = 2^n \times 16\,\text{bytes} \quad (\text{doble precisión compleja}),$$
+                </div>
+                <p>
+                  lo que implica aproximadamente 16 GB para \(n = 30\) y 16 TB para \(n = 40\). Esta escala
+                  exponencial constituye el límite práctico del método en CPU convencional; aceleradores con
+                  memoria unificada de alta capacidad pueden extender el rango útil entre dos y cuatro cúbits
+                  adicionales.
+                </p>
+                <p>
+                  Cuando el sistema interactúa con un entorno —introduciendo decoherencia y ruido incoherente—,
+                  el estado debe describirse mediante la <strong>matriz de densidad</strong>
+                  \(\rho \in \mathcal{L}(\mathbb{C}^{2^n})\), un operador positivo semidefinido de traza unidad
+                  cuya representación matricial requiere \(2^{2n}\) entradas complejas. El coste de memoria
+                  crece al cuadrado respecto al vector de estado:
+                </p>
+                <div class="qubits-equation" aria-label="Memoria de la matriz de densidad">
+                  $$M_{\rho} = 2^{2n} \times 16\,\text{bytes},$$
+                </div>
+                <p>
+                  de modo que el límite práctico sin compresión se sitúa en torno a \(n \approx 15\text{–}20\)
+                  cúbits en servidores de memoria moderada. El simulador de Harmoniq ofrece esta modalidad para
+                  circuitos pequeños donde la fidelidad física completa —incluyendo correlaciones cuánticas
+                  entre subsistemas— es imprescindible.
+                </p>
+              </div>
+
+              <figure class="qubits-figure">
+                <div class="qubits-figure-frame" aria-hidden="true">
+                  <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Diagrama esquemático: circuito → simulador → resultado -->
+                    <rect x="10" y="35" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.3" rx="2" opacity="0.7"/>
+                    <text x="45" y="58" font-size="9" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.8">Circuito</text>
+                    <text x="45" y="69" font-size="8" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.55">n qubits</text>
+                    <line x1="80" y1="55" x2="110" y2="55" stroke="currentColor" stroke-width="1.2" opacity="0.55" marker-end="url(#arr)"/>
+                    <rect x="110" y="25" width="100" height="60" fill="none" stroke="currentColor" stroke-width="1.3" rx="2" opacity="0.7"/>
+                    <text x="160" y="48" font-size="9" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.8">Simulador</text>
+                    <text x="160" y="60" font-size="7.5" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.55">|ψ⟩ ∈ ℂ^(2ⁿ)</text>
+                    <text x="160" y="71" font-size="7.5" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.55">ρ ∈ L(ℂ^(2ⁿ))</text>
+                    <line x1="210" y1="55" x2="240" y2="55" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>
+                    <rect x="240" y="35" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.3" rx="2" opacity="0.7"/>
+                    <text x="275" y="58" font-size="9" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.8">Resultado</text>
+                    <text x="275" y="69" font-size="8" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" opacity="0.55">shots / ρ_out</text>
+                  </svg>
+                </div>
+                <figcaption class="qubits-figure-caption">
+                  Figura 1. Flujo abstracto de la simulación de vector de estado: el circuito de \(n\) cúbits se
+                  mapea a una operación lineal sobre \(\mathbb{C}^{2^n}\), de la que se extrae la distribución
+                  de probabilidad de medición o la matriz de densidad reducida de un subsistema.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>2.2 Redes tensoriales: MPS, PEPS y contracción jerárquica</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Cuando el circuito produce estados con <em>entrelazamiento acotado</em> —condición que se
+                  satisface en numerosos algoritmos variacionales, circuitos poco profundos y preparaciones
+                  adiabáticas— es posible representar el vector de estado de forma comprimida mediante un
+                  <strong>estado de producto matricial</strong> (MPS, del inglés <em>matrix product state</em>):
+                </p>
+                <div class="qubits-equation" aria-label="Representación MPS">
+                  $$|\psi\rangle = \sum_{s_1,\ldots,s_n \in \{0,1\}} A^{s_1}_1 A^{s_2}_2 \cdots A^{s_n}_n \, |s_1 s_2 \cdots s_n\rangle,$$
+                </div>
+                <p>
+                  donde cada \(A^{s_k}_k\) es una matriz compleja de dimensión a lo sumo \(\chi \times \chi\),
+                  con \(\chi\) denominado <em>bond dimension</em> o dimensión de enlace. La entropía de Von
+                  Neumann de un bipartición del sistema está acotada superiormente por \(\log_2 \chi\); para
+                  estados poco entrelazados, \(\chi\) permanece pequeño (típicamente \(\chi \lesssim 10^3\)) y
+                  el costo de memoria escala como \(\mathcal{O}(n \chi^2)\) en lugar de \(\mathcal{O}(2^n)\).
+                </p>
+                <p>
+                  La aplicación de puertas de dos cúbits entre sitios contiguos en la cadena MPS requiere una
+                  descomposición en valores singulares (SVD) tras el producto tensorial local, seguida de un
+                  truncamiento controlado al bond dimension máximo \(\chi_{\max}\). Este truncamiento introduce
+                  un error de aproximación que puede cuantificarse mediante el espectro singular descartado.
+                  En la implementación de Harmoniq, el umbral de truncamiento es configurable por el usuario.
+                </p>
+                <p>
+                  Para sistemas con geometría de red bidimensional o alta conectividad, los MPS se generalizan
+                  a estados de producto tensorial proyectado (PEPS), cuya contracción exacta es
+                  \(\#P\)-duro en el caso general; en la práctica se recurre a esquemas de contracción
+                  aproximada tipo árbol (tree-TN) o por capas que exploran el compromiso entre coste
+                  computacional y precisión.
+                </p>
+              </div>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Nota técnica</p>
+                <p>
+                  El criterio operativo para elegir entre vector de estado y MPS depende de la entropía de
+                  entrelazamiento del estado objetivo. Si el circuito contiene capas de puertas de dos cúbits
+                  de largo alcance o profundidades \(p > \log_2 n\) con puertas entrelazantes densas, la
+                  dimensión de enlace necesaria puede crecer exponencialmente y el MPS perderá su ventaja
+                  sobre el vector de estado completo.
+                </p>
+              </aside>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>2.3 Monte Carlo cuántico estocástico (QMC y unraveling)</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Cuando el interés principal recae en expectativas de observables —no en amplitudes individuales—
+                  y el sistema es ruidoso, el método de <strong>trayectorias cuánticas</strong> (<em>quantum
+                  trajectories</em> o <em>Monte Carlo wave function</em>, MCWF) proporciona una alternativa
+                  escalable. En lugar de propagar la matriz de densidad completa, se realiza un promedio sobre
+                  un conjunto de \(N_{\text{traj}}\) realizaciones estocásticas del vector de estado puro,
+                  cada una evolucionando bajo un hamiltoniano efectivo no hermítico corregido por saltos
+                  aleatorios determinados por los operadores de Lindblad:
+                </p>
+                <div class="qubits-equation" aria-label="Estimador Monte Carlo de observable">
+                  $$\langle \hat{O} \rangle \approx \frac{1}{N_{\text{traj}}} \sum_{j=1}^{N_{\text{traj}}} \langle \psi_j(t) | \hat{O} | \psi_j(t) \rangle,$$
+                </div>
+                <p>
+                  con un error estadístico de orden \(\mathcal{O}(N_{\text{traj}}^{-1/2})\). Dado que cada
+                  trayectoria es un vector de estado puro de dimensión \(2^n\), el costo por trayectoria es
+                  \(\mathcal{O}(2^n)\), pero las trayectorias son independientes entre sí y se distribuyen
+                  trivialmente en procesadores paralelos. Para circuitos ruidosos de tamaño intermedio
+                  (\(n \in [20, 50]\)), este método es a menudo el único practicable con recursos computacionales
+                  razonables.
+                </p>
+                <p>
+                  En el contexto de Harmoniq, la semilla aleatoria utilizada para la selección de saltos
+                  cuánticos forma parte de los metadatos del trabajo (<em>job</em>), garantizando que cualquier
+                  ejecución pueda reproducirse exactamente con la misma semilla para auditoría y depuración.
+                </p>
+              </div>
+            </section>
+
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <div class="tech-ui-mock tech-ui-mock--toolkit" role="presentation">
+                  <div class="tech-ui-titlebar">
+                    <span class="tech-ui-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                    <div class="tech-ui-titlebar-track"><span class="tech-ui-titlebar-fill tech-ui-titlebar-fill--wide"></span></div>
+                  </div>
+                  <div class="tech-ui-body tech-ui-body--stack">
+                    <div class="tech-ui-toolbar">
+                      <span class="tech-ui-pill-btn"></span>
+                      <span class="tech-ui-pill-btn tech-ui-pill-btn--ghost"></span>
+                      <span class="tech-ui-pill-btn tech-ui-pill-btn--ghost"></span>
+                    </div>
+                    <div class="tech-ui-pipeline">
+                      <span class="tech-ui-node"></span>
+                      <span class="tech-ui-node-join"></span>
+                      <span class="tech-ui-node"></span>
+                      <span class="tech-ui-node-join"></span>
+                      <span class="tech-ui-node tech-ui-node--end"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 2. Representación esquemática del pipeline de simulación: el circuito pasa por compilación
+                a base nativa, selección de backend (vector de estado, MPS o Monte Carlo) y recolección de muestras
+                con metadatos declarados para reproducibilidad.
+              </figcaption>
+            </figure>
+          </section>
+
+          <!-- ── 3. COMPUTADORAS ─────────────────────────────────────────── -->
+          <section id="sim-computers" class="qubits-section">
+            <h2>Computadoras: backends de simulación y su relación con el hardware</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La arquitectura de Harmoniq separa con rigor la <em>descripción</em> del circuito cuántico del
+                <em>medio de ejecución</em>. Un mismo objeto de circuito —representado en la representación
+                intermedia interna— puede enviarse a cualquiera de los backends registrados sin modificación
+                del código de usuario. Esta separación no es cosmética: refleja el principio de que el
+                experimento lógico (qué operaciones se realizan) y el experimento físico (sobre qué sustrato
+                se realizan, con qué ruido y qué conectividad) son conceptualmente independientes y deben
+                mantenerse separados para garantizar la reproducibilidad científica.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>3.1 Simulador Hopper — 20 cúbits (Curiosity)</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El simulador <strong>Hopper</strong>, construido sobre el procesador de referencia Curiosity,
+                  opera con un modelo de ruido calibrado para replicar la fenomenología de un sistema de iones
+                  atrapados de 20 cúbits en operación. Su rango de aplicación principal abarca el desarrollo
+                  y la depuración de algoritmos de profundidad baja-moderada: algoritmos variacionales tipo
+                  VQE o QAOA con capas \(p \leq 10\), circuitos de preparación de estados para problemas de
+                  optimización combinatoria y suites de benchmarking de ruido.
+                </p>
+                <p>
+                  La conectividad del grafo de interacciones es <em>all-to-all</em>: cualquier par de cúbits
+                  puede participar en una puerta de dos cúbits nativa sin requerir operaciones SWAP adicionales.
+                  Esto distingue la plataforma de iones atrapados de las arquitecturas superconductoras de
+                  vecinos próximos e implica que la compilación del circuito produce profundidades menores para
+                  algoritmos con alta densidad de interacciones de largo alcance.
+                </p>
+                <p>
+                  Los parámetros de ruido del modelo de Hopper son los siguientes (valores de referencia
+                  para la configuración estándar):
+                </p>
+                <ul class="qubits-feature-list">
+                  <li class="qubits-feature-item">
+                    <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-timer"></i></div>
+                    <div class="qubits-feature-copy qubits-prose--academic">
+                      <h3>Tiempos de coherencia</h3>
+                      <p>
+                        \(T_1 \approx 120\,\mu\text{s}\) (relajación longitudinal); \(T_2 \approx 80\,\mu\text{s}\)
+                        (decoherencia transversal). Estos valores determinan el presupuesto de profundidad máxima
+                        del circuito antes de que los errores acumulados superen el umbral de utilidad.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="qubits-feature-item">
+                    <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-cpu"></i></div>
+                    <div class="qubits-feature-copy qubits-prose--academic">
+                      <h3>Fidelidades de puerta</h3>
+                      <p>
+                        Fidelidad media de puerta de un cúbit: 99,8 %. Fidelidad media de puerta de dos cúbits
+                        (tipo Mølmer–Sørensen): 98,5 %. Las fidelidades se miden mediante caracterización de
+                        proceso por randomized benchmarking estándar.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="qubits-feature-item">
+                    <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-waveform"></i></div>
+                    <div class="qubits-feature-copy qubits-prose--academic">
+                      <h3>Tiempo de puerta nativa</h3>
+                      <p>
+                        La puerta de dos cúbits nativa tiene una duración de aproximadamente
+                        \(50\,\mu\text{s}\), determinada por la frecuencia de los modos vibracionales del bus
+                        iónico. Las rotaciones de un cúbit se implementan en \(\lesssim 10\,\mu\text{s}\) mediante
+                        pulsos láser calibrados.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>3.2 Simulador Hermann — 70 cúbits (Discovery)</h3>
+              <figure class="qubits-figure">
+                <div class="qubits-figure-frame qubits-figure-frame--flush" aria-hidden="true">
+                  <img
+                    src="../assets/hermann-procesador.png"
+                    alt="Procesador Hermann — 70 Qubits — Discovery"
+                    loading="lazy"
+                    decoding="async"
+                    style="width: 100%; height: auto; display: block"
+                  />
+                </div>
+                <figcaption class="qubits-figure-caption">
+                  Procesador Hermann — 70 Qubits — Procesador Discovery.
+                </figcaption>
+              </figure>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El simulador <strong>Hermann</strong>, basado en el procesador Discovery, cubre el régimen
+                  de escala intermedia: circuitos con hasta 70 cúbits activos y profundidades moderadas
+                  compatibles con los parámetros de ruido del sistema. En este rango, la simulación exacta
+                  de vector de estado es computacionalmente prohibitiva; Hermann emplea una combinación
+                  adaptativa de redes tensoriales (MPS con bond dimension máximo configurable) y Monte Carlo
+                  de trayectorias para el componente de ruido.
+                </p>
+                <p>
+                  El perfil de aplicación de Hermann incluye algoritmos de optimización cuántico-clásicos
+                  con ansatz variacionales de alta expresividad, simulación de sistemas de materia condensada
+                  en cadenas o anillos de hasta \(\sim 60\) sitios, y evaluación de protocolos de corrección
+                  de errores a escala subumbral donde el número de cúbits físicos supera el rango de la
+                  simulación exacta pero el circuito preserva estructura de baja entropía.
+                </p>
+                <p>
+                  Los tiempos de coherencia de referencia del modelo Discovery son \(T_1 \approx 200\,\mu\text{s}\)
+                  y \(T_2 \approx 140\,\mu\text{s}\), con fidelidades de puerta de un cúbit del 99,6 % y de
+                  dos cúbits del 97,9 %. La latencia de puerta nativa se reduce a \(\approx 45\,\mu\text{s}\)
+                  por mejoras en el diseño del potencial de confinamiento.
+                </p>
+              </div>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Comparación de backends</p>
+                <p>
+                  Hopper es el backend de referencia para circuitos pequeños y alta fidelidad de simulación;
+                  Hermann es el backend adecuado para exploración de escala con tolerancia a cierto error
+                  de aproximación. En ambos casos, el número de shots declarados en el trabajo determina
+                  la incertidumbre estadística de los estimadores de expectación; se recomienda un mínimo
+                  de \(N_{\text{shots}} \geq 1024\) para estimaciones con error relativo inferior al 5 %.
+                </p>
+              </aside>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>3.3 Modelo de abstracción de backend en Harmoniq</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Internamente, cada backend se registra como una instancia del objeto <code>Backend</code> en
+                  el SDK de Harmoniq, parametrizado por su conjunto de puertas nativas, grafo de conectividad,
+                  modelo de ruido y capacidades de trabajo (límite de cúbits, tiempo máximo de ejecución,
+                  política de cola). La transpilación del circuito de usuario a la base nativa del backend
+                  se realiza automáticamente por el compilador antes de enviar el trabajo.
+                </p>
+                <p>
+                  El compilador de Harmoniq aplica, en orden, las siguientes fases de optimización:
+                  (i) cancelación algebraica de puertas inversas adyacentes; (ii) síntesis de Solovay–Kitaev
+                  para aproximar rotaciones arbitrarias con la base nativa; (iii) ruteo de cúbits según el
+                  grafo de conectividad mediante SABRE u algoritmos de emparejamiento de subgrafos;
+                  (iv) optimización de profundidad por conmutación de puertas de dos cúbits; (v) inserción de
+                  operaciones de corrección de fase acumuladas por la compilación.
+                </p>
+              </div>
+            </section>
+          </section>
+
+          <!-- ── 4. FUNDAMENTOS ──────────────────────────────────────────── -->
+          <section id="sim-foundations" class="qubits-section">
+            <h2>Fundamentos: el modelo físico detrás de los simuladores</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Los simuladores de Harmoniq están calibrados sobre la física de <strong>iones atrapados</strong>:
+                átomos cargados confinados electromagnéticamente en trampas de tipo Paul o Penning, enfriados
+                mediante láser hasta el estado de movimiento fundamental y manipulados con pulsos ópticos o
+                de radiofrecuencia. Esta sección resume el marco teórico que justifica los modelos de ruido y
+                los parámetros de fidelidad incorporados en los backends.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>4.1 Hamiltoniano del sistema de iones atrapados</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Consideremos \(n\) iones de la misma especie (p. ej., \({}^{171}\text{Yb}^+\) o
+                  \({}^{40}\text{Ca}^+\)) confinados en una cadena lineal. El hamiltoniano total del sistema
+                  ión-campo incluye el término de movimiento de los centros de masa en los modos normales
+                  del potencial de trampa, la interacción interna que define los cúbits (típicamente dos
+                  niveles hiperfinos o electrónicos) y la interacción radiación-materia en el régimen de
+                  Lamb–Dicke. En la aproximación de Lamb–Dicke (\(\eta_k \ll 1\), con \(\eta_k\) el
+                  parámetro de Lamb–Dicke del modo \(k\)), y tras la transformación a imagen de interacción
+                  y la aproximación de onda rotante, el hamiltoniano efectivo de acoplamiento es
+                </p>
+                <div class="qubits-equation" aria-label="Hamiltoniano de acoplamiento Lamb-Dicke">
+                  $$H_{\text{int}} \approx \hbar \sum_{i=1}^{n} \sum_k \eta_k^{(i)} \Omega_i \left( \sigma_i^+ a_k + \sigma_i^- a_k^\dagger \right),$$
+                </div>
+                <p>
+                  donde \(\sigma_i^\pm\) son operadores de escalera del i-ésimo cúbit, \(a_k, a_k^\dagger\)
+                  son operadores de aniquilación y creación del modo fonónico \(k\), y \(\Omega_i\) es la
+                  frecuencia de Rabi efectiva del pulso sobre el ión \(i\). Las puertas de dos cúbits
+                  (Mølmer–Sørensen, puerta geométrica de fase) se implementan mediante pulsos bicromaticos
+                  que acoplan simultáneamente dos iones a través de los modos de centro de masa o respiración,
+                  generando la operación unitaria
+                </p>
+                <div class="qubits-equation" aria-label="Puerta Mølmer-Sørensen">
+                  $$\text{MS}(\theta) = \exp\!\left(-i\frac{\theta}{4}\,\sigma_x^{(1)}\otimes\sigma_x^{(2)}\right),$$
+                </div>
+                <p>
+                  que para \(\theta = \pi/2\) produce un estado de Bell maximalmente entrelazado a partir
+                  de la base computacional \(|00\rangle\), siendo la puerta de dos cúbits nativa de la
+                  plataforma y el elemento a partir del cual el compilador descompone cualquier operación
+                  unitaria de dos cúbits general.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>4.2 Canales de ruido e implementación Lindblad</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La dinámica real del sistema no es unitaria: la interacción con modos del campo
+                  electromagnético del vacío, el calentamiento motónico del trap (<em>motional heating</em>),
+                  las fluctuaciones de frecuencia de los láseres y el <em>crosstalk</em> entre iones adyacentes
+                  introducen canales de error. En el marco de la ecuación maestra de Lindblad se modelan
+                  mediante operadores de salto \(\{L_k\}\):
+                </p>
+                <div class="qubits-equation" aria-label="Ecuación maestra de Lindblad completa">
+                  $$\frac{\mathrm{d}\rho}{\mathrm{d}t} = -\frac{i}{\hbar}[H,\rho] + \sum_k \gamma_k \!\left(L_k \rho L_k^\dagger - \frac{1}{2}\left\{L_k^\dagger L_k,\rho\right\}\right).$$
+                </div>
+                <p>
+                  Los canales más relevantes en la plataforma de iones atrapados son los siguientes:
+                </p>
+              </div>
+              <ul class="qubits-feature-list">
+                <li class="qubits-feature-item">
+                  <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-arrow-down"></i></div>
+                  <div class="qubits-feature-copy qubits-prose--academic">
+                    <h3>Amortiguamiento de amplitud (\(T_1\))</h3>
+                    <p>
+                      El operador de Lindblad \(L = \sqrt{\gamma_1}\,\sigma^-\) modela la relajación del
+                      cúbit desde el estado excitado \(|1\rangle\) hacia el estado base \(|0\rangle\) a tasa
+                      \(\gamma_1 = 1/T_1\). En el sistema de iones atrapados, esta relajación se debe
+                      principalmente a la emisión espontánea para estados electrónicos ópticos, o a la
+                      transición inducida por ruido electromagnético residual para niveles hiperfinos
+                      de larga vida.
+                    </p>
+                  </div>
+                </li>
+                <li class="qubits-feature-item">
+                  <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-arrows-horizontal"></i></div>
+                  <div class="qubits-feature-copy qubits-prose--academic">
+                    <h3>Desfasamiento puro (<em>dephasing</em>, \(T_2\))</h3>
+                    <p>
+                      El operador \(L = \sqrt{\gamma_\phi/2}\,\sigma_z\) describe la pérdida de coherencia
+                      transversal sin cambio de población, a tasa \(\gamma_\phi\) tal que
+                      \(1/T_2 = 1/(2T_1) + \gamma_\phi/2\). Las fluctuaciones de fase del oscilador local
+                      de referencia y las fluctuaciones de campo magnético son las fuentes dominantes.
+                    </p>
+                  </div>
+                </li>
+                <li class="qubits-feature-item">
+                  <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-scatter-plot"></i></div>
+                  <div class="qubits-feature-copy qubits-prose--academic">
+                    <h3>Canal despolarizante</h3>
+                    <p>
+                      Para modelar errores estocásticos de puerta de origen incierto, se añade un canal
+                      despolarizante de tasa \(p_{\text{dep}}\) que mezcla el estado con la identidad:
+                      \(\rho \mapsto (1-p_{\text{dep}})\rho + p_{\text{dep}}\,\mathbb{I}/2\). Este canal
+                      se aplica tras cada puerta de dos cúbits como corrección fenomenológica calibrada
+                      respecto a la fidelidad media medida.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El error de calentamiento motónico merece mención adicional: el aumento del número medio de
+                  fonones \(\bar{n}\) a tasa \(\dot{\bar{n}}\) degrada la fidelidad de las puertas Mølmer–Sørensen,
+                  que dependen del estado del modo bus. Este efecto se modela en el simulador de Harmoniq
+                  mediante un canal de amplificación de amplitud sobre el modo fonónico del bus, parametrizado
+                  por la tasa de calentamiento medida experimentalmente en el sistema de referencia.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>4.3 Caracterización del proceso cuántico y benchmarking</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La validez de los modelos de ruido incorporados en los backends depende de la calidad de la
+                  caracterización experimental del hardware real. Harmoniq emplea tres protocolos complementarios:
+                </p>
+                <p>
+                  <strong>Randomized benchmarking (RB):</strong> secuencias aleatorias de puertas del grupo de
+                  Clifford, seguidas de la puerta de inversión exacta, permiten estimar la tasa de error media
+                  por puerta \(r\) a partir de la caída exponencial de la fidelidad en función del número de
+                  puertas \(m\):
+                </p>
+                <div class="qubits-equation" aria-label="Caída exponencial del randomized benchmarking">
+                  $$F(m) = A \cdot p^m + B, \qquad r = \frac{d-1}{d}(1-p),$$
+                </div>
+                <p>
+                  donde \(d = 2^n\) es la dimensión del espacio de Hilbert del subsistema caracterizado y los
+                  parámetros \(A, B, p\) se ajustan por regresión no lineal sobre el conjunto de datos
+                  experimentales.
+                </p>
+                <p>
+                  <strong>Tomografía de proceso cuántico (QPT):</strong> con \(d^4\) experimentos de preparación
+                  y medición permite reconstruir la superoperación \(\mathcal{E}\) que describe el canal real
+                  en la representación de \(\chi\)-matriz. Es costosa en tiempo de medición (\(\mathcal{O}(d^4)\)
+                  experimentos) y se reserva para la caracterización de puertas individuales de alta importancia.
+                </p>
+                <p>
+                  <strong>Cycle benchmarking y tomografía comprimida:</strong> técnicas más recientes que
+                  combinan la eficiencia estadística del RB con la información de proceso completa de la QPT,
+                  usando muestras dispersas en el espacio de Pauli para estimar tasas de error diferenciadas
+                  por canal.
+                </p>
+              </div>
+            </section>
+          </section>
+
+          <!-- ── 5. MODO DE USO ──────────────────────────────────────────── -->
+          <section id="sim-usage" class="qubits-section">
+            <h2>Modo de uso: flujo de trabajo con el SDK de Harmoniq</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La ejecución de un circuito sobre cualquiera de los backends de simulación sigue un flujo
+                de cinco etapas: definición del circuito, compilación al backend objetivo, configuración
+                del trabajo, ejecución y análisis de resultados. Esta sección describe cada etapa con
+                detalle suficiente para que un usuario nuevo pueda iniciar su primera simulación, y con
+                la precisión necesaria para que un usuario avanzado identifique los parámetros de ajuste
+                relevantes.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>5.1 Definición del circuito</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El circuito se construye sobre el objeto <code>QuantumCircuit</code> del SDK, que acepta
+                  operaciones en la base de puertas universales: \(R_x(\theta)\), \(R_y(\theta)\),
+                  \(R_z(\theta)\), \(H\), \(\text{CNOT}\), \(T\), \(S\) y sus conjugadas, además de puertas
+                  parametrizadas definidas por el usuario. El SDK admite dos estilos de composición: imperativo
+                  (llamadas secuenciales a métodos de puerta) y declarativo (descripción en OpenQASM 3.0 o
+                  en el formato interno de representación intermedia de Harmoniq).
+                </p>
+                <p>
+                  Independientemente del estilo, el circuito se valida sintácticamente en el momento de la
+                  construcción y semánticamente (compatibilidad de tipos, rangos de parámetros, integridad
+                  del grafo de operaciones) antes de la compilación. Los errores de validación se notifican
+                  con mensajes descriptivos que incluyen el número de línea de OpenQASM o el nombre del
+                  método de SDK responsable.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>5.2 Compilación y transpilación</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El compilador de Harmoniq recibe el circuito en representación abstracta y produce una
+                  secuencia de instrucciones en la base nativa del backend seleccionado. El nivel de
+                  optimización es configurable mediante el parámetro <code>optimization_level</code>
+                  (valores 0–3): el nivel 0 aplica únicamente la descomposición mínima a la base nativa;
+                  el nivel 3 activa todas las pasadas de optimización disponibles, incluyendo la
+                  cancelación de puertas globales por conmutatividad y la síntesis de bloques
+                  KAK para cúbits adyacentes en el grafo.
+                </p>
+                <p>
+                  El informe de compilación (<em>transpilation report</em>) documenta la profundidad
+                  del circuito original y transpilado, el número de puertas de dos cúbits antes y después
+                  de la optimización, y el número de operaciones SWAP introducidas por el ruteo. Este
+                  informe es determinante para estimar la fidelidad esperada de la ejecución: un aumento
+                  de SWAP sobre el grafo de conectividad implica cúbits físicos adicionales operando bajo
+                  ruido sin contribución al algoritmo lógico.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>5.3 Configuración y envío del trabajo</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El trabajo (<em>job</em>) es el objeto que encapsula el circuito compilado junto con los
+                  parámetros de ejecución. Los parámetros obligatorios son: <code>backend</code> (nombre
+                  del backend destino), <code>shots</code> (número de repeticiones del experimento) y
+                  <code>seed</code> (semilla aleatoria para reproducibilidad). Los parámetros opcionales
+                  incluyen <code>noise_model</code> (para sobreescribir el modelo de ruido por defecto),
+                  <code>mps_bond_dim</code> (bond dimension máximo para el backend Hermann),
+                  <code>n_trajectories</code> (número de trayectorias Monte Carlo) y
+                  <code>initial_layout</code> (mapeo explícito de cúbits lógicos a físicos).
+                </p>
+                <p>
+                  Una vez configurado, el trabajo se envía al servicio de cola de Harmoniq Cloud mediante
+                  la llamada <code>backend.run(circuit, **params)</code>, que retorna un objeto
+                  <code>JobHandle</code> con identificador único. El estado del trabajo puede consultarse
+                  de forma asíncrona mediante <code>handle.status()</code>, que devuelve uno de los valores
+                  del enumerado <code>JobStatus</code>: <code>QUEUED</code>, <code>RUNNING</code>,
+                  <code>COMPLETED</code>, <code>FAILED</code> o <code>CANCELLED</code>.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>5.4 Análisis de resultados</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El resultado de un trabajo completado se obtiene mediante <code>handle.result()</code>,
+                  que devuelve un objeto <code>SimulatorResult</code> con los siguientes atributos principales:
+                </p>
+              </div>
+              <ul class="qubits-feature-list">
+                <li class="qubits-feature-item">
+                  <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-chart-bar"></i></div>
+                  <div class="qubits-feature-copy qubits-prose--academic">
+                    <h3>Distribución de medición (<code>counts</code>)</h3>
+                    <p>
+                      Diccionario de cadenas de bits a recuento de apariciones sobre los \(N_{\text{shots}}\)
+                      experimentos. Permite estimar la distribución de probabilidad de medición en la base
+                      computacional y calcular expectativas de observables diagonales.
+                    </p>
+                  </div>
+                </li>
+                <li class="qubits-feature-item">
+                  <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-matrix"></i></div>
+                  <div class="qubits-feature-copy qubits-prose--academic">
+                    <h3>Matriz de densidad de salida (<code>density_matrix</code>)</h3>
+                    <p>
+                      Disponible cuando el backend ejecuta en modo de simulación exacta y el usuario
+                      solicita la matriz completa. Permite calcular observables no diagonales, entropías
+                      de Von Neumann y concurrencia de entrelazamiento sin coste adicional de muestreo.
+                    </p>
+                  </div>
+                </li>
+                <li class="qubits-feature-item">
+                  <div class="qubits-feature-icon" aria-hidden="true"><i class="ph ph-info"></i></div>
+                  <div class="qubits-feature-copy qubits-prose--academic">
+                    <h3>Metadatos del trabajo (<code>metadata</code>)</h3>
+                    <p>
+                      Incluye la semilla utilizada, el tiempo de ejecución en cola y en cómputo, la versión
+                      del compilador, el nivel de optimización aplicado y el informe de transpilación.
+                      Estos datos son esenciales para reproducir exactamente cualquier resultado y deben
+                      incluirse como anexo en publicaciones científicas que usen la plataforma.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Práctica recomendada</p>
+                <p>
+                  Toda comparación de resultados entre backends —o entre distintas ejecuciones del mismo
+                  backend— debe declarar explícitamente: backend utilizado, versión del SDK, parámetros
+                  del modelo de ruido (si se modificaron), número de shots, semilla aleatoria y nivel de
+                  optimización del compilador. Sin esta información, los resultados son anecdóticos y no
+                  reproducibles. El objeto <code>metadata</code> del resultado contiene todos estos valores
+                  de forma estructurada y puede serializarse en JSON para archivo.
+                </p>
+              </aside>
+            </section>
+
+            <section class="qubits-section" style="padding-left: 0; border-left: none;">
+              <h3>5.5 Flujo de trabajo recomendado</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La metodología de desarrollo cuántico responsable sigue un orden conservador que minimiza
+                  el uso de recursos costosos y maximiza la información extraída en cada etapa:
+                </p>
+              </div>
+              <ol class="qubits-steps">
+                <li>
+                  <strong>Prototipado sin ruido.</strong> Ejecutar el circuito sobre el simulador de vector
+                  de estado sin modelo de ruido. Verificar que la distribución de medición ideal se
+                  corresponde con la salida esperada del algoritmo. Esta etapa no consume cuota de créditos
+                  de backend ruidoso.
+                </li>
+                <li>
+                  <strong>Análisis de profundidad y recursos.</strong> Revisar el informe de compilación:
+                  profundidad del circuito transpilado, número de puertas de dos cúbits y operaciones SWAP.
+                  Si la profundidad supera el presupuesto de decoherencia (\(\tau_{\text{circuito}} > T_2 / 5\)
+                  como regla heurística), rediseñar el ansatz o aplicar técnicas de mitigación de errores.
+                </li>
+                <li>
+                  <strong>Simulación ruidosa en Hopper.</strong> Añadir el modelo de ruido del backend
+                  seleccionado y repetir la simulación. Comparar la fidelidad de la salida ruidosa con la
+                  ideal; identificar qué capas del circuito introducen mayor degradación.
+                </li>
+                <li>
+                  <strong>Escala a Hermann (si aplica).</strong> Para circuitos de 21–70 cúbits, repetir
+                  el análisis en el backend Hermann ajustando el bond dimension MPS o el número de
+                  trayectorias Monte Carlo hasta que la convergencia del estimador sea satisfactoria.
+                </li>
+                <li>
+                  <strong>Archivo de resultados.</strong> Serializar el objeto <code>SimulatorResult</code>
+                  completo —incluyendo metadatos— junto con el circuito fuente y el informe de compilación
+                  en un repositorio versionado. Asociar cada experimento a un identificador de trabajo
+                  único para trazabilidad.
+                </li>
+              </ol>
+            </section>
+          </section>
+
+          <!-- ── REFERENCIAS ─────────────────────────────────────────────── -->
+          <section id="referencias-simuladores" class="qubits-section qubits-refs">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="qubits-refs-intro qubits-prose--academic">
+              La selección siguiente orienta al lector hacia las fuentes primarias que fundamentan los
+              métodos de simulación descritos en este documento, así como hacia recursos prácticos de
+              uso de plataformas relacionadas.
+            </p>
+            <ul class="qubits-ref-grid">
+              <li>
+                <a class="qubits-ref-card" href="https://doi.org/10.1103/RevModPhys.86.153" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Bloch et al. (2012) — Rev. Mod. Phys.</span>
+                  <span class="qubits-ref-desc">Revisión canónica de la simulación cuántica con átomos ultrafríos: fundamentos, implementaciones y perspectivas.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://doi.org/10.1103/PhysRevX.6.031007" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Mølmer &amp; Sørensen (1999) — Phys. Rev. Lett.</span>
+                  <span class="qubits-ref-desc">Artículo original de la puerta de dos cúbits tipo MS en iones atrapados, base de las puertas nativas del simulador Hopper y Hermann.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://doi.org/10.1103/RevModPhys.77.259" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Vidal (2003) — Phys. Rev. Lett. · MPS eficiente</span>
+                  <span class="qubits-ref-desc">Algoritmo TEBD para propagación en tiempo real de estados MPS; fundamento del backend de redes tensoriales de Hermann.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://doi.org/10.1103/PhysRevLett.68.580" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Mølmer, Castin &amp; Dalibard (1993) — Phys. Rev. Lett.</span>
+                  <span class="qubits-ref-desc">Artículo fundacional del método de trayectorias cuánticas (Monte Carlo de función de onda), base del backend estocástico de Harmoniq.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://qiskit.org/ecosystem/aer/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Qiskit Aer — Documentación oficial</span>
+                  <span class="qubits-ref-desc">Simulador de referencia de código abierto; útil para comparación de resultados y verificación de modelos de ruido entre plataformas.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Nielsen &amp; Chuang — <em>Quantum Computation and Quantum Information</em></span>
+                  <span class="qubits-ref-desc">Cambridge University Press. Capítulos 8 (canales cuánticos) y 11 (caracterización de procesos) son esenciales para comprender los modelos de ruido implementados.</span>
+                </div>
+              </li>
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Breuer &amp; Petruccione — <em>The Theory of Open Quantum Systems</em></span>
+                  <span class="qubits-ref-desc">Oxford University Press. Referencia estándar para la ecuación maestra de Lindblad, el método de trayectorias cuánticas y sus límites de validez.</span>
+                </div>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://arxiv.org/abs/2109.06073" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Proctor et al. (2021) — Scalable randomized benchmarking</span>
+                  <span class="qubits-ref-desc">Cycle benchmarking y extensiones del RB para caracterización de puertas a escala; metodología adoptada por Harmoniq para calibrar los backends.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <!-- ── ENDMATTER ───────────────────────────────────────────────── -->
+          <section id="descargar-articulo-simuladores" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row">
+                <dt>Título</dt>
+                <dd class="qubits-endmatter-doc-title">
+                  Simuladores cuánticos Harmoniq: arquitectura, fundamentos físicos y flujo de trabajo
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt>Fecha de elaboración</dt>
+                <dd><time datetime="2026-04-10">10 de abril de 2026</time></dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt>Autores</dt>
+                <dd>
+                  Noguerón Méndez José Antonio
+                  <span class="qubits-endmatter-affil">Head of Quantum Product</span>
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt>Formato</dt>
+                <dd>PDF</dd>
+              </div>
+            </dl>
+            <a
+              id="simArticleDownload"
+              class="qubits-btn-artículo qubits-btn-artículo--disabled"
+              href="#"
+              aria-label="Descargar el artículo completo"
+              aria-disabled="true"
+            >
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span>Descargar artículo</span>
+            </a>
+          </section>
+
+        </article>
+      </main>
+
+      <!-- ── TOC DERECHO ───────────────────────────────────────────────── -->
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Documentación</span>
+          </a>
+          <a href="#sim-functioning" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Funcionamiento</span>
+          </a>
+          <a href="#sim-functioning" class="right-toc-sublink">Vector de estado</a>
+          <a href="#sim-functioning" class="right-toc-sublink">Redes tensoriales</a>
+          <a href="#sim-functioning" class="right-toc-sublink">Monte Carlo</a>
+          <a href="#sim-computers" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Computadoras</span>
+          </a>
+          <a href="#sim-computers" class="right-toc-sublink">Hopper (20 Q)</a>
+          <a href="#sim-computers" class="right-toc-sublink">Hermann (70 Q)</a>
+          <a href="#sim-computers" class="right-toc-sublink">Abstracción de backend</a>
+          <a href="#sim-foundations" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Fundamentos</span>
+          </a>
+          <a href="#sim-foundations" class="right-toc-sublink">Hamiltoniano</a>
+          <a href="#sim-foundations" class="right-toc-sublink">Canales de ruido</a>
+          <a href="#sim-foundations" class="right-toc-sublink">Benchmarking</a>
+          <a href="#sim-usage" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Modo de uso</span>
+          </a>
+          <a href="#sim-usage" class="right-toc-sublink">Definición del circuito</a>
+          <a href="#sim-usage" class="right-toc-sublink">Compilación</a>
+          <a href="#sim-usage" class="right-toc-sublink">Configuración del trabajo</a>
+          <a href="#sim-usage" class="right-toc-sublink">Análisis de resultados</a>
+          <a href="#sim-usage" class="right-toc-sublink">Flujo recomendado</a>
+          <a href="#referencias-simuladores" class="right-toc-sublink">Referencias</a>
+          <a href="#descargar-articulo-simuladores" class="right-toc-sublink">Descargar artículo</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+
+      (function () {
+        var SIM_ARTICLE_PDF_URL = "";
+        var a = document.getElementById("simArticleDownload");
+        if (!a) return;
+        if (SIM_ARTICLE_PDF_URL) {
+          a.href = SIM_ARTICLE_PDF_URL;
+          a.setAttribute("download", "simuladores-cuanticos-harmoniq.pdf");
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener noreferrer");
+          a.classList.remove("qubits-btn-artículo--disabled");
+          a.removeAttribute("aria-disabled");
+        } else {
+          a.classList.add("qubits-btn-artículo--disabled");
+          a.setAttribute("aria-disabled", "true");
+          a.removeAttribute("download");
+          a.addEventListener("click", function (e) { e.preventDefault(); });
+        }
+      })();
+    </script>
+  </body>
+</html>

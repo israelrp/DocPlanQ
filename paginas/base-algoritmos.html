@@ -1,0 +1,1278 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introducción a algoritmos cuánticos | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+  <article class="qubits-article-inner">
+
+          <!-- ═══════════════════════════════════════════════════════════ HERO -->
+          <section id="page-body" class="qubits-hero">
+            <div class="qubits-kicker-with-back">
+              <button type="button" class="doc-back-btn" data-i18n-aria-label="doc.backPrevious" aria-label="Volver a la página anterior" onclick="history.back()">
+                <i class="ph ph-arrow-left" aria-hidden="true"></i>
+              </button>
+              <p class="qubits-kicker qubits-kicker--row">
+                <span class="qubits-kicker-segment">Programación cuántica</span>
+                <span class="qubits-kicker-rule" aria-hidden="true"></span>
+                <span class="qubits-kicker-segment">Informática cuántica</span>
+              </p>
+            </div>
+
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img class="qubits-author-photo" src="../images/author-nogueron-mendez-planq.png" width="56" height="56" alt="Retrato de Noguerón Méndez José Antonio" loading="lazy" decoding="async" />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h1 class="qubits-hero-title">Algoritmos cuánticos: modelos de consulta, complejidad y primitivas computacionales</h1>
+
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                Un <strong>algoritmo cuántico</strong> es una secuencia finita de transformaciones unitarias sobre un registro de cúbits,
+                seguida de mediciones proyectivas cuyas salidas se post-procesan clásicamente para resolver una tarea computacional definida.
+                Desde la formulación original de Feynman (1982) sobre la simulación cuántica eficiente, y el posterior marco formal de
+                Deutsch (1985), la teoría de algoritmos cuánticos ha evolucionado hasta constituir uno de los pilares de la ciencia de la
+                información cuántica. La pregunta fundamental que articula este campo es: ¿para qué familias de problemas la mecánica cuántica
+                ofrece una ventaja computacional demostrable —ya sea muestral, de consultas o de profundidad de circuito— respecto a cualquier
+                algoritmo clásico conocido?
+              </p>
+              <p>
+                Este artículo ofrece un recorrido riguroso por los principales paradigmas algorítmicos cuánticos. Comenzamos estableciendo
+                el modelo de computación cuántica basado en circuitos y su relación con la máquina de Turing cuántica. A continuación,
+                introducimos las clases de complejidad cuántica —BQP, QMA y sus variantes— y el marco de separaciones relativas.
+                Examinamos en profundidad los algoritmos fundacionales: Deutsch-Jozsa, Simon, estimación de fase cuántica, Shor y Grover,
+                derivando sus propiedades de corrección y complejidad. Abordamos también los paradigmas variacionales (VQE, QAOA) que
+                dominan la era de dispositivos cuánticos ruidosos de escala intermedia (NISQ), la simulación hamiltoniana y las
+                descomposiciones de Trotter-Suzuki, para concluir con una reflexión crítica sobre el estado actual de la ventaja cuántica
+                demostrada experimentalmente y sus limitaciones.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §1 MODELO DE COMPUTACIÓN -->
+          <section id="modelo-computacion" class="qubits-section">
+            <h2>Modelo de computación cuántica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El modelo estándar de computación cuántica se sustenta en el <strong>paradigma de circuitos cuánticos</strong>, introducido
+                por Deutsch (1989) y formalizado por Yao (1993), quien demostró su equivalencia polinómica con la máquina de Turing cuántica.
+                En este modelo, un cómputo se describe como la aplicación sucesiva de compuertas unitarias —operaciones lineales que preservan
+                la norma del vector de estado— sobre un registro de \(n\) cúbits inicializado en el estado \(|0\rangle^{\otimes n}\).
+                El espacio de Hilbert asociado tiene dimensión \(2^n\), y el estado del sistema en cualquier instante es un vector unitario
+                \(|\psi\rangle \in \mathbb{C}^{2^n}\).
+              </p>
+              <p>
+                La evolución temporal del registro viene dictada por la ecuación de Schrödinger. En el marco discreto de circuitos,
+                cada paso corresponde a la aplicación de una compuerta unitaria \(U_k\), de modo que el estado final antes de la medición es:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi_{\text{final}}\rangle = U_T \cdots U_2 \, U_1 \, |0\rangle^{\otimes n}
+                \]
+              </div>
+              <p>
+                donde \(T\) es la profundidad total del circuito. La <strong>universalidad</strong> del modelo se garantiza con un
+                conjunto finito de compuertas: típicamente las rotaciones de un cúbit
+                \(R_x(\theta), R_y(\theta), R_z(\theta)\) junto con una compuerta de entrelazamiento como CNOT o CZ.
+                El teorema de Solovay-Kitaev asegura que cualquier unitario de \(n\) cúbits puede aproximarse con precisión
+                \(\epsilon\) usando \(O(\text{poly}(n) \cdot \log^c(1/\epsilon))\) compuertas del conjunto universal, con \(c \approx 3.97\).
+              </p>
+              <p>
+                Tras la evolución unitaria, se realizan <strong>mediciones proyectivas</strong> en la base computacional
+                \(\{|0\rangle, |1\rangle\}^{\otimes n}\). La probabilidad de obtener la cadena de bits \(x \in \{0,1\}^n\) viene dada
+                por la regla de Born:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \Pr[x] = |\langle x | \psi_{\text{final}} \rangle|^2
+                \]
+              </div>
+              <p>
+                Las salidas medidas se procesan clásicamente para producir el resultado del algoritmo. Es fundamental notar que la
+                medición es irreversible y destruye la superposición: el estado colapsa al autoestado correspondiente al resultado
+                observado. Este hecho impone restricciones profundas en el diseño algorítmico, pues la información cuántica no puede
+                ser copiada (teorema de no-clonación) y la extracción de información requiere interferencia constructiva cuidadosamente
+                orquestada.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Equivalencia Turing–circuito.</strong> Yao (1993) demostró que la máquina de Turing cuántica y el modelo de
+                  circuitos cuánticos uniformes son polinómicamente equivalentes. Esto significa que la clase BQP es independiente de
+                  cuál de los dos formalismos se utilice para definirla, proporcionando robustez a la teoría de complejidad cuántica.
+                </p>
+              </aside>
+
+              <p>
+                El modelo de circuitos admite extensiones importantes. La <strong>computación cuántica basada en mediciones</strong>
+                (measurement-based quantum computation, MBQC), introducida por Raussendorf y Briegel (2001), parte de un estado
+                altamente entrelazado —el estado cluster— y realiza el cómputo exclusivamente mediante mediciones adaptativas de un
+                cúbit, donde la elección de la base de medición de cada paso depende de los resultados anteriores. Aunque
+                conceptualmente distinto, este modelo es polinómicamente equivalente al de circuitos. De manera análoga, la
+                computación cuántica adiabática, basada en el teorema adiabático y la evolución lenta de hamiltonianos, también ha
+                sido demostrada equivalente en poder computacional bajo condiciones técnicas apropiadas.
+              </p>
+              <p>
+                Comparado con la máquina de Turing clásica determinista, el modelo cuántico introduce tres capacidades fundamentales:
+                (1) <strong>superposición</strong>, que permite codificar amplitudes complejas sobre exponencialmente muchas configuraciones
+                simultáneamente; (2) <strong>entrelazamiento</strong>, que establece correlaciones no locales entre subsistemas imposibles
+                de reproducir clásicamente; y (3) <strong>interferencia</strong>, que permite cancelar amplitudes correspondientes a
+                soluciones incorrectas y amplificar las correctas. La combinación de estas tres propiedades es lo que subyace a toda
+                aceleración cuántica conocida.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §2 CLASES DE COMPLEJIDAD -->
+          <section id="complejidad-cuantica" class="qubits-section">
+            <h2>Clases de complejidad cuántica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La clase de complejidad central en computación cuántica es <strong>BQP</strong> (<em>Bounded-Error Quantum Polynomial Time</em>),
+                definida como el conjunto de lenguajes \(L\) para los cuales existe una familia uniforme de circuitos cuánticos
+                polinómicos \(\{C_n\}\) tal que para toda entrada \(x\) de longitud \(n\):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  x \in L \implies \Pr[C_n(x) = 1] \geq \tfrac{2}{3}, \qquad
+                  x \notin L \implies \Pr[C_n(x) = 1] \leq \tfrac{1}{3}
+                \]
+              </div>
+              <p>
+                La constante \(2/3\) es arbitraria: mediante amplificación por repetición y voto mayoritario, la probabilidad de error
+                puede reducirse exponencialmente con overhead polinómico. La relación de BQP con las clases clásicas fundamentales se
+                resume en las contenciones conocidas:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathsf{P} \subseteq \mathsf{BPP} \subseteq \mathsf{BQP} \subseteq \mathsf{PP} \subseteq \mathsf{PSPACE}
+                \]
+              </div>
+              <p>
+                La contención \(\mathsf{BPP} \subseteq \mathsf{BQP}\) es inmediata: todo circuito clásico probabilista puede simularse
+                cuánticamente usando compuertas Toffoli y cúbits ancilla. La contención \(\mathsf{BQP} \subseteq \mathsf{PSPACE}\)
+                fue demostrada por Bernstein y Vazirani (1997), utilizando el hecho de que un circuito cuántico de tamaño polinómico
+                puede simularse clásicamente en espacio polinómico (aunque potencialmente con tiempo exponencial). Las separaciones
+                estrictas entre estas clases permanecen como problemas abiertos de primera magnitud en teoría de la complejidad.
+              </p>
+              <p>
+                En el mundo relativizado —es decir, en presencia de oráculos— se conocen separaciones más fuertes. Bernstein y Vazirani
+                (1997) demostraron la existencia de un oráculo \(A\) tal que \(\mathsf{BQP}^A \not\subseteq \mathsf{BPP}^A\), y
+                posteriormente Aaronson y Ambainis establecieron oráculos que separan BQP de la jerarquía polinómica. El resultado de
+                Raz y Tal (2019) —construyendo un oráculo bajo el cual \(\mathsf{BQP} \not\subseteq \mathsf{PH}\)— constituyó un hito
+                al demostrar que, al menos en el mundo relativizado, la computación cuántica trasciende toda la jerarquía polinómica.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>QMA: la «NP cuántica».</strong> La clase QMA (<em>Quantum Merlin-Arthur</em>) es el análogo cuántico de NP
+                  (o más precisamente, de MA). Un lenguaje \(L \in \mathsf{QMA}\) si existe un verificador cuántico polinómico \(V\)
+                  tal que: si \(x \in L\), existe un estado cuántico testigo \(|\xi\rangle\) de tamaño polinómico con
+                  \(\Pr[V(x, |\xi\rangle) = 1] \geq 2/3\); si \(x \notin L\), para todo estado \(|\xi\rangle\),
+                  \(\Pr[V(x, |\xi\rangle) = 1] \leq 1/3\). El problema QMA-completo canónico es el <em>Local Hamiltonian Problem</em>
+                  (Kitaev, 1999), análogo cuántico de la satisfacibilidad booleana.
+                </p>
+              </aside>
+
+              <p>
+                Otras clases relevantes incluyen <strong>QIP</strong> (protocolos interactivos cuánticos), donde Jain, Ji, Upadhyay y
+                Watrous (2011) demostraron que \(\mathsf{QIP} = \mathsf{PSPACE}\), un resultado sorprendente que muestra que la
+                interacción cuántica no añade poder sobre PSPACE. La clase <strong>QCMA</strong> restringe QMA requiriendo que el
+                testigo sea clásico; se sabe que \(\mathsf{QCMA} \subseteq \mathsf{QMA}\), pero la separación estricta es un problema
+                abierto. Finalmente, la clase <strong>PostBQP</strong> (BQP con post-selección) fue demostrada igual a PP por Aaronson
+                (2005), un resultado con implicaciones profundas para la simulabilidad clásica de circuitos cuánticos.
+              </p>
+              <p>
+                La estructura de estas clases tiene consecuencias directas para la criptografía post-cuántica. Si \(\mathsf{NP} \subseteq \mathsf{BQP}\),
+                todos los problemas NP-completos —incluyendo SAT, el problema de la mochila y la programación lineal entera— serían
+                resolubles eficientemente por computadoras cuánticas, colapsando la criptografía basada en complejidad computacional.
+                Aunque esta contención se considera improbable (y equivaldría a un colapso radical de la estructura de complejidad),
+                la mera posibilidad motiva la investigación activa en esquemas criptográficos resistentes a ataques cuánticos, como
+                los basados en retículas, códigos y funciones hash.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §3 PARALELISMO Y CONSULTAS -->
+          <section id="paralelismo-consultas" class="qubits-section">
+            <h2>Paralelismo cuántico y modelo de consultas</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El <strong>modelo de consultas</strong> (query model) es el marco formal predominante para demostrar aceleraciones cuánticas.
+                En este modelo, el algoritmo no tiene acceso directo a la descripción de la función \(f: \{0,1\}^n \to \{0,1\}^m\),
+                sino que la evalúa mediante un <strong>oráculo cuántico</strong> \(O_f\) que actúa coherentemente sobre superposiciones:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  O_f |x\rangle |y\rangle = |x\rangle |y \oplus f(x)\rangle
+                \]
+              </div>
+              <p>
+                donde \(\oplus\) denota la suma módulo \(2^m\). La complejidad de consultas cuántica, denotada \(Q(f)\), es el número
+                mínimo de aplicaciones de \(O_f\) necesarias para resolver el problema computacional asociado con probabilidad de error
+                acotada. Análogamente, la complejidad de consultas clásica determinista \(D(f)\) y la probabilista \(R(f)\) cuentan el
+                número mínimo de evaluaciones clásicas de \(f\).
+              </p>
+              <p>
+                El llamado «paralelismo cuántico» —término que, aunque popular, puede inducir a confusión— se refiere a la capacidad de
+                evaluar el oráculo sobre una superposición de todas las entradas posibles en una sola consulta. Preparando el registro
+                de entrada en superposición uniforme mediante compuertas de Hadamard:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  H^{\otimes n} |0\rangle^{\otimes n} = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n - 1} |x\rangle
+                \]
+              </div>
+              <p>
+                y aplicando el oráculo, se obtiene:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  O_f \left(\frac{1}{\sqrt{2^n}} \sum_{x} |x\rangle |0\rangle\right)
+                  = \frac{1}{\sqrt{2^n}} \sum_{x} |x\rangle |f(x)\rangle
+                \]
+              </div>
+              <p>
+                Sin embargo, la mera creación de esta superposición no constituye por sí misma una ventaja computacional. La
+                restricción fundamental es que una medición en la base computacional extraerá un único par \((x, f(x))\) aleatorio,
+                destruyendo el resto de la superposición. La verdadera potencia de los algoritmos cuánticos reside en la
+                <strong>interferencia</strong>: la aplicación cuidadosa de transformaciones unitarias posteriores al oráculo que
+                modifican las amplitudes de modo que las soluciones deseadas interfieran constructivamente (sus amplitudes se sumen)
+                mientras que las no deseadas interfieran destructivamente (sus amplitudes se cancelen).
+              </p>
+              <p>
+                El método de los <strong>polinomios</strong>, introducido por Beals, Buhrman, Cleve, Mosca y de Wolf (2001), establece
+                cotas inferiores en la complejidad de consultas cuántica. Si \(f: \{0,1\}^n \to \{0,1\}\) es una función booleana y
+                \(\widetilde{\deg}(f)\) denota el grado polinómico aproximado de \(f\), entonces
+                \(Q(f) \geq \widetilde{\deg}(f)/2\). Esto demuestra, por ejemplo, que la aceleración cuadrática de Grover es
+                óptima: cualquier algoritmo cuántico para búsqueda no estructurada requiere \(\Omega(\sqrt{N})\) consultas.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Método adversarial.</strong> Ambainis (2002) introdujo el método adversarial cuántico, posteriormente
+                  refinado como el <em>adversario generalizado con pesos negativos</em> por Høyer, Lee y Špalek (2007), demostrando
+                  que este método proporciona cotas inferiores <em>tight</em> para toda función booleana total en el modelo de consultas.
+                  El adversario generalizado caracteriza exactamente la complejidad de consultas cuántica: \(Q(f) = \Theta(\text{Adv}^{\pm}(f))\).
+                </p>
+              </aside>
+
+              <p>
+                Las separaciones entre complejidad de consultas clásica y cuántica dependen crucialmente de la estructura del problema.
+                Para funciones booleanas totales, la separación máxima conocida es polinómica: \(D(f) = O(Q(f)^6)\) por el resultado
+                de Aaronson, Ben-David y Kothari (2021), mejorando la cota anterior de cuarto poder. Para funciones parciales —donde
+                la promesa restringe las entradas válidas— las separaciones pueden ser exponenciales, como demuestran los algoritmos de
+                Deutsch-Jozsa y Simon.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §4 DEUTSCH-JOZSA -->
+          <section id="deutsch-jozsa" class="qubits-section">
+            <h2>Algoritmo de Deutsch-Jozsa</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo de <strong>Deutsch-Jozsa</strong> (1992) constituye la primera demostración de una separación exponencial
+                entre complejidad de consultas determinista clásica y cuántica exacta. El problema se formula como sigue: dada una
+                función \(f: \{0,1\}^n \to \{0,1\}\) con la <em>promesa</em> de que es o bien <strong>constante</strong> (toma el
+                mismo valor para todas las entradas) o bien <strong>balanceada</strong> (toma el valor 0 en exactamente la mitad de
+                las entradas y 1 en la otra mitad), determinar cuál de los dos casos se verifica.
+              </p>
+              <p>
+                Clásicamente, en el peor caso determinista, se requieren \(2^{n-1} + 1\) evaluaciones de \(f\): es necesario consultar
+                más de la mitad de las entradas antes de poder garantizar una respuesta correcta. Un algoritmo probabilista puede
+                resolver el problema con alta probabilidad usando \(O(1)\) consultas (muestreando unas pocas entradas y verificando
+                si obtiene valores distintos), pero con una probabilidad de error no nula. El algoritmo cuántico de Deutsch-Jozsa
+                resuelve el problema con certeza —probabilidad de error exactamente cero— usando una <strong>única consulta</strong>
+                al oráculo.
+              </p>
+              <p>
+                El circuito procede en cuatro pasos. Primero, se preparan \(n+1\) cúbits: los \(n\) primeros en \(|0\rangle\) y el
+                último (cúbit ancilla) en \(|1\rangle\). Se aplica la compuerta de Hadamard a todos los cúbits:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  H^{\otimes n}|0\rangle^{\otimes n} \otimes H|1\rangle
+                  = \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} |x\rangle
+                  \otimes \frac{|0\rangle - |1\rangle}{\sqrt{2}}
+                \]
+              </div>
+              <p>
+                A continuación se aplica el oráculo \(O_f\). Dado que el cúbit ancilla está en el estado
+                \(|{-}\rangle = (|0\rangle - |1\rangle)/\sqrt{2}\), la acción del oráculo produce el efecto de <em>phase kickback</em>:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  O_f |x\rangle |{-}\rangle = (-1)^{f(x)} |x\rangle |{-}\rangle
+                \]
+              </div>
+              <p>
+                El estado del registro de trabajo (excluyendo la ancilla) es entonces:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} |x\rangle
+                \]
+              </div>
+              <p>
+                Finalmente, se aplica \(H^{\otimes n}\) al registro de trabajo. La amplitud del estado \(|0\rangle^{\otimes n}\) tras
+                esta transformación es:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \langle 0^n | H^{\otimes n} \left(\frac{1}{\sqrt{2^n}} \sum_x (-1)^{f(x)} |x\rangle\right)
+                  = \frac{1}{2^n} \sum_{x \in \{0,1\}^n} (-1)^{f(x)}
+                \]
+              </div>
+              <p>
+                Si \(f\) es constante, esta suma vale \(\pm 1\), por lo que la medición del registro produce \(|0\rangle^{\otimes n}\)
+                con probabilidad 1. Si \(f\) es balanceada, la suma se anula exactamente (la mitad de los términos contribuyen \(+1\)
+                y la otra mitad \(-1\)), de modo que la probabilidad de obtener \(|0\rangle^{\otimes n}\) es 0. Por tanto, una única
+                medición distingue los dos casos con certeza.
+              </p>
+              <p>
+                Aunque el problema de Deutsch-Jozsa carece de aplicaciones prácticas directas, su importancia es conceptual: demuestra
+                que la interferencia cuántica puede extraer propiedades <em>globales</em> de una función con un número de consultas
+                exponencialmente menor que cualquier algoritmo determinista. Este principio se extiende y amplifica en los algoritmos
+                de Simon y Shor.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §5 SIMON -->
+          <section id="algoritmo-simon" class="qubits-section">
+            <h2>Algoritmo de Simon</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo de <strong>Simon</strong> (1994) resuelve el siguiente problema: dada una función
+                \(f: \{0,1\}^n \to \{0,1\}^n\) con la promesa de que existe un \(s \in \{0,1\}^n\) tal que
+                \(f(x) = f(y)\) si y solo si \(x = y\) o \(x = y \oplus s\), encontrar la cadena oculta \(s\).
+                Simon demostró que este problema requiere \(\Omega(2^{n/2})\) consultas clásicas (incluso probabilistas),
+                mientras que su algoritmo cuántico lo resuelve con \(O(n)\) consultas, estableciendo la primera separación
+                exponencial para un problema computacional (no meramente de decisión con promesa trivial).
+              </p>
+              <p>
+                El circuito cuántico de Simon prepara el estado \(|0\rangle^{\otimes n} |0\rangle^{\otimes n}\), aplica
+                \(H^{\otimes n}\) al primer registro, y luego el oráculo \(O_f\). El estado resultante es:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} |x\rangle |f(x)\rangle
+                \]
+              </div>
+              <p>
+                Si medimos el segundo registro y obtenemos un valor \(z = f(x_0)\), el primer registro colapsa a la superposición
+                \((|x_0\rangle + |x_0 \oplus s\rangle)/\sqrt{2}\) (asumiendo \(s \neq 0\)). Aplicando \(H^{\otimes n}\) al
+                primer registro y midiendo, se obtiene una cadena \(y\) uniformemente aleatoria del subespacio ortogonal a \(s\),
+                es decir, \(y \cdot s = 0 \pmod{2}\). Tras \(O(n)\) iteraciones independientes, acumulamos suficientes ecuaciones
+                lineales para resolver el sistema y determinar \(s\) mediante eliminación gaussiana clásica.
+              </p>
+              <p>
+                Más precisamente, tras \(n - 1\) consultas, obtenemos \(n - 1\) vectores \(y_1, \ldots, y_{n-1}\) satisfaciendo
+                \(y_i \cdot s = 0\). Si estos vectores son linealmente independientes (lo cual ocurre con probabilidad al menos
+                \(\prod_{k=1}^{n-1}(1 - 2^{-k}) \geq 1/4\)), determinan unívocamente \(s\) (módulo el vector nulo). En la práctica,
+                \(O(n)\) iteraciones bastan para obtener un sistema de rango completo con alta probabilidad.
+              </p>
+              <p>
+                El algoritmo de Simon es el precursor directo del algoritmo de Shor. Ambos comparten la estructura de
+                <strong>problema del subgrupo oculto</strong> (Hidden Subgroup Problem, HSP): dada una función
+                \(f: G \to S\) que es constante en las coclases de un subgrupo \(H \leq G\) y distinta entre coclases distintas,
+                encontrar \(H\). El algoritmo de Simon resuelve el HSP para \(G = \mathbb{Z}_2^n\), mientras que el de Shor
+                lo resuelve para \(G = \mathbb{Z}_N\). Para grupos no abelianos, el HSP permanece abierto en general y su
+                resolución tendría implicaciones para problemas como el isomorfismo de grafos.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Separación exponencial.</strong> El algoritmo de Simon fue el primer ejemplo de una separación
+                  <em>exponencial</em> entre complejidad de consultas cuántica y clásica probabilista para un problema computacional.
+                  Esta separación inspiró directamente a Shor (1994) a buscar problemas con estructura algebraica similar en
+                  \(\mathbb{Z}_N\), conduciendo al algoritmo de factorización.
+                </p>
+              </aside>
+
+              <p>
+                Desde el punto de vista de la complejidad, el problema de Simon define un oráculo relativo al cual
+                \(\mathsf{BQP} \not\subseteq \mathsf{BPP}\), proporcionando evidencia fuerte (aunque no una demostración absoluta)
+                de que la computación cuántica es estrictamente más poderosa que la clásica probabilista. La reducción de Shor
+                demuestra que este poder se manifiesta en problemas concretos de la teoría de números con implicaciones
+                criptográficas devastadoras.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §6 QPE -->
+          <section id="estimacion-fase" class="qubits-section">
+            <h2>Estimación de fase cuántica (QPE)</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>estimación de fase cuántica</strong> (Quantum Phase Estimation, QPE) es una subrutina fundamental que
+                subyace a múltiples algoritmos cuánticos, incluyendo el de Shor, la simulación hamiltoniana y los algoritmos
+                para problemas de álgebra lineal. Introducida por Kitaev (1995) y elaborada por Cleve, Ekert, Macchiavello y
+                Mosca (1998), QPE resuelve el siguiente problema: dado acceso a un operador unitario \(U\) y a un autoestado
+                \(|\phi\rangle\) tal que \(U|\phi\rangle = e^{2\pi i \theta}|\phi\rangle\), estimar la fase \(\theta \in [0, 1)\)
+                con \(t\) bits de precisión.
+              </p>
+              <p>
+                El circuito de QPE emplea dos registros: un registro de \(t\) cúbits de «precisión» inicializado en
+                \(|0\rangle^{\otimes t}\) y un registro de «eigenestado» preparado en \(|\phi\rangle\). El algoritmo consta de
+                tres etapas:
+              </p>
+              <p>
+                <strong>Etapa 1: Superposición.</strong> Se aplica \(H^{\otimes t}\) al registro de precisión, obteniéndose
+                la superposición uniforme \(\frac{1}{\sqrt{2^t}} \sum_{k=0}^{2^t - 1} |k\rangle |\phi\rangle\).
+              </p>
+              <p>
+                <strong>Etapa 2: Aplicación controlada de potencias de \(U\).</strong> Para cada cúbit \(j\) del registro de
+                precisión (contando desde 0), se aplica la operación controlada \(C\text{-}U^{2^j}\). El efecto acumulado sobre
+                el estado es:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \frac{1}{\sqrt{2^t}} \sum_{k=0}^{2^t - 1} e^{2\pi i \theta k} |k\rangle |\phi\rangle
+                \]
+              </div>
+              <p>
+                <strong>Etapa 3: Transformada cuántica de Fourier inversa.</strong> Se aplica \(\text{QFT}^{\dagger}\) al registro
+                de precisión. Si \(\theta = j / 2^t\) para algún entero \(j\), la QFT inversa produce el estado \(|j\rangle\)
+                exactamente. En el caso general, la medición produce un valor \(\tilde{j}\) tal que
+                \(|\theta - \tilde{j}/2^t| \leq 2^{-t}\) con probabilidad al menos \(1 - \epsilon\), donde usar
+                \(t + \lceil\log(2 + 1/(2\epsilon))\rceil\) cúbits de precisión garantiza esta cota.
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \Pr\!\left[\left|\theta - \frac{\tilde{j}}{2^t}\right| \leq \frac{1}{2^t}\right] \geq 1 - \epsilon
+                \]
+              </div>
+              <p>
+                La complejidad del circuito está dominada por las aplicaciones controladas de \(U\): la potencia máxima aplicada
+                es \(U^{2^{t-1}}\), que requiere \(2^{t-1}\) aplicaciones secuenciales de \(U\) (o menos si se dispone de
+                cuadratura eficiente). La profundidad total del circuito es \(O(2^t)\) aplicaciones de \(U\) más \(O(t^2)\)
+                compuertas para la QFT (o \(O(t \log t)\) con la versión aproximada).
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>QPE iterativa.</strong> La variante de Kitaev con un solo cúbit ancilla reemplaza el registro de \(t\)
+                  cúbits por mediciones secuenciales adaptativas, reduciendo drásticamente el número de cúbits a costa de
+                  profundidad de circuito. Esta versión es particularmente relevante para dispositivos NISQ con cúbits limitados.
+                </p>
+              </aside>
+
+              <p>
+                Las aplicaciones de QPE son ubicuas en algoritmia cuántica. En el algoritmo de Shor, QPE se utiliza para extraer
+                el período de la función modular. En simulación cuántica, QPE permite estimar energías del estado fundamental de
+                hamiltonianos moleculares. En el algoritmo HHL para sistemas lineales, QPE extrae los valores propios de la
+                matriz del sistema. En todos estos casos, la eficiencia de QPE es el cuello de botella que determina la
+                complejidad global del algoritmo.
+              </p>
+              <p>
+                Cuando el estado de entrada no es un autoestado exacto de \(U\), sino una superposición
+                \(|\psi\rangle = \sum_j \alpha_j |\phi_j\rangle\), QPE produce una superposición correlacionada
+                \(\sum_j \alpha_j |\tilde{\theta}_j\rangle |\phi_j\rangle\), donde \(\tilde{\theta}_j\) es la estimación de
+                la fase asociada al autoestado \(|\phi_j\rangle\). Este hecho es explotado en los algoritmos de simulación
+                cuántica, donde la medición del registro de fase proyecta el sistema en un autoestado particular del hamiltoniano.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §7 SHOR -->
+          <section id="algoritmo-shor" class="qubits-section">
+            <h2>Algoritmo de Shor</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo de <strong>Shor</strong> (1994) es, probablemente, el resultado más célebre de la computación cuántica.
+                Demuestra que un computador cuántico puede factorizar un entero \(N\) de \(n = \lceil\log_2 N\rceil\) bits en tiempo
+                \(O(n^2 \log n \log\log n)\) con alta probabilidad, frente al mejor algoritmo clásico conocido —la criba general del
+                cuerpo de números (GNFS)— cuya complejidad es subexponencial:
+                \(\exp\!\big(O(n^{1/3} (\log n)^{2/3})\big)\). Esta separación superpolinómica tiene implicaciones directas para la
+                seguridad de los criptosistemas RSA, Diffie-Hellman y de curva elíptica, que fundamentan la infraestructura de
+                comunicaciones seguras actual.
+              </p>
+              <p>
+                El algoritmo de Shor se descompone en dos etapas: una <strong>reducción clásica</strong> del problema de factorización
+                al problema de hallar el <em>período</em> (u orden) de una función modular, y un <strong>algoritmo cuántico</strong>
+                para la búsqueda de período. La reducción clásica procede como sigue: se elige aleatoriamente \(a \in \{2, \ldots, N-1\}\)
+                con \(\gcd(a, N) = 1\). Se define la función \(f(x) = a^x \bmod N\), que es periódica con período \(r\) (el orden
+                de \(a\) en el grupo multiplicativo \(\mathbb{Z}_N^*\)). Si \(r\) es par y \(a^{r/2} \not\equiv -1 \pmod{N}\),
+                entonces \(\gcd(a^{r/2} \pm 1, N)\) produce un factor no trivial de \(N\). Se demuestra que un \(a\) aleatorio
+                satisface estas condiciones con probabilidad al menos \(1/2\).
+              </p>
+              <p>
+                La parte cuántica —la búsqueda de período— utiliza QPE aplicada al operador unitario de multiplicación modular
+                \(U_a |x\rangle = |ax \bmod N\rangle\). Los autoestados de \(U_a\) son:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |u_s\rangle = \frac{1}{\sqrt{r}} \sum_{k=0}^{r-1} e^{-2\pi i s k / r} |a^k \bmod N\rangle, \qquad s = 0, 1, \ldots, r-1
+                \]
+              </div>
+              <p>
+                con autovalores \(e^{2\pi i s/r}\). Crucialmente, la superposición uniforme de estos autoestados es accesible:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} |u_s\rangle = |1\rangle
+                \]
+              </div>
+              <p>
+                Por lo tanto, al inicializar el segundo registro en \(|1\rangle\) y aplicar QPE con \(t = 2n + \lceil\log(2 + 1/(2\epsilon))\rceil\)
+                cúbits de precisión, se obtiene una superposición sobre las estimaciones de \(s/r\) para \(s\) aleatorio. La medición
+                produce un valor \(\tilde{\theta}\) cercano a \(s/r\), del cual se extrae \(r\) mediante el algoritmo de
+                <strong>fracciones continuas</strong>: se busca la fracción irreducible \(p/q\) con \(q < N\) más cercana a
+                \(\tilde{\theta}/2^t\), y se verifica si \(q\) (o un múltiplo pequeño) es el período buscado.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Implicaciones criptográficas.</strong> La existencia del algoritmo de Shor ha motivado la transición global
+                  hacia la criptografía post-cuántica. El NIST finalizó en 2024 los primeros estándares post-cuánticos (FIPS 203, 204,
+                  205), basados en retículas (ML-KEM, ML-DSA) y funciones hash (SLH-DSA). La amenaza «harvest now, decrypt later» —donde
+                  un adversario almacena comunicaciones cifradas hoy para descifrarlas cuando disponga de un computador cuántico
+                  suficientemente potente— hace urgente la migración incluso antes de que los dispositivos cuánticos alcancen escala
+                  criptográficamente relevante.
+                </p>
+              </aside>
+
+              <p>
+                La implementación de Shor requiere circuitos de multiplicación modular eficientes. La exponenciación modular
+                \(a^x \bmod N\) se descompone en \(O(n)\) multiplicaciones modulares controladas, cada una implementable con
+                \(O(n^2)\) compuertas elementales usando aritmética reversible. El circuito total requiere \(O(n^3)\) compuertas
+                y \(O(n)\) cúbits (más ancillas para la aritmética). Variantes más sofisticadas, como la de Beauregard (2003),
+                reducen el número de cúbits a \(2n + 3\) a costa de mayor profundidad de circuito.
+              </p>
+              <p>
+                La <strong>transformada cuántica de Fourier</strong> (QFT) es el componente central de QPE en el algoritmo de Shor.
+                La QFT sobre \(2^t\) elementos se define como:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \text{QFT} |j\rangle = \frac{1}{\sqrt{2^t}} \sum_{k=0}^{2^t - 1} e^{2\pi i j k / 2^t} |k\rangle
+                \]
+              </div>
+              <p>
+                Se implementa con \(O(t^2)\) compuertas usando rotaciones controladas de fase, o con \(O(t \log t)\) compuertas
+                usando la versión aproximada de Coppersmith (1994). La QFT cuántica es exponencialmente más eficiente que la
+                transformada de Fourier discreta clásica (que requiere \(O(2^t t)\) operaciones mediante FFT), pero esta comparación
+                no es directa, pues la QFT opera sobre amplitudes que no pueden leerse directamente.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §8 GROVER -->
+          <section id="busqueda-grover" class="qubits-section">
+            <h2>Búsqueda de Grover</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo de <strong>Grover</strong> (1996) resuelve el problema de búsqueda no estructurada: dado un oráculo
+                \(O_f\) para una función \(f: \{0,1\}^n \to \{0,1\}\) con exactamente \(M\) soluciones marcadas (es decir,
+                \(|\{x : f(x) = 1\}| = M\)) entre \(N = 2^n\) candidatos, encontrar una solución con alta probabilidad.
+                Clásicamente, esto requiere \(\Theta(N/M)\) evaluaciones de \(f\) en el peor caso; el algoritmo de Grover
+                lo logra con \(O(\sqrt{N/M})\) consultas cuánticas.
+              </p>
+              <p>
+                El algoritmo se basa en la iteración del <strong>operador de Grover</strong> \(G = D \cdot O_f\), donde
+                \(O_f\) es el oráculo de fase (\(O_f |x\rangle = (-1)^{f(x)}|x\rangle\)) y \(D\) es el <strong>operador de
+                difusión</strong> (o inversión sobre la media):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  D = 2|s\rangle\langle s| - I, \qquad |s\rangle = H^{\otimes n}|0\rangle^{\otimes n} = \frac{1}{\sqrt{N}}\sum_{x=0}^{N-1}|x\rangle
+                \]
+              </div>
+              <p>
+                La geometría del algoritmo se comprende elegantemente en el subespacio bidimensional generado por los estados
+                \(|w\rangle\) (superposición uniforme de soluciones) y \(|w^{\perp}\rangle\) (superposición uniforme de
+                no-soluciones). Definiendo el ángulo \(\sin\theta = \sqrt{M/N}\), el estado inicial
+                \(|s\rangle = \cos\theta\,|w^{\perp}\rangle + \sin\theta\,|w\rangle\) y cada iteración de \(G\) es una rotación
+                de ángulo \(2\theta\) en este plano:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  G^k |s\rangle = \cos\!\big((2k+1)\theta\big)|w^{\perp}\rangle + \sin\!\big((2k+1)\theta\big)|w\rangle
+                \]
+              </div>
+              <p>
+                La probabilidad de medir una solución tras \(k\) iteraciones es \(\sin^2\!\big((2k+1)\theta\big)\). Esta
+                probabilidad se maximiza cuando \((2k+1)\theta \approx \pi/2\), lo que da el número óptimo de iteraciones:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  k_{\text{ópt}} = \left\lfloor \frac{\pi}{4\theta} \right\rfloor
+                  \approx \frac{\pi}{4}\sqrt{\frac{N}{M}}
+                \]
+              </div>
+              <p>
+                Un aspecto sutil del algoritmo es que la probabilidad de éxito <em>oscila</em>: si se itera más allá del óptimo,
+                la amplitud de la solución comienza a decrecer. Esto contrasta con los algoritmos clásicos de búsqueda, cuya
+                probabilidad de éxito crece monótonamente. Cuando \(M\) es desconocido, la técnica de <strong>estimación del conteo
+                cuántico</strong> (quantum counting), basada en QPE aplicada al operador de Grover, permite estimar \(M\) y ajustar
+                el número de iteraciones.
+              </p>
+              <p>
+                La optimalidad de Grover fue demostrada por Bennett, Bernstein, Brassard y Vazirani (1997) usando el método híbrido
+                (polynomial method): cualquier algoritmo cuántico para búsqueda no estructurada con \(M = 1\) solución requiere
+                \(\Omega(\sqrt{N})\) consultas. Esto establece que la aceleración cuadrática de Grover es la máxima posible en
+                ausencia de estructura adicional.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Amplificación de amplitud.</strong> Brassard, Høyer, Mosca y Tapp (2002) generalizaron el algoritmo de Grover
+                  al marco de <em>amplificación de amplitud</em>: dado cualquier algoritmo cuántico \(\mathcal{A}\) que produce un
+                  «buen» estado con probabilidad \(p\), la amplificación de amplitud permite alcanzar una probabilidad cercana a 1
+                  usando \(O(1/\sqrt{p})\) aplicaciones de \(\mathcal{A}\) y \(\mathcal{A}^{-1}\). Esta generalización es una
+                  primitiva algorítmica cuántica universal con aplicaciones en optimización, conteo y muestreo.
+                </p>
+              </aside>
+
+              <p>
+                Las aplicaciones de la búsqueda de Grover y la amplificación de amplitud se extienden mucho más allá de la búsqueda
+                en bases de datos. En criptografía, Grover implica que una clave simétrica de \(n\) bits ofrece solo \(n/2\) bits de
+                seguridad frente a un atacante cuántico, motivando la duplicación de longitudes de clave (AES-256 en lugar de AES-128).
+                En optimización combinatoria, la búsqueda de Grover acelera cuadráticamente los algoritmos de fuerza bruta y
+                backtracking. En estimación de Monte Carlo cuántico, Montanaro (2015) demostró una aceleración cuadrática sobre
+                los métodos clásicos, con aplicaciones potenciales en finanzas computacionales y evaluación de riesgo.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §9 VQE / QAOA -->
+          <section id="algoritmos-variacionales" class="qubits-section">
+            <h2>Algoritmos variacionales (VQE / QAOA)</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Los <strong>algoritmos variacionales cuánticos</strong> constituyen el paradigma dominante en la era de dispositivos
+                cuánticos ruidosos de escala intermedia (NISQ). A diferencia de los algoritmos cuánticos «puros» como Shor o Grover,
+                que requieren circuitos profundos con corrección de errores, los métodos variacionales emplean
+                <strong>bucles híbridos clásico-cuánticos</strong>: un circuito cuántico parametrizado de profundidad moderada prepara
+                un estado de prueba, un procesador clásico evalúa una función de costo a partir de las mediciones, y un optimizador
+                clásico actualiza los parámetros del circuito para minimizar dicha función.
+              </p>
+              <p>
+                El <strong>Variational Quantum Eigensolver</strong> (VQE), introducido por Peruzzo <em>et al.</em> (2014), busca
+                la energía del estado fundamental de un hamiltoniano \(H\). El principio variacional cuántico garantiza que para
+                todo estado normalizado \(|\psi(\vec\theta)\rangle\):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  E_0 \leq \langle \psi(\vec\theta) | H | \psi(\vec\theta) \rangle = C(\vec\theta)
+                \]
+              </div>
+              <p>
+                donde \(E_0\) es la energía del estado fundamental y \(C(\vec\theta)\) es la función de costo evaluada
+                experimentalmente. El <strong>ansatz</strong> —la forma funcional del circuito parametrizado— determina la
+                expresividad del espacio variacional. Los ansätze comunes incluyen el <em>Unitary Coupled Cluster</em> (UCC),
+                inspirado en la química cuántica, y las arquitecturas de <em>hardware-efficient ansatz</em>, diseñadas para
+                minimizar la profundidad del circuito a costa de mayor variabilidad en el paisaje de optimización.
+              </p>
+              <p>
+                El <strong>Quantum Approximate Optimization Algorithm</strong> (QAOA), propuesto por Farhi, Goldstone y Gutmann
+                (2014), aborda problemas de optimización combinatoria codificados en un hamiltoniano de costo
+                \(H_C = \sum_{\alpha} C_\alpha\). El circuito QAOA de profundidad \(p\) aplica \(p\) capas alternadas de evolución
+                bajo \(H_C\) y un hamiltoniano de mezcla \(H_M\) (típicamente \(H_M = \sum_i X_i\)):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\vec\gamma, \vec\beta\rangle = \prod_{l=1}^{p} e^{-i\beta_l H_M} e^{-i\gamma_l H_C} |+\rangle^{\otimes n}
+                \]
+              </div>
+              <p>
+                En el límite \(p \to \infty\), QAOA converge al estado fundamental de \(H_C\) (por el teorema adiabático
+                discretizado). Para \(p\) finito, se optimizan los \(2p\) parámetros \(\{\gamma_l, \beta_l\}\) clásicamente.
+                Farhi y Harrow (2016) demostraron que QAOA con \(p\) suficiente puede superar cualquier algoritmo clásico local,
+                bajo ciertas conjeturas de complejidad.
+              </p>
+              <p>
+                Un desafío central de los métodos variacionales es el fenómeno de los <strong>barren plateaus</strong> (mesetas
+                estériles), identificado por McClean <em>et al.</em> (2018). En circuitos suficientemente expresivos y aleatorios,
+                el gradiente de la función de costo decrece exponencialmente con el número de cúbits:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \text{Var}\!\left[\frac{\partial C}{\partial \theta_k}\right] \leq F(n) \in O(2^{-n})
+                \]
+              </div>
+              <p>
+                Esto hace que la optimización sea exponencialmente difícil en la práctica, pues el gradiente es indistinguible del
+                ruido estadístico de las mediciones. Las estrategias de mitigación incluyen: (1) inicializaciones inteligentes
+                cercanas a estados clásicos, (2) ansätze con estructura local que preservan la localidad del gradiente,
+                (3) funciones de costo locales, y (4) técnicas de «parameter shift rule» con pre-entrenamiento clásico.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Paisaje de optimización.</strong> Además de los barren plateaus, el paisaje variacional puede exhibir
+                  mínimos locales espurios, trampas de silla y dependencia sensible de la inicialización. La interacción entre
+                  la expresividad del ansatz, la estructura del hamiltoniano y las propiedades del optimizador clásico permanece
+                  como un área de investigación activa. Resultados recientes sugieren que la ventaja cuántica variacional, si
+                  existe, puede requerir estructuras de ansatz cuidadosamente diseñadas que incorporen simetrías del problema.
+                </p>
+              </aside>
+
+              <p>
+                La evaluación de la función de costo requiere descomponer \(H\) en una suma de operadores de Pauli:
+                \(H = \sum_i c_i P_i\), donde cada \(P_i \in \{I, X, Y, Z\}^{\otimes n}\). El valor esperado de cada
+                término se estima independientemente mediante mediciones repetidas en la base apropiada, lo que introduce un
+                overhead estadístico proporcional al número de términos y la precisión deseada. Técnicas de agrupamiento
+                (grouping) de términos conmutantes y esquemas de medición clásica-sombra (classical shadows) reducen este
+                costo significativamente.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §10 SIMULACIÓN CUÁNTICA -->
+          <section id="simulacion-cuantica" class="qubits-section">
+            <h2>Simulación cuántica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>simulación cuántica</strong> es la aplicación más natural e históricamente primera propuesta para los
+                computadores cuánticos. Feynman (1982) argumentó que simular un sistema cuántico de \(n\) partículas en un
+                computador clásico requiere recursos exponenciales en \(n\) (debido al crecimiento exponencial del espacio de
+                Hilbert), mientras que un computador cuántico podría hacerlo eficientemente. Lloyd (1996) formalizó esta intuición
+                demostrando que los hamiltonianos locales pueden simularse eficientemente en un computador cuántico.
+              </p>
+              <p>
+                El problema central es: dado un hamiltoniano \(H\) actuando sobre \(n\) cúbits y un tiempo de evolución \(t\),
+                implementar una aproximación del operador de evolución temporal \(e^{-iHt}\) con error
+                \(\|U_{\text{approx}} - e^{-iHt}\| \leq \epsilon\) usando un número polinómico de compuertas elementales.
+                Para hamiltonianos que son suma de términos locales, \(H = \sum_{k=1}^{L} H_k\), la
+                <strong>descomposición de Trotter-Suzuki</strong> proporciona el método fundamental.
+              </p>
+              <p>
+                La fórmula de Trotter de primer orden aproxima la exponencial de la suma mediante el producto de exponenciales:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  e^{-iHt} \approx \left(\prod_{k=1}^{L} e^{-iH_k t/r}\right)^r + O\!\left(\frac{L^2 t^2 \|H\|^2}{r}\right)
+                \]
+              </div>
+              <p>
+                donde \(r\) es el número de pasos de Trotter (slices). Para alcanzar un error \(\epsilon\), se requieren
+                \(r = O(L^2 t^2 / \epsilon)\) pasos. La fórmula de Trotter-Suzuki de segundo orden proporciona una mejor
+                convergencia:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  S_2(\Delta t) = \prod_{k=1}^{L} e^{-iH_k \Delta t/2} \prod_{k=L}^{1} e^{-iH_k \Delta t/2}
+                \]
+              </div>
+              <p>
+                con error \(O(L^3 (\Delta t)^3)\), requiriendo \(r = O((Lt)^{3/2}/\sqrt{\epsilon})\) pasos. Las fórmulas de
+                orden superior \(2k\) se construyen recursivamente mediante la fórmula de Suzuki, reduciendo progresivamente
+                el error a costa de un prefactor constante mayor.
+              </p>
+              <p>
+                Los avances recientes en simulación cuántica incluyen algoritmos basados en
+                <strong>qubitización y señalización cuántica</strong> (quantum signal processing, QSP), introducidos por Low y
+                Chuang (2017) y generalizados por Gilyén, Su, Low y Wiebe (2019) en el marco de la <em>transformación singular
+                cuántica</em> (Quantum Singular Value Transformation, QSVT). Estos métodos alcanzan la complejidad óptima
+                \(O(\alpha t + \log(1/\epsilon))\) para hamiltonianos con norma \(\alpha\), superando las fórmulas de
+                producto en escalamiento con la precisión \(\epsilon\).
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Ventaja cuántica en química.</strong> La simulación de moléculas es uno de los candidatos más prometedores
+                  para la ventaja cuántica práctica. La energía del estado fundamental de la molécula de FeMoCo —cofactor del
+                  nitrogenasa, relevante para la fijación biológica del nitrógeno— se estima intratable clásicamente con precisión
+                  química (\(\sim 1\) kcal/mol), mientras que un computador cuántico con corrección de errores podría abordarla con
+                  \(O(10^4\text{–}10^6)\) cúbits lógicos.
+                </p>
+              </aside>
+
+              <p>
+                La simulación cuántica se clasifica en dos paradigmas: <strong>simulación digital</strong>, que discretiza la
+                evolución en compuertas universales (Trotter, QSVT); y <strong>simulación analógica</strong>, que utiliza un
+                sistema cuántico controlable para emular directamente el hamiltoniano objetivo. Los simuladores analógicos —como
+                átomos fríos en redes ópticas, iones atrapados y arreglos de átomos de Rydberg— han demostrado capacidades
+                impresionantes en la simulación de modelos de Hubbard, de Ising y de espines cuánticos, alcanzando regímenes
+                inaccesibles para métodos clásicos como Monte Carlo cuántico (debido al problema del signo fermiónico).
+              </p>
+              <p>
+                Desde la perspectiva de la complejidad, el problema de la simulación hamiltoniana es BQP-completo para
+                hamiltonianos locales (Feynman-Kitaev), lo que significa que es la tarea computacional más general que una
+                computadora cuántica puede resolver eficientemente. Esto refuerza la tesis de que la simulación cuántica
+                constituye la aplicación <em>killer</em> de la computación cuántica.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §11 VENTAJA CUÁNTICA -->
+          <section id="ventaja-cuantica" class="qubits-section">
+            <h2>Ventaja cuántica: estado del arte</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El concepto de <strong>ventaja cuántica</strong> (o supremacía cuántica, en la terminología original de Preskill, 2012)
+                se refiere a la demostración experimental de que un dispositivo cuántico puede realizar una tarea computacional que
+                ningún computador clásico conocido puede igualar en tiempo razonable. Google reclamó este hito en 2019 con el
+                procesador Sycamore de 53 cúbits superconductores, muestreando distribuciones de circuitos aleatorios en 200 segundos,
+                tarea que estimaron requeriría 10.000 años en el supercomputador clásico más potente de la época.
+              </p>
+              <p>
+                Posteriormente, IBM cuestionó la estimación clásica, argumentando que técnicas de simulación tensorial y almacenamiento
+                en disco podrían reducir el tiempo clásico a días. El grupo de Pan y Zhang (USTC) demostró simulaciones clásicas
+                eficientes de circuitos ruidosos mediante contracción de redes tensoriales con ruido incorporado. Estas controversias
+                ilustran la dificultad fundamental de demostrar ventaja cuántica: requiere simultáneamente (1) una tarea bien definida,
+                (2) una cota superior en el rendimiento cuántico, y (3) una cota inferior en la dificultad clásica —y esta última es
+                inherentemente difícil de establecer de manera rigurosa.
+              </p>
+              <p>
+                Experimentos subsecuentes han ampliado el panorama. USTC (2020) reportó ventaja cuántica en <strong>boson sampling</strong>
+                gaussiano con el fotónico Jiuzhang (76 fotones detectados), y posteriormente con Jiuzhang 2.0 (113 fotones) y
+                Zuchongzhi 2.1 (66 cúbits superconductores). Estos experimentos basados en muestreo tienen la particularidad de que
+                la tarea computacional —generar muestras de una distribución específica— carece de utilidad práctica directa,
+                aunque conjeturalmente es difícil de simular clásicamente (bajo la conjetura de que la jerarquía polinómica no colapsa).
+              </p>
+              <p>
+                El papel del <strong>ruido</strong> es central en la discusión de ventaja cuántica. Los dispositivos NISQ operan sin
+                corrección de errores, con tasas de error de compuerta del orden de \(10^{-3}\) a \(10^{-2}\). A medida que aumenta
+                la profundidad del circuito, el ruido degrada la distribución de salida hacia la distribución uniforme, reduciendo
+                la fidelidad del muestreo. Las técnicas de <strong>mitigación de errores</strong> —como la extrapolación a ruido cero
+                (ZNE), la mitigación probabilística de errores (PEM) y los estimadores twirled readout— pueden mejorar la calidad de
+                los valores esperados estimados, pero con un overhead exponencial en el número de cúbits, lo que limita su
+                escalabilidad.
+              </p>
+
+              <aside class="qubits-callout">
+                <p>
+                  <strong>Corrección de errores cuánticos.</strong> La demostración de la ventaja cuántica computacionalmente útil —no
+                  meramente de muestreo— requiere presumiblemente corrección cuántica de errores a gran escala. Los códigos de
+                  superficie, combinados con destilación de estados mágicos, constituyen el paradigma arquitectónico más prometedor.
+                  Google (2023) demostró por primera vez que el rendimiento del código de superficie mejora al aumentar la distancia
+                  del código (de distancia 3 a 5), un hito crucial hacia la corrección de errores escalable. IBM (2024) reportó
+                  circuitos con 1.386 cúbits en su procesador Condor, aunque sin corrección de errores completa.
+                </p>
+              </aside>
+
+              <p>
+                La cuestión de si existe una ventaja cuántica <strong>práctica</strong> —es decir, para un problema con utilidad
+                real y no meramente un benchmark artificial— permanece abierta. Los candidatos más prometedores incluyen: (1) la
+                simulación de materiales y moléculas complejas, donde los métodos cuánticos podrían superar a DMRG y las técnicas
+                de Monte Carlo con signo en sistemas fuertemente correlacionados; (2) problemas de optimización combinatoria donde
+                QAOA o recocido cuántico podrían superar a las metaheurísticas clásicas para instancias específicas; y (3) el
+                aprendizaje automático cuántico, donde resultados teóricos recientes de Huang <em>et al.</em> (2022) demuestran
+                separaciones exponenciales en ciertas tareas de predicción de propiedades de estados cuánticos.
+              </p>
+              <p>
+                En resumen, la ventaja cuántica se encuentra en un estado de transición: ha sido demostrada convincentemente para
+                tareas de muestreo sin utilidad directa, pero aún no se ha logrado para problemas computacionales prácticos. El
+                camino hacia la utilidad cuántica requiere simultáneamente mejoras en hardware (coherencia, conectividad, fidelidad
+                de compuerta), software (compiladores, optimizadores variacionales, técnicas de mitigación) y teoría (nuevos
+                algoritmos que aprovechen la estructura de problemas reales). La computación cuántica tolerante a fallos, cuando
+                se alcance a escala suficiente, transformará radicalmente este panorama.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ §12 REFERENCIAS -->
+          <section id="referencias-algoritmos" class="qubits-section ref-cards-section">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="ref-cards-lead">
+              Selección de monografías, artículos seminales y recursos abiertos para profundizar en algoritmos cuánticos: desde los
+              textos fundacionales de la disciplina hasta los resultados más recientes en complejidad cuántica y métodos variacionales.
+            </p>
+            <div class="qubits-ref-grid">
+              <article class="ref-card">
+                <p class="ref-card-source">Nielsen &amp; Chuang</p>
+                <p class="ref-card-book"><em>Quantum Computation and Quantum Information</em> <span class="ref-card-pub">(Cambridge, 2010)</span></p>
+                <p class="ref-card-desc">
+                  El texto de referencia estándar en computación e información cuántica. Cubre en detalle circuitos cuánticos,
+                  algoritmos de Shor y Grover, corrección de errores, entrelazamiento y canales cuánticos.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Kaye, Laflamme &amp; Mosca</p>
+                <p class="ref-card-book"><em>An Introduction to Quantum Computing</em> <span class="ref-card-pub">(Oxford, 2007)</span></p>
+                <p class="ref-card-desc">
+                  Introducción accesible con tratamiento completo de algoritmos cuánticos fundamentales, complejidad de consultas
+                  y corrección de errores. Ideal para una primera aproximación rigurosa.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Preskill · notas Ph 229</p>
+                <p class="ref-card-book"><em>Quantum Computation and Information</em> <span class="ref-card-pub">(Caltech)</span></p>
+                <p class="ref-card-desc">
+                  Apuntes de curso actualizados que cubren desde fundamentos hasta resultados recientes en complejidad cuántica,
+                  corrección de errores y ventaja cuántica.
+                </p>
+                <a class="ref-card-open" href="http://theory.caltech.edu/~preskill/ph229/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Shor (1994)</p>
+                <p class="ref-card-book"><em>Algorithms for quantum computation: discrete logarithms and factoring</em> <span class="ref-card-pub">(FOCS)</span></p>
+                <p class="ref-card-desc">
+                  El artículo original que presentó el algoritmo de factorización cuántica en tiempo polinómico, transformando
+                  la criptografía y catalizando el campo de la computación cuántica.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/quant-ph/9508027" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Grover (1996)</p>
+                <p class="ref-card-book"><em>A fast quantum mechanical algorithm for database search</em> <span class="ref-card-pub">(STOC)</span></p>
+                <p class="ref-card-desc">
+                  Presentación del algoritmo de búsqueda cuántica con aceleración cuadrática, demostrado óptimo para el modelo
+                  de oráculo.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/quant-ph/9605043" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Farhi, Goldstone &amp; Gutmann (2014)</p>
+                <p class="ref-card-book"><em>A Quantum Approximate Optimization Algorithm</em> <span class="ref-card-pub">(arXiv)</span></p>
+                <p class="ref-card-desc">
+                  Introducción del paradigma QAOA para optimización combinatoria en dispositivos cuánticos de profundidad finita.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/abs/1411.4028" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Arute <em>et al.</em> (2019)</p>
+                <p class="ref-card-book"><em>Quantum supremacy using a programmable superconducting processor</em> <span class="ref-card-pub">(Nature)</span></p>
+                <p class="ref-card-desc">
+                  Demostración experimental de ventaja cuántica en muestreo de circuitos aleatorios con el procesador Sycamore de Google.
+                </p>
+                <a class="ref-card-open" href="https://doi.org/10.1038/s41586-019-1666-5" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">arXiv · quant-ph</p>
+                <p class="ref-card-book"><em>Lista «recent» de prepublicaciones</em></p>
+                <p class="ref-card-desc">
+                  Preprints actualizados en física cuántica e información cuántica; recurso esencial para seguir la frontera del campo.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Qiskit Textbook</p>
+                <p class="ref-card-book"><em>Texto abierto con laboratorios interactivos</em></p>
+                <p class="ref-card-desc">
+                  Fundamentos de algoritmos cuánticos con implementaciones ejecutables en Qiskit; cubre Deutsch-Jozsa, Grover, QPE
+                  y Shor con visualizaciones.
+                </p>
+                <a class="ref-card-open" href="https://learning.quantum.ibm.com/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+            </div>
+            <p class="qubits-prose qubits-prose--academic ref-cards-foot">
+              <a href="fundamento-teorico.html#bases-cuantica">← Volver a Fundamentos teóricos</a>
+            </p>
+          </section>
+
+          <!-- ═══════════════════════════════════════════ ENDMATTER -->
+          <section id="descargar-articulo-algoritmos" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row"><dt>Título</dt><dd class="qubits-endmatter-doc-title">Algoritmos cuánticos: modelos de consulta, complejidad y primitivas computacionales</dd></div>
+              <div class="qubits-endmatter-row"><dt>Fecha de elaboración</dt><dd><time datetime="2026-04-10">10 de abril de 2026</time></dd></div>
+              <div class="qubits-endmatter-row"><dt>Autores</dt><dd><span>Noguerón Méndez José Antonio</span><span class="qubits-endmatter-affil">Head of Quantum Product</span></dd></div>
+            </dl>
+            <a id="algoritmosArticleDownload" class="qubits-btn-artículo qubits-btn-artículo--disabled" href="#" aria-label="Descargar el artículo completo" aria-disabled="true">
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span>Descargar artículo</span>
+            </a>
+          </section>
+
+  </article>
+</main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#modelo-computacion" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Modelo de computación</span>
+          </a>
+          <a href="#complejidad-cuantica" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Clases de complejidad</span>
+          </a>
+          <a href="#paralelismo-consultas" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Paralelismo y consultas</span>
+          </a>
+          <a href="#deutsch-jozsa" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Deutsch-Jozsa</span>
+          </a>
+          <a href="#algoritmo-simon" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Algoritmo de Simon</span>
+          </a>
+          <a href="#estimacion-fase" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Estimación de fase (QPE)</span>
+          </a>
+          <a href="#algoritmo-shor" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Algoritmo de Shor</span>
+          </a>
+          <a href="#busqueda-grover" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Búsqueda de Grover</span>
+          </a>
+          <a href="#algoritmos-variacionales" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Variacionales (VQE / QAOA)</span>
+          </a>
+          <a href="#simulacion-cuantica" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Simulación cuántica</span>
+          </a>
+          <a href="#ventaja-cuantica" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Ventaja cuántica</span>
+          </a>
+          <a href="#referencias-algoritmos" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Referencias</span>
+          </a>
+          <a href="#descargar-articulo-algoritmos" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Descargar artículo</span>
+          </a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+  </body>
+</html>

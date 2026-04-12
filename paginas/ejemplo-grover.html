@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Búsqueda de Grover: amplificación de amplitud y complejidad de consulta oracular | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=105" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs"><i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span></a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api"><i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span></a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles"><i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span></a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i><span data-i18n="search.label">Search</span>
+              </button>
+              <input id="searchInput" class="search-input" type="search" placeholder="Buscar en la documentación..." aria-label="Buscar en la documentación" data-i18n-placeholder="search.placeholder" data-i18n-aria-label="search.placeholder" autocomplete="off" />
+            </div>
+            <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+              <div class="search-dropdown-panel"><div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div></div>
+            </div>
+          </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button type="button" class="lang-dropdown-toggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Seleccion de idioma" data-i18n-aria-label="lang.menu">
+            <span class="lang-current" data-lang-label>ES</span><i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true"><i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i><span class="lang-btn-label" data-i18n="lang.optionEs">Español</span><span class="lang-btn-code" aria-hidden="true">ES</span></button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false"><i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i><span class="lang-btn-label" data-i18n="lang.optionEn">English</span><span class="lang-btn-code" aria-hidden="true">EN</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button type="button" class="left-nav-toggle" id="leftNavToggle" aria-expanded="true" aria-controls="leftNavPanel">
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false"><i class="ph ph-cpu" aria-hidden="true"></i><span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span><i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i></button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false"><i class="ph ph-flow-arrow" aria-hidden="true"></i><span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span><i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i></button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item toc-active" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a>
+            <button type="button" class="nav-item nav-item-help" data-help-trigger><i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span></button>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+
+        <!-- ── HERO ────────────────────────────────────── -->
+        <section id="page-body" class="qubits-hero">
+          <div class="qubits-kicker-with-back">
+            <button
+              type="button"
+              class="doc-back-btn"
+              data-i18n-aria-label="doc.backPrevious"
+              aria-label="Volver a la página anterior"
+              onclick="history.back()"
+            >
+              <i class="ph ph-arrow-left" aria-hidden="true"></i>
+            </button>
+            <p class="qubits-kicker qubits-kicker--row">
+              <span class="qubits-kicker-segment">Fundamento teórico</span>
+              <span class="qubits-kicker-rule" aria-hidden="true"></span>
+              <span class="qubits-kicker-segment">Grover</span>
+            </p>
+          </div>
+          <div class="qubits-authors" aria-label="Créditos">
+            <p class="qubits-authors-label">Autor</p>
+            <div class="qubits-authors-row">
+              <div class="qubits-author-card">
+                <img
+                  class="qubits-author-photo"
+                  src="../images/author-nogueron-mendez-planq.png"
+                  width="56"
+                  height="56"
+                  alt="Retrato de Noguerón Méndez José Antonio"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="qubits-author-meta">
+                  <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                  <span class="qubits-author-role">Head of Quantum Product</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h1 class="qubits-hero-title">Búsqueda de Grover: amplificación de amplitud y complejidad de consulta oracular</h1>
+          <div class="qubits-prose qubits-prose--academic qubits-lead">
+            <p>
+              El <strong>algoritmo de Grover</strong>, propuesto por Lov Grover en 1996, resuelve el
+              problema de búsqueda en bases de datos no ordenadas con una complejidad de
+              \(\mathcal{O}(\sqrt{N})\) consultas al oráculo, frente a las \(\mathcal{O}(N)\) que
+              requiere cualquier algoritmo clásico en el peor caso. Aunque la ventaja es cuadrática en
+              lugar de exponencial, su campo de aplicación es vasto: optimización combinatoria, criptoanálisis,
+              búsqueda de colisiones en funciones hash y aceleración de otros algoritmos cuánticos mediante
+              la técnica de amplificación de amplitud generalizada.
+            </p>
+            <p>
+              Geométricamente, cada iteración \(G = \mathcal{D}\mathcal{O}\) actúa como una rotación en el
+              plano bidimensional engendrado por el estado uniforme \(|s\rangle\) y la superposición de estados
+              marcados; el ángulo inicial \(\theta = \arcsin(1/\sqrt{N})\) determina la velocidad de
+              precesión hacia el objetivo. En el límite de \(N\) grande, el número óptimo de iteraciones
+              \(\lfloor \pi\sqrt{N}/4 \rfloor\) sigue siendo \(\Theta(\sqrt{N})\), y Bennett et al. probaron
+              que ningún algoritmo cuántico basado en oráculo puede mejorar el orden \(\Omega(\sqrt{N})\) para
+              búsqueda no estructurada. Los histogramas obtenidos en HarmoniQ permiten contrastar esa
+              predicción ideal con modelos de ruido de puerta en registros pequeños.
+            </p>
+          </div>
+          <div class="hq-example-meta">
+            <span class="hq-example-meta__item"><i class="ph ph-chart-bar"></i> <strong>Intermedio</strong></span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-circles-three-plus"></i> 2 cúbits</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-git-branch"></i> 11 puertas</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-arrows-clockwise"></i> 1 iteración</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-cpu"></i> Hopper / Hermann</span>
+          </div>
+        </section>
+
+        <!-- ── FUNDAMENTO TEÓRICO ──────────────────────── -->
+        <section id="grover-theory" class="qubits-section">
+          <h2>Fundamento teórico</h2>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>El problema de búsqueda no estructurada</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Sea \(\mathcal{X} = \{0, 1, \ldots, N-1\}\) un espacio de búsqueda de \(N = 2^n\) elementos
+                y \(f: \mathcal{X} \to \{0,1\}\) una función que marca exactamente un elemento
+                \(x^* \in \mathcal{X}\) con \(f(x^*) = 1\). El objetivo es encontrar \(x^*\) consultando
+                al oráculo \(\mathcal{O}_f\) el mínimo número de veces.
+              </p>
+              <p>
+                Cualquier algoritmo clásico (determinista o probabilístico) necesita \(\Omega(N)\) consultas
+                para localizar \(x^*\) con alta probabilidad. El algoritmo de Grover requiere únicamente
+                \(\mathcal{O}(\sqrt{N})\) consultas, lo que para \(N = 2^{64}\) representa la diferencia
+                entre \(10^{19}\) y \(\approx 4 \times 10^9\) operaciones.
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Amplificación de amplitud</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo opera iterando dos operadores unitarios sobre el estado inicial de superposición
+                uniforme \(|s\rangle = H^{\otimes n}|0\rangle^{\otimes n} = \frac{1}{\sqrt{N}}\sum_{x}|x\rangle\).
+              </p>
+              <p>
+                <strong>Operador oráculo \(\mathcal{O}\):</strong> refleja la fase del estado marcado:
+                \[
+                  \mathcal{O}|x\rangle = (-1)^{f(x)}|x\rangle.
+                \]
+                Geometricamente, esta operación invierte el signo de la componente \(|x^*\rangle\),
+                separándola de la superposición uniforme.
+              </p>
+              <p>
+                <strong>Operador de difusión de Grover \(\mathcal{D}\):</strong> realiza la inversión alrededor
+                de la media de las amplitudes:
+                \[
+                  \mathcal{D} = 2|s\rangle\langle s| - I = H^{\otimes n}(2|0\rangle\langle 0| - I)H^{\otimes n}.
+                \]
+                Esta operación amplifica la amplitud del estado marcado a expensas de los estados no marcados.
+                Cada iteración \(G = \mathcal{D} \circ \mathcal{O}\) incrementa la amplitud de \(|x^*\rangle\)
+                en un factor \(\approx \sqrt{N}^{-1}\).
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Número óptimo de iteraciones</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Después de \(k\) iteraciones de \(G\), la probabilidad de medir \(|x^*\rangle\) es:
+                \[
+                  P(x^*) = \sin^2\!\left((2k+1)\theta\right), \quad \theta = \arcsin\!\left(\frac{1}{\sqrt{N}}\right).
+                \]
+                El número óptimo de iteraciones que maximiza \(P(x^*)\) es:
+                \[
+                  k^* = \left\lfloor\frac{\pi}{4}\sqrt{N}\right\rfloor.
+                \]
+                Para \(N = 4\) (\(n = 2\) cúbits), \(k^* = 1\) y la probabilidad teórica de éxito es exactamente
+                \(1\) (no hay error de búsqueda en el caso ideal). Esta propiedad hace del caso de 2 cúbits el
+                ejemplo pedagógico ideal para introducir Grover sin el factor de aproximación presente en
+                espacios de mayor dimensión.
+              </p>
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Número de soluciones múltiples</p>
+              <p>
+                Si hay \(M\) soluciones con \(M > 1\), el número óptimo de iteraciones se convierte en
+                \(k^* = \lfloor\frac{\pi}{4}\sqrt{N/M}\rfloor\). Con múltiples soluciones el algoritmo
+                converge más rápido, y puede detenerse antes si se desconoce \(M\) utilizando la
+                técnica de conteo cuántico (<em>quantum counting</em>).
+              </p>
+            </aside>
+          </section>
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Geometría en el plano de Grover y error por sobriteración</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Sea \(\mathcal{A}\) el subespacio de dimensión dos generado por \(|w\rangle\) (estado marcado
+                normalizado) y \(|s'\rangle\), la superposición uniforme sobre los estados no marcados. El
+                operador de Grover restringido a \(\mathcal{A}\) es una rotación de ángulo \(2\theta\) en
+                dirección determinada por la composición de reflexión respecto de \(|s\rangle\) y respecto de
+                \(|w\rangle\). Por ello, aplicar \(G\) más veces de lo óptimo «pasa de largo» el objetivo y
+                la probabilidad de éxito disminuye; este fenómeno es observable numéricamente al variar el
+                número de iteraciones en simuladores.
+              </p>
+              <p>
+                Para \(N=4\) y una solución, \(\theta = \pi/6\) y una única iteración alcanza probabilidad
+                unitaria en el modelo ideal; el ejemplo de dos cúbits de esta guía es, por tanto, el caso
+                marginal donde la aproximación continua coincide exactamente con la dinámica finita.
+              </p>
+            </div>
+          </section>
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Cota inferior cuántica y marco de amplificación de amplitud</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Bennett, Bernstein, Brassard y Vazirani demostraron que, para búsqueda no estructurada en el
+                modelo de oráculo, \(\Omega(\sqrt{N})\) consultas son necesarias incluso para algoritmos
+                cuánticos. Grover alcanza asintóticamente esa cota, de modo que el algoritmo es óptimo en
+                orden de magnitud. La generalización de Brassard–Høyer–Mosca–Tapp encapsula \(G\) dentro de la
+                <em>amplificación de amplitud</em>, subrutina estándar en estimación de fase y conteo
+                cuántico.
+              </p>
+            </div>
+            <div class="qubits-equation" aria-label="Rotación de Grover en términos de proyecciones">
+              \[
+                G = (2|s\rangle\langle s| - I)(I - 2|w\rangle\langle w|),
+                \qquad |s\rangle = \frac{1}{\sqrt{N}}\sum_x |x\rangle.
+              \]
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Oráculos en la práctica</p>
+              <p>
+                En aplicaciones reales, el coste de implementar \(\mathcal{O}\) suele dominar el coste de
+                las difusiones; la ventaja \(\sqrt{N}\) en consultas al oráculo no implica automáticamente
+                ventaja neta si cada consulta requiere un circuito de profundidad \(\mathrm{poly}(N)\).
+              </p>
+            </aside>
+          </section>
+        </section>
+
+        <!-- ── CIRCUITO ────────────────────────────────── -->
+        <section id="grover-circuit" class="qubits-section">
+          <h2>Circuito cuántico (2 cúbits, búsqueda de \(|11\rangle\))</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El circuito busca el elemento marcado \(x^* = |11\rangle\) en el espacio
+              \(\{|00\rangle, |01\rangle, |10\rangle, |11\rangle\}\). Con \(N=4\) y \(k^*=1\),
+              la probabilidad de éxito es 1 en el caso ideal.
+            </p>
+            <p>
+              El oráculo de fase para \(|11\rangle\) es la puerta CZ (Z controlada): aplica una
+              fase \(-1\) al estado \(|11\rangle\) y deja invariantes los demás. El operador de
+              difusión se descompone en la secuencia \(H^{\otimes 2} \cdot X^{\otimes 2} \cdot \text{CZ} \cdot X^{\otimes 2} \cdot H^{\otimes 2}\).
+            </p>
+          </div>
+          <div class="hq-circuit-block" aria-label="Circuito Grover 2 cúbits">
+<span class="q-w">                  ┌──────────────┐  ┌──────────────────────────┐</span>
+<span class="q-l">q₀</span><span class="q-w">: ─</span><span class="q-g">[H]</span><span class="q-w">──────────┤</span><span class="q-c">  Oráculo   </span><span class="q-w">├──┤</span><span class="q-g">      Difusión           </span><span class="q-w">├── </span><span class="q-m">┤M├</span>
+<span class="q-l">q₁</span><span class="q-w">: ─</span><span class="q-g">[H]</span><span class="q-w">──────────┤</span><span class="q-c">    CZ      </span><span class="q-w">├──┤</span><span class="q-g">  H·X·CZ·X·H            </span><span class="q-w">├── </span><span class="q-m">┤M├</span>
+<span class="q-w">                  └──────────────┘  └──────────────────────────┘</span>
+
+<span class="q-w">Descomposición completa de las 11 puertas:</span>
+<span class="q-l">q₀</span><span class="q-w">: </span><span class="q-g">[H]</span><span class="q-w"> ─── </span><span class="q-c">●</span><span class="q-w"> ─── </span><span class="q-g">[H]</span><span class="q-w"> </span><span class="q-g">[X]</span><span class="q-w"> ─── </span><span class="q-c">●</span><span class="q-w"> ─── </span><span class="q-g">[X]</span><span class="q-w"> </span><span class="q-g">[H]</span><span class="q-w"> ─── </span><span class="q-m">┤M├</span>
+<span class="q-l">q₁</span><span class="q-w">: </span><span class="q-g">[H]</span><span class="q-w"> ─── </span><span class="q-c">Z</span><span class="q-w"> ─── </span><span class="q-g">[H]</span><span class="q-w"> </span><span class="q-g">[X]</span><span class="q-w"> ─── </span><span class="q-c">Z</span><span class="q-w"> ─── </span><span class="q-g">[X]</span><span class="q-w"> </span><span class="q-g">[H]</span><span class="q-w"> ─── </span><span class="q-m">┤M├</span>
+<span class="q-w">       </span><span class="q-g">Super.</span><span class="q-w">  </span><span class="q-c">Oráculo</span><span class="q-w">      </span><span class="q-g">─────── Difusión ───────</span></div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              <strong>Superposición:</strong> H en \(q_0\) y \(q_1\) prepara la superposición uniforme
+              \(\frac{1}{2}(|00\rangle + |01\rangle + |10\rangle + |11\rangle)\).
+            </p>
+            <p>
+              <strong>Oráculo (CZ):</strong> aplica fase \(-1\) a \(|11\rangle\), produciendo
+              \(\frac{1}{2}(|00\rangle + |01\rangle + |10\rangle - |11\rangle)\).
+            </p>
+            <p>
+              <strong>Difusión:</strong> la secuencia \(H^{\otimes 2} \cdot X^{\otimes 2} \cdot \text{CZ} \cdot X^{\otimes 2} \cdot H^{\otimes 2}\) implementa la reflexión alrededor del estado
+              promedio, amplificando \(|11\rangle\) a amplitud 1 en una sola iteración.
+            </p>
+          </div>
+        </section>
+
+        <!-- ── IMPLEMENTACIÓN ──────────────────────────── -->
+        <section id="grover-impl" class="qubits-section">
+          <h2>Implementación en HarmoniQ</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              La secuencia completa de 11 puertas implementa: superposición inicial (2 H), oráculo
+              CZ (1 CZ), y difusión de Grover (2 H + 2 X + 1 CZ + 2 X + 2 H = 9 puertas), sumando
+              en total 11 operaciones unitarias. Se utiliza la puerta <code>"cz"</code> del SDK para
+              la puerta Z controlada.
+            </p>
+          </div>
+
+          <!-- Swift -->
+          <section id="grover-impl-swift" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/swift.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Swift</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Grover.swift</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> HarmoniQ
+
+<span class="c">// Búsqueda de |11⟩ en {|00⟩, |01⟩, |10⟩, |11⟩} — 1 iteración de Grover</span>
+<span class="k">let</span> gates: [<span class="t">Gate</span>] = [
+    <span class="c">// 1. Superposición uniforme</span>
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,  targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,  targets: [<span class="n">1</span>]),
+    <span class="c">// 2. Oráculo: CZ marca |11⟩ con fase −1</span>
+    <span class="t">Gate</span>(name: <span class="s">"cz"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+    <span class="c">// 3. Difusión de Grover: H·X·CZ·X·H</span>
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,  targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,  targets: [<span class="n">1</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"x"</span>,  targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"x"</span>,  targets: [<span class="n">1</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"cz"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"x"</span>,  targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"x"</span>,  targets: [<span class="n">1</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,  targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,  targets: [<span class="n">1</span>]),
+]
+
+<span class="k">do</span> {
+    <span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider: <span class="s">"hopper"</span>,
+        shots:    <span class="n">1024</span>,
+        qubits:   <span class="n">2</span>,
+        bits:     <span class="n">2</span>,
+        gates:    gates,
+        basis:    <span class="s">"Z"</span>
+    )
+    <span class="c">// Esperado: "|11" con probabilidad ≈ 1</span>
+    <span class="fn">print</span>(<span class="s">"Elemento encontrado:"</span>, result.mostFrequent)
+    <span class="fn">print</span>(<span class="s">"Distribución:"</span>, result.counts)
+} <span class="k">catch</span> {
+    <span class="fn">print</span>(<span class="s">"Error:"</span>, error)
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- Kotlin -->
+          <section id="grover-impl-kotlin" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/kotlin.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Kotlin</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Grover.kt</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    <span class="c">// Superposición</span>
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,  targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,  targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="c">// Oráculo</span>
+    <span class="t">Gate</span>(name = <span class="s">"cz"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="c">// Difusión</span>
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,  targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,  targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"x"</span>,  targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"x"</span>,  targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"cz"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"x"</span>,  targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"x"</span>,  targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,  targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,  targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+)
+
+viewModelScope.<span class="fn">launch</span> {
+    <span class="k">val</span> result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider = <span class="s">"hopper"</span>,
+        shots    = <span class="n">1024</span>,
+        qubits   = <span class="n">2</span>,
+        bits     = <span class="n">2</span>,
+        gates    = gates,
+        basis    = <span class="s">"Z"</span>
+    )
+    <span class="t">Log</span>.<span class="fn">d</span>(<span class="s">"Grover"</span>, <span class="s">"Encontrado: ${result.mostFrequent}"</span>)
+    <span class="t">Log</span>.<span class="fn">d</span>(<span class="s">"Grover"</span>, <span class="s">"Distribución: ${result.counts}"</span>)
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- React -->
+          <section id="grover-impl-react" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/react.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>React / TypeScript</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>grover.ts</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> { <span class="t">HarmoniQ</span> } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+<span class="k">import type</span> { <span class="t">Gate</span> } <span class="k">from</span> <span class="s">'@planq/harmoniq'</span>
+
+<span class="k">const</span> gates: <span class="t">Gate</span>[] = [
+  <span class="c">// Superposición</span>
+  { name: <span class="s">'h'</span>,  targets: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,  targets: [<span class="n">1</span>] },
+  <span class="c">// Oráculo: marca |11⟩</span>
+  { name: <span class="s">'cz'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  <span class="c">// Difusión de Grover</span>
+  { name: <span class="s">'h'</span>,  targets: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,  targets: [<span class="n">1</span>] },
+  { name: <span class="s">'x'</span>,  targets: [<span class="n">0</span>] },
+  { name: <span class="s">'x'</span>,  targets: [<span class="n">1</span>] },
+  { name: <span class="s">'cz'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  { name: <span class="s">'x'</span>,  targets: [<span class="n">0</span>] },
+  { name: <span class="s">'x'</span>,  targets: [<span class="n">1</span>] },
+  { name: <span class="s">'h'</span>,  targets: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,  targets: [<span class="n">1</span>] },
+]
+
+<span class="k">const</span> result = <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>({
+  provider: <span class="s">'hopper'</span>,
+  shots:    <span class="n">1024</span>,
+  qubits:   <span class="n">2</span>,
+  bits:     <span class="n">2</span>,
+  gates,
+  basis:    <span class="s">'Z'</span>,
+})
+<span class="c">// Esperado: "11" con alta probabilidad</span>
+console.<span class="fn">log</span>(<span class="s">'Encontrado:'</span>, result.mostFrequent)
+console.<span class="fn">log</span>(<span class="s">'Distribución:'</span>, result.counts)</code></pre>
+            </div>
+          </section>
+
+          <!-- Python -->
+          <section id="grover-impl-python" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/python.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Python</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>grover.py</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    <span class="c"># Superposición</span>
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,  targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,  targets=[<span class="n">1</span>]),
+    <span class="c"># Oráculo: marca |11⟩ con fase −1</span>
+    <span class="t">Gate</span>(name=<span class="s">"cz"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    <span class="c"># Difusión de Grover</span>
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,  targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,  targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"x"</span>,  targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"x"</span>,  targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"cz"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"x"</span>,  targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"x"</span>,  targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,  targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,  targets=[<span class="n">1</span>]),
+]
+
+result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">execute_circuit</span>(
+    provider=<span class="s">"hopper"</span>,
+    shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>,
+    bits=<span class="n">2</span>,
+    gates=gates,
+    basis=<span class="s">"Z"</span>,
+)
+
+<span class="fn">print</span>(<span class="s">"Elemento encontrado:"</span>, result.most_frequent)  <span class="c"># "11"</span>
+<span class="fn">print</span>(<span class="s">"Distribución:"</span>, result.counts)
+
+<span class="c"># En Jupyter: result.plot_histogram()</span></code></pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── ANÁLISIS DE RESULTADOS ──────────────────── -->
+        <section id="grover-results" class="qubits-section">
+          <h2>Análisis de resultados</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              Para el caso de 2 cúbits con un único elemento marcado, la única iteración de Grover
+              debería producir el estado \(|11\rangle\) con probabilidad teórica 1. Los resultados
+              típicos con el backend Hopper son:
+            </p>
+          </div>
+          <table class="hq-backends-table">
+            <thead>
+              <tr><th>Estado</th><th>Probabilidad ideal</th><th>Conteo típico (1024 shots)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>|11⟩</code> (marcado)</td><td>1.000</td><td>940 – 1024</td></tr>
+              <tr><td><code>|00⟩</code></td><td>0.000</td><td>0 – 20</td></tr>
+              <tr><td><code>|01⟩</code></td><td>0.000</td><td>0 – 20</td></tr>
+              <tr><td><code>|10⟩</code></td><td>0.000</td><td>0 – 20</td></tr>
+            </tbody>
+          </table>
+          <div class="qubits-prose qubits-prose--academic" style="margin-top:16px;">
+            <p>
+              El circuito de Grover emplea 11 puertas, de las cuales 2 son CZ (puertas de dos cúbits).
+              La fidelidad acumulada por error de puerta es aproximadamente:
+              \[
+                F_{\text{total}} \approx F_{1Q}^{9} \cdot F_{2Q}^{2}
+                \approx 0.998^{9} \times 0.985^{2} \approx 0.952,
+              \]
+              donde \(F_{1Q} = 0.998\) y \(F_{2Q} = 0.985\) son las fidelidades de puerta de Hopper.
+              Esto explica por qué el conteo de <code>|11⟩</code> se sitúa entre 940 y 1024 en lugar
+              de 1024 exacto.
+            </p>
+            <p>
+              Para buscar un elemento diferente, basta con modificar el oráculo. Por ejemplo, para marcar
+              \(|00\rangle\), el oráculo sería X⊗X, CZ, X⊗X (aplica X antes y después del CZ para
+              trasladar la fase al estado \(|00\rangle\)).
+            </p>
+          </div>
+        </section>
+
+        <!-- ── REFERENCIAS ─────────────────────────────── -->
+        <section id="grover-refs" class="qubits-section qubits-refs">
+          <h2>Referencias y lecturas recomendadas</h2>
+          <p class="qubits-refs-intro qubits-prose--academic">
+            La selección siguiente orienta al lector hacia monografías y recursos cuya rigurosidad ha sido
+            contrastada por la comunidad científica; complementa la bibliografía citada al pie de esta guía.
+          </p>
+          <ul class="qubits-ref-grid">
+            <li>
+              <a class="qubits-ref-card" href="https://quantum.ibm.com/" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">IBM Quantum</span>
+                <span class="qubits-ref-desc">Plataforma experimental y documentación orientada a circuitos y calibración.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://qiskit.org/learn" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">Qiskit Textbook</span>
+                <span class="qubits-ref-desc">Texto abierto con derivaciones paso a paso y ejercicios numéricos.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="qubits-ref-card"
+                href="https://learn.microsoft.com/azure/quantum/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="qubits-ref-name">Microsoft Learn · Azure Quantum</span>
+                <span class="qubits-ref-desc">Fundamentos y modelos de programación cuántica en entornos administrados.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">arXiv · quant-ph</span>
+                <span class="qubits-ref-desc">Prepublicaciones recientes en información cuántica y computación cuántica.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://www.nist.gov/quantum-information-science" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">NIST · Quantum information</span>
+                <span class="qubits-ref-desc">Marcos metrológicos y estándares en ciencia cuántica aplicada.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <div class="qubits-ref-card qubits-ref-card--static">
+                <span class="qubits-ref-name">Nielsen &amp; Chuang</span>
+                <span class="qubits-ref-desc"
+                  ><em>Quantum Computation and Quantum Information</em> (Cambridge University Press). Obra de referencia para
+                  demostraciones formales, complejidad cuántica y códigos correctores.</span
+                >
+              </div>
+            </li>
+          </ul>
+          <h3 class="qubits-refs-biblio-title">Bibliografía citada</h3>
+          <ol class="qubits-refs-list">
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[1]</span>
+              <div class="qubits-ref-body">
+                Grover, L. K. (1996). <em>A fast quantum mechanical algorithm for database search.</em> Proceedings of the 28th Annual ACM Symposium on Theory of Computing (STOC), 212–219.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[2]</span>
+              <div class="qubits-ref-body">
+                Grover, L. K. (1997). <em>Quantum mechanics helps in searching for a needle in a haystack.</em> Physical Review Letters, 79(2), 325–328.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[3]</span>
+              <div class="qubits-ref-body">
+                Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). <em>Quantum amplitude amplification and estimation.</em> Contemporary Mathematics, 305, 53–74.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[4]</span>
+              <div class="qubits-ref-body">
+                Nielsen, M. A., & Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information.</em> Cambridge University Press. Sección 6.1.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[5]</span>
+              <div class="qubits-ref-body">
+                Bennett, C. H., Bernstein, E., Brassard, G., & Vazirani, U. (1997). <em>Strengths and Weaknesses of Quantum Computing.</em> SIAM Journal on Computing, 26(5), 1510–1523.
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section id="descargar-articulo-grover" class="qubits-section qubits-article-endmatter">
+          <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+          <dl class="qubits-endmatter-meta">
+            <div class="qubits-endmatter-row">
+              <dt>Título</dt>
+              <dd class="qubits-endmatter-doc-title">
+                Búsqueda de Grover: amplificación de amplitud y complejidad de consulta oracular
+              </dd>
+            </div>
+            <div class="qubits-endmatter-row">
+              <dt>Fecha de elaboración</dt>
+              <dd>
+                <time datetime="2026-03-30">30 de marzo de 2026</time>
+              </dd>
+            </div>
+            <div class="qubits-endmatter-row">
+              <dt>Autores</dt>
+              <dd>
+                <span>Noguerón Méndez José Antonio</span>
+                <span class="qubits-endmatter-affil">Head of Quantum Product</span>
+              </dd>
+            </div>
+          </dl>
+          <a
+            id="groverArticleDownload"
+            class="qubits-btn-artículo qubits-btn-artículo--disabled"
+            href="#"
+            aria-label="Descargar el artículo completo"
+            aria-disabled="true"
+          >
+            <i class="ph ph-download-simple" aria-hidden="true"></i>
+            <span>Descargar artículo</span>
+          </a>
+        </section>
+
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#grover-theory" class="right-toc-sublink">Fundamento teórico</a>
+          <a href="#grover-circuit" class="right-toc-sublink">Circuito cuántico</a>
+          <a href="#grover-impl" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Implementación</span>
+          </a>
+          <a href="#grover-impl-swift" class="right-toc-sublink">Swift</a>
+          <a href="#grover-impl-kotlin" class="right-toc-sublink">Kotlin</a>
+          <a href="#grover-impl-react" class="right-toc-sublink">React</a>
+          <a href="#grover-impl-python" class="right-toc-sublink">Python</a>
+          <a href="#grover-results" class="right-toc-sublink">Análisis de resultados</a>
+          <a href="#grover-refs" class="right-toc-sublink">Referencias y lecturas</a>
+          <a href="#descargar-articulo-grover" class="right-toc-sublink">Descargar artículo</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light"><i class="ph ph-sun"></i></button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system"><i class="ph ph-desktop"></i></button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark"><i class="ph ph-moon"></i></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+              { left: "\\[", right: "\\]", display: true },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+    </script>
+  </body>
+</html>

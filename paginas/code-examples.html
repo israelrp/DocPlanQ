@@ -1,0 +1,1351 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejemplos | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="../styles.css?v=107" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content hq-examples-page learning-page ft-bases-hub" data-doc-views>
+
+        <!-- ── HERO ──────────────────────────────────────────────── -->
+        <section id="page-body" class="ft-blueprint-hero" aria-labelledby="hq-examples-title">
+          <div class="ft-blueprint-hero__grid" aria-hidden="true"></div>
+          <div class="ft-blueprint-hero__inner">
+            <div class="ft-blueprint-hero__copy">
+              <p class="ft-blueprint-hero__kicker">Harmoniq · Ejemplos</p>
+              <h1 id="hq-examples-title" class="ft-blueprint-hero__title">
+                <span class="ft-blueprint-hero__title-line ft-blueprint-hero__title-line--1">Repositorio de</span>
+                <span class="ft-blueprint-hero__title-line ft-blueprint-hero__title-line--2">circuitos cuánticos</span>
+              </h1>
+              <div class="ft-blueprint-hero__rule" aria-hidden="true"></div>
+              <p class="ft-blueprint-hero__lead">
+                Algoritmos canónicos implementados sobre el SDK de HarmoniQ. Cada ejemplo incluye teoría, diagrama de circuito y código listo para
+                <span class="ft-blueprint-hero__mono">Swift</span>,
+                <span class="ft-blueprint-hero__mono">Kotlin</span>,
+                <span class="ft-blueprint-hero__mono">React</span> y
+                <span class="ft-blueprint-hero__mono">Python</span>.
+              </p>
+              <div class="hq-examples-hero-sdks" aria-label="SDKs disponibles">
+                <img src="../icons/swift.svg" alt="Swift" width="22" height="22" loading="lazy" />
+                <img src="../icons/kotlin.svg" alt="Kotlin" width="22" height="22" loading="lazy" />
+                <img src="../icons/react.svg" alt="React" width="22" height="22" loading="lazy" />
+                <img src="../icons/python.svg" alt="Python" width="22" height="22" loading="lazy" />
+              </div>
+            </div>
+            <div class="ft-blueprint-hero__viz" aria-hidden="true">
+              <svg class="ft-blueprint-svg ft-blueprint-svg--circuit" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- q₀ wire -->
+                <line class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x1="8" y1="44" x2="212" y2="44" stroke="currentColor" stroke-width="1"/>
+                <!-- q₁ wire -->
+                <line class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x1="8" y1="90" x2="212" y2="90" stroke="currentColor" stroke-width="1"/>
+                <!-- Labels -->
+                <text x="10" y="40" font-size="8" fill="currentColor" opacity="0.55" font-family="monospace">q₀</text>
+                <text x="10" y="86" font-size="8" fill="currentColor" opacity="0.55" font-family="monospace">q₁</text>
+                <!-- H gate q₀ -->
+                <rect class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x="38" y="34" width="22" height="20" stroke="#0062ff" stroke-width="1.3" rx="2"/>
+                <text x="49" y="47" font-size="9" text-anchor="middle" fill="#0062ff" font-family="monospace" font-weight="500">H</text>
+                <!-- CNOT: control dot on q₀ -->
+                <circle class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" cx="100" cy="44" r="4" fill="#0062ff"/>
+                <!-- CNOT vertical line -->
+                <line class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x1="100" y1="48" x2="100" y2="82" stroke="currentColor" stroke-width="1.2"/>
+                <!-- CNOT target (⊕) on q₁ -->
+                <circle class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" cx="100" cy="90" r="9" stroke="currentColor" stroke-width="1.3"/>
+                <line class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x1="100" y1="81" x2="100" y2="99" stroke="currentColor" stroke-width="1.1"/>
+                <line class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x1="91" y1="90" x2="109" y2="90" stroke="currentColor" stroke-width="1.1"/>
+                <!-- Measure q₀ -->
+                <rect class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x="158" y="34" width="22" height="20" stroke="currentColor" stroke-width="1.2" rx="2" opacity="0.75"/>
+                <text x="169" y="47" font-size="8" text-anchor="middle" fill="currentColor" opacity="0.65" font-family="monospace">M</text>
+                <!-- Measure q₁ -->
+                <rect class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x="158" y="80" width="22" height="20" stroke="currentColor" stroke-width="1.2" rx="2" opacity="0.75"/>
+                <text x="169" y="93" font-size="8" text-anchor="middle" fill="currentColor" opacity="0.65" font-family="monospace">M</text>
+                <!-- Output bits -->
+                <text x="186" y="47" font-size="8" fill="#0062ff" opacity="0.8" font-family="monospace">0</text>
+                <text x="186" y="93" font-size="8" fill="#0062ff" opacity="0.8" font-family="monospace">1</text>
+                <!-- Decorative bottom accent line -->
+                <line class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x1="8" y1="128" x2="212" y2="128" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+                <text x="8" y="140" font-size="7" fill="currentColor" opacity="0.4" font-family="monospace">Estado de Bell · Deutsch-Jozsa · Grover</text>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── EJEMPLOS INDEX ─────────────────────────────────────── -->
+        <div class="hq-examples-index">
+
+          <!-- Fundamentos -->
+          <div class="hq-examples-section" id="examples-basics">
+            <p class="hq-examples-section-title hq-examples-section-title--minimal">Fundamentos del entrelazamiento</p>
+            <div class="hq-example-grid hq-example-grid--stack">
+
+              <article class="hq-example-card hq-example-card--split">
+                <div class="hq-example-split">
+                  <div class="hq-example-split__main">
+                    <div class="hq-example-card__preview hq-example-card__preview--compact" aria-hidden="true">
+                      <span><span class="q-l">q₀</span><span class="q-w">: ─</span><span class="q-g">[H]</span><span class="q-w">─</span><span class="q-c">●</span><span class="q-w">──────── </span><span class="q-m">┤M├</span></span>
+                      <span><span class="q-l">q₁</span><span class="q-w">: ────────</span><span class="q-c">⊕</span><span class="q-w">──────── </span><span class="q-m">┤M├</span></span>
+                    </div>
+                    <div class="hq-example-card__body hq-example-card__body--split">
+                      <h3 class="hq-example-card__title">
+                        <a href="ejemplo-bell-state.html">Estado de Bell</a>
+                      </h3>
+                      <p class="hq-example-card__desc">
+                        Preparación del par entrelazado maximalmente |Φ⁺⟩. El ejemplo más sencillo de correlaciones
+                        cuánticas no clásicas.
+                      </p>
+                      <p class="hq-example-harmoniq-hint">
+                        <strong>HarmoniQ:</strong> configura la API key al iniciar la app y ejecuta el mismo circuito con
+                        <code>HarmoniQ.quantum.executeCircuit</code> (Swift/Kotlin/React) o
+                        <code>HarmoniQ.quantum.execute_circuit</code> (Python). Backend recomendado para 2 cúbits:
+                        <code>hopper</code>.
+                      </p>
+                      <div class="hq-example-card__footer hq-example-card__footer--minimal">
+                        <span class="hq-difficulty hq-difficulty--basic">Básico</span>
+                        <span class="hq-qubits-badge">2 cúbits</span>
+                        <div class="hq-example-card__langs" aria-label="SDKs disponibles">
+                          <img src="../icons/swift.svg" alt="Swift" width="16" height="16" loading="lazy" />
+                          <img src="../icons/kotlin.svg" alt="Kotlin" width="16" height="16" loading="lazy" />
+                          <img src="../icons/react.svg" alt="React" width="16" height="16" loading="lazy" />
+                          <img src="../icons/python.svg" alt="Python" width="16" height="16" loading="lazy" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <aside class="hq-example-split__peek" aria-label="Vista previa de código multiplataforma">
+                    <p class="hq-codepeek-kicker">Código</p>
+                    <div class="hq-codepeek" data-codepeek>
+                      <div class="hq-codepeek-tabs" role="tablist" aria-label="Lenguaje">
+                        <button type="button" class="hq-codepeek-tab is-active" role="tab" aria-selected="true" data-codepeek-tab="python">Python</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="swift">Swift</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="kotlin">Kotlin</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="react">React</button>
+                      </div>
+                      <div class="hq-codepeek-panels">
+                        <pre class="hq-codepeek-panel is-active" role="tabpanel" data-codepeek-panel="python"><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">0</span>]),
+    Gate(name=<span class="s">"cnot"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+]
+result = HarmoniQ.quantum.execute_circuit(
+    provider=<span class="s">"hopper"</span>, shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>, bits=<span class="n">2</span>, gates=gates, basis=<span class="s">"Z"</span>,
+)
+<span class="fn">print</span>(result.counts)  <span class="c"># {"00": ~512, "11": ~512}</span></code></pre>
+                        <pre class="hq-codepeek-panel" role="tabpanel" hidden data-codepeek-panel="swift"><code><span class="k">import</span> HarmoniQ
+
+<span class="k">let</span> gates: [Gate] = [
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">0</span>]),
+    Gate(name: <span class="s">"cnot"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+]
+<span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> HarmoniQ.quantum.executeCircuit(
+    provider: <span class="s">"hopper"</span>, shots: <span class="n">1024</span>,
+    qubits: <span class="n">2</span>, bits: <span class="n">2</span>, gates: gates, basis: <span class="s">"Z"</span>
+)
+<span class="fn">print</span>(result.counts)</code></pre>
+                        <pre class="hq-codepeek-panel" role="tabpanel" hidden data-codepeek-panel="kotlin"><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"cnot"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+)
+<span class="k">val</span> result = HarmoniQ.quantum.executeCircuit(
+    provider = <span class="s">"hopper"</span>, shots = <span class="n">1024</span>,
+    qubits = <span class="n">2</span>, bits = <span class="n">2</span>, gates = gates, basis = <span class="s">"Z"</span>
+)</code></pre>
+                        <pre class="hq-codepeek-panel" role="tabpanel" hidden data-codepeek-panel="react"><code><span class="k">import</span> { HarmoniQ } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+
+<span class="k">const</span> gates = [
+  { name: <span class="s">'h'</span>, targets: [<span class="n">0</span>] },
+  { name: <span class="s">'cnot'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+]
+<span class="k">const</span> result = <span class="k">await</span> HarmoniQ.quantum.executeCircuit({
+  provider: <span class="s">'hopper'</span>, shots: <span class="n">1024</span>,
+  qubits: <span class="n">2</span>, bits: <span class="n">2</span>, gates, basis: <span class="s">'Z'</span>,
+})
+console.log(result.counts)</code></pre>
+                      </div>
+                    </div>
+                    <a class="hq-example-split__more" href="ejemplo-bell-state.html">Guía completa →</a>
+                  </aside>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <!-- Algoritmos de oráculo -->
+          <div class="hq-examples-section" id="examples-oracle">
+            <p class="hq-examples-section-title hq-examples-section-title--minimal">Algoritmos de oráculo</p>
+            <div class="hq-example-grid hq-example-grid--stack">
+
+              <article class="hq-example-card hq-example-card--split">
+                <div class="hq-example-split">
+                  <div class="hq-example-split__main">
+                    <div class="hq-example-card__preview hq-example-card__preview--compact" aria-hidden="true">
+                      <span><span class="q-l">q₀</span><span class="q-w">: ───</span><span class="q-g">[H]</span><span class="q-w">──</span><span class="q-c">●</span><span class="q-w">──</span><span class="q-g">[H]</span><span class="q-w">── </span><span class="q-m">┤M├</span></span>
+                      <span><span class="q-l">q₁</span><span class="q-w">: </span><span class="q-g">[X]</span><span class="q-g">[H]</span><span class="q-w">──</span><span class="q-c">⊕</span><span class="q-w">──────── </span><span class="q-w">───</span></span>
+                    </div>
+                    <div class="hq-example-card__body hq-example-card__body--split">
+                      <h3 class="hq-example-card__title">
+                        <a href="ejemplo-deutsch-jozsa.html">Deutsch-Jozsa</a>
+                      </h3>
+                      <p class="hq-example-card__desc">
+                        Determina si una función booleana es constante o balanceada con una sola consulta al oráculo. Ventaja
+                        cuántica exponencial sobre algoritmos clásicos deterministas.
+                      </p>
+                      <p class="hq-example-harmoniq-hint">
+                        <strong>HarmoniQ:</strong> misma API que Bell — lista de <code>Gate</code> y
+                        <code>executeCircuit</code> / <code>execute_circuit</code>. El primer bit de
+                        <code>mostFrequent</code> distingue constante (<code>0…</code>) vs balanceada (<code>1…</code>) con la función
+                        balanceada <code>f(x)=x</code>.
+                      </p>
+                      <div class="hq-example-card__footer hq-example-card__footer--minimal">
+                        <span class="hq-difficulty hq-difficulty--intermediate">Intermedio</span>
+                        <span class="hq-qubits-badge">2 cúbits</span>
+                        <div class="hq-example-card__langs" aria-label="SDKs disponibles">
+                          <img src="../icons/swift.svg" alt="Swift" width="16" height="16" loading="lazy" />
+                          <img src="../icons/kotlin.svg" alt="Kotlin" width="16" height="16" loading="lazy" />
+                          <img src="../icons/react.svg" alt="React" width="16" height="16" loading="lazy" />
+                          <img src="../icons/python.svg" alt="Python" width="16" height="16" loading="lazy" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <aside class="hq-example-split__peek" aria-label="Vista previa Deutsch-Jozsa">
+                    <p class="hq-codepeek-kicker">Código</p>
+                    <div class="hq-codepeek" data-codepeek>
+                      <div class="hq-codepeek-tabs" role="tablist" aria-label="Lenguaje">
+                        <button type="button" class="hq-codepeek-tab is-active" role="tab" aria-selected="true" data-codepeek-tab="python">Python</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="swift">Swift</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="kotlin">Kotlin</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="react">React</button>
+                      </div>
+                      <div class="hq-codepeek-panels">
+                        <pre class="hq-codepeek-panel is-active" role="tabpanel" data-codepeek-panel="python"><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    Gate(name=<span class="s">"x"</span>, targets=[<span class="n">1</span>]),
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">0</span>]),
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">1</span>]),
+    Gate(name=<span class="s">"cnot"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">0</span>]),
+]
+result = HarmoniQ.quantum.execute_circuit(
+    provider=<span class="s">"hopper"</span>, shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>, bits=<span class="n">2</span>, gates=gates, basis=<span class="s">"Z"</span>,
+)
+tipo = <span class="s">"Constante"</span> <span class="k">if</span> result.most_frequent.<span class="fn">startswith</span>(<span class="s">"0"</span>) <span class="k">else</span> <span class="s">"Balanceada"</span>
+<span class="fn">print</span>(<span class="s">f"Función: {tipo}"</span>, result.counts)</code></pre>
+                        <pre class="hq-codepeek-panel" role="tabpanel" hidden data-codepeek-panel="swift"><code><span class="k">import</span> HarmoniQ
+
+<span class="k">let</span> gates: [Gate] = [
+    Gate(name: <span class="s">"x"</span>, targets: [<span class="n">1</span>]),
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">0</span>]),
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">1</span>]),
+    Gate(name: <span class="s">"cnot"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">0</span>]),
+]
+<span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> HarmoniQ.quantum.executeCircuit(
+    provider: <span class="s">"hopper"</span>, shots: <span class="n">1024</span>,
+    qubits: <span class="n">2</span>, bits: <span class="n">2</span>, gates: gates, basis: <span class="s">"Z"</span>
+)
+<span class="k">let</span> tipo = result.mostFrequent.<span class="fn">hasPrefix</span>(<span class="s">"0"</span>) ? <span class="s">"Constante"</span> : <span class="s">"Balanceada"</span>
+<span class="fn">print</span>(<span class="s">"Función: \(tipo)"</span>)</code></pre>
+                        <pre class="hq-codepeek-panel" role="tabpanel" hidden data-codepeek-panel="kotlin"><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    Gate(name = <span class="s">"x"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    Gate(name = <span class="s">"cnot"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+)
+<span class="k">val</span> result = HarmoniQ.quantum.executeCircuit(
+    provider = <span class="s">"hopper"</span>, shots = <span class="n">1024</span>,
+    qubits = <span class="n">2</span>, bits = <span class="n">2</span>, gates = gates, basis = <span class="s">"Z"</span>
+)</code></pre>
+                        <pre class="hq-codepeek-panel" role="tabpanel" hidden data-codepeek-panel="react"><code><span class="k">import</span> { HarmoniQ } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+
+<span class="k">const</span> gates = [
+  { name: <span class="s">'x'</span>, targets: [<span class="n">1</span>] },
+  { name: <span class="s">'h'</span>, targets: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>, targets: [<span class="n">1</span>] },
+  { name: <span class="s">'cnot'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>, targets: [<span class="n">0</span>] },
+]
+<span class="k">const</span> result = <span class="k">await</span> HarmoniQ.quantum.executeCircuit({
+  provider: <span class="s">'hopper'</span>, shots: <span class="n">1024</span>, qubits: <span class="n">2</span>, bits: <span class="n">2</span>, gates, basis: <span class="s">'Z'</span>,
+})
+<span class="k">const</span> tipo = result.mostFrequent.<span class="fn">startsWith</span>(<span class="s">'0'</span>) ? <span class="s">'Constante'</span> : <span class="s">'Balanceada'</span>
+console.log(tipo, result.counts)</code></pre>
+                      </div>
+                    </div>
+                    <a class="hq-example-split__more" href="ejemplo-deutsch-jozsa.html">Guía completa →</a>
+                  </aside>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <!-- Búsqueda y amplificación -->
+          <div class="hq-examples-section" id="examples-search">
+            <p class="hq-examples-section-title hq-examples-section-title--minimal">Búsqueda y amplificación de amplitud</p>
+            <div class="hq-example-grid hq-example-grid--stack">
+
+              <article class="hq-example-card hq-example-card--split">
+                <div class="hq-example-split">
+                  <div class="hq-example-split__main">
+                    <div class="hq-example-card__preview hq-example-card__preview--compact" aria-hidden="true">
+                      <span><span class="q-l">q₀</span><span class="q-w">: </span><span class="q-g">[H]</span><span class="q-w">── </span><span class="q-c">Oráculo</span><span class="q-w"> ── </span><span class="q-g">Difusión</span><span class="q-w"> ── </span><span class="q-m">┤M├</span></span>
+                      <span><span class="q-l">q₁</span><span class="q-w">: </span><span class="q-g">[H]</span><span class="q-w">── </span><span class="q-c">Oráculo</span><span class="q-w"> ── </span><span class="q-g">Difusión</span><span class="q-w"> ── </span><span class="q-m">┤M├</span></span>
+                    </div>
+                    <div class="hq-example-card__body hq-example-card__body--split">
+                      <h3 class="hq-example-card__title">
+                        <a href="ejemplo-grover.html">Búsqueda de Grover</a>
+                      </h3>
+                      <p class="hq-example-card__desc">
+                        Encuentra un elemento marcado en una base de datos no ordenada en O(√N) consultas. Implementación de
+                        2 cúbits con amplificación de amplitud completa.
+                      </p>
+                      <p class="hq-example-harmoniq-hint">
+                        <strong>HarmoniQ:</strong> el oráculo usa <code>cz</code> (marca <code>|11⟩</code>); la difusión es la secuencia
+                        <code>H · X · CZ · X · H</code> en ambos cúbits. Misma llamada <code>executeCircuit</code> /
+                        <code>execute_circuit</code> con la lista completa de puertas.
+                      </p>
+                      <div class="hq-example-card__footer hq-example-card__footer--minimal">
+                        <span class="hq-difficulty hq-difficulty--intermediate">Intermedio</span>
+                        <span class="hq-qubits-badge">2 cúbits</span>
+                        <div class="hq-example-card__langs" aria-label="SDKs disponibles">
+                          <img src="../icons/swift.svg" alt="Swift" width="16" height="16" loading="lazy" />
+                          <img src="../icons/kotlin.svg" alt="Kotlin" width="16" height="16" loading="lazy" />
+                          <img src="../icons/react.svg" alt="React" width="16" height="16" loading="lazy" />
+                          <img src="../icons/python.svg" alt="Python" width="16" height="16" loading="lazy" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <aside class="hq-example-split__peek" aria-label="Vista previa Grover">
+                    <p class="hq-codepeek-kicker">Código</p>
+                    <div class="hq-codepeek" data-codepeek>
+                      <div class="hq-codepeek-tabs" role="tablist" aria-label="Lenguaje">
+                        <button type="button" class="hq-codepeek-tab is-active" role="tab" aria-selected="true" data-codepeek-tab="python">Python</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="swift">Swift</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="kotlin">Kotlin</button>
+                        <button type="button" class="hq-codepeek-tab" role="tab" aria-selected="false" data-codepeek-tab="react">React</button>
+                      </div>
+                      <div class="hq-codepeek-panels">
+                        <pre class="hq-codepeek-panel is-active hq-codepeek-panel--tall" role="tabpanel" data-codepeek-panel="python"><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">0</span>]), Gate(name=<span class="s">"h"</span>, targets=[<span class="n">1</span>]),
+    Gate(name=<span class="s">"cz"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">0</span>]), Gate(name=<span class="s">"h"</span>, targets=[<span class="n">1</span>]),
+    Gate(name=<span class="s">"x"</span>, targets=[<span class="n">0</span>]), Gate(name=<span class="s">"x"</span>, targets=[<span class="n">1</span>]),
+    Gate(name=<span class="s">"cz"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    Gate(name=<span class="s">"x"</span>, targets=[<span class="n">0</span>]), Gate(name=<span class="s">"x"</span>, targets=[<span class="n">1</span>]),
+    Gate(name=<span class="s">"h"</span>, targets=[<span class="n">0</span>]), Gate(name=<span class="s">"h"</span>, targets=[<span class="n">1</span>]),
+]
+result = HarmoniQ.quantum.execute_circuit(
+    provider=<span class="s">"hopper"</span>, shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>, bits=<span class="n">2</span>, gates=gates, basis=<span class="s">"Z"</span>,
+)
+<span class="fn">print</span>(result.most_frequent)  <span class="c"># "11"</span></code></pre>
+                        <pre class="hq-codepeek-panel hq-codepeek-panel--tall" role="tabpanel" hidden data-codepeek-panel="swift"><code><span class="k">import</span> HarmoniQ
+
+<span class="k">let</span> gates: [Gate] = [
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">0</span>]), Gate(name: <span class="s">"h"</span>, targets: [<span class="n">1</span>]),
+    Gate(name: <span class="s">"cz"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">0</span>]), Gate(name: <span class="s">"h"</span>, targets: [<span class="n">1</span>]),
+    Gate(name: <span class="s">"x"</span>, targets: [<span class="n">0</span>]), Gate(name: <span class="s">"x"</span>, targets: [<span class="n">1</span>]),
+    Gate(name: <span class="s">"cz"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+    Gate(name: <span class="s">"x"</span>, targets: [<span class="n">0</span>]), Gate(name: <span class="s">"x"</span>, targets: [<span class="n">1</span>]),
+    Gate(name: <span class="s">"h"</span>, targets: [<span class="n">0</span>]), Gate(name: <span class="s">"h"</span>, targets: [<span class="n">1</span>]),
+]
+<span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> HarmoniQ.quantum.executeCircuit(
+    provider: <span class="s">"hopper"</span>, shots: <span class="n">1024</span>,
+    qubits: <span class="n">2</span>, bits: <span class="n">2</span>, gates: gates, basis: <span class="s">"Z"</span>
+)
+<span class="fn">print</span>(result.mostFrequent)</code></pre>
+                        <pre class="hq-codepeek-panel hq-codepeek-panel--tall" role="tabpanel" hidden data-codepeek-panel="kotlin"><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    Gate(name = <span class="s">"cz"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    Gate(name = <span class="s">"x"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"x"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    Gate(name = <span class="s">"cz"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"x"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"x"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    Gate(name = <span class="s">"h"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+)
+<span class="k">val</span> result = HarmoniQ.quantum.executeCircuit(
+    provider = <span class="s">"hopper"</span>, shots = <span class="n">1024</span>,
+    qubits = <span class="n">2</span>, bits = <span class="n">2</span>, gates = gates, basis = <span class="s">"Z"</span>
+)</code></pre>
+                        <pre class="hq-codepeek-panel hq-codepeek-panel--tall" role="tabpanel" hidden data-codepeek-panel="react"><code><span class="k">import</span> { HarmoniQ } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+
+<span class="k">const</span> gates = [
+  { name: <span class="s">'h'</span>, targets: [<span class="n">0</span>] }, { name: <span class="s">'h'</span>, targets: [<span class="n">1</span>] },
+  { name: <span class="s">'cz'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>, targets: [<span class="n">0</span>] }, { name: <span class="s">'h'</span>, targets: [<span class="n">1</span>] },
+  { name: <span class="s">'x'</span>, targets: [<span class="n">0</span>] }, { name: <span class="s">'x'</span>, targets: [<span class="n">1</span>] },
+  { name: <span class="s">'cz'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  { name: <span class="s">'x'</span>, targets: [<span class="n">0</span>] }, { name: <span class="s">'x'</span>, targets: [<span class="n">1</span>] },
+  { name: <span class="s">'h'</span>, targets: [<span class="n">0</span>] }, { name: <span class="s">'h'</span>, targets: [<span class="n">1</span>] },
+]
+<span class="k">const</span> result = <span class="k">await</span> HarmoniQ.quantum.executeCircuit({
+  provider: <span class="s">'hopper'</span>, shots: <span class="n">1024</span>, qubits: <span class="n">2</span>, bits: <span class="n">2</span>, gates, basis: <span class="s">'Z'</span>,
+})
+console.log(result.mostFrequent)</code></pre>
+                      </div>
+                    </div>
+                    <a class="hq-example-split__more" href="ejemplo-grover.html">Guía completa →</a>
+                  </aside>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+        </div><!-- /hq-examples-index -->
+
+        <!-- ── SWIFT ──────────────────────────────────────────────── -->
+        <section id="ios" class="qubits-section hq-lang-section">
+          <div class="hq-lang-head">
+            <img class="hq-lang-head__icon" src="../icons/swift.svg" width="36" height="36" alt="" aria-hidden="true" />
+            <h2 class="hq-lang-head__title">Swift</h2>
+            <span class="hq-lang-head__badge">iOS 17.6+ · macOS 14.6+ · Swift 5.9+</span>
+          </div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El SDK para Swift está diseñado para aplicaciones iOS y macOS. Se distribuye mediante
+              Swift Package Manager y expone una API asíncrona con <code>async/await</code> que se
+              integra de forma natural con SwiftUI y UIKit.
+            </p>
+          </div>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="ios-install">
+            <h3>Instalación</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                <strong>Opción 1 — Xcode (recomendado):</strong> Ve a
+                <em>File → Add Package Dependencies…</em> e ingresa la URL del repositorio:
+              </p>
+            </div>
+            <div class="hq-install-cmd">https://github.com/planq/HarmoniQ-Swift.git</div>
+            <div class="qubits-prose qubits-prose--academic" style="margin-top:16px;">
+              <p><strong>Opción 2 — Package.swift:</strong></p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Package.swift</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="c">// swift-tools-version: 5.9</span>
+<span class="k">import</span> PackageDescription
+
+<span class="k">let</span> package = <span class="t">Package</span>(
+    name: <span class="s">"MiAppCuantica"</span>,
+    platforms: [
+        .iOS(.v17),
+        .macOS(.v14),
+    ],
+    dependencies: [
+        .package(
+            url: <span class="s">"https://github.com/planq/HarmoniQ-Swift.git"</span>,
+            from: <span class="s">"1.0.0"</span>
+        ),
+    ],
+    targets: [
+        .target(
+            name: <span class="s">"MiAppCuantica"</span>,
+            dependencies: [<span class="s">"HarmoniQ"</span>]
+        ),
+    ]
+)</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="ios-config">
+            <h3>Configuración</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Llama a <code>HarmoniQ.configure(apiKey:)</code> una sola vez al arrancar la app,
+                normalmente en <code>AppDelegate.application(_:didFinishLaunchingWithOptions:)</code>
+                o en el punto de entrada <code>@main</code> de SwiftUI. Puedes obtener tu API Key
+                desde el panel de usuario en <a href="https://planq.com.blog" target="_blank" rel="noopener">planq.com.blog</a>.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Configuración inicial</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> HarmoniQ
+
+<span class="c">// Configuración básica (backend se selecciona en cada llamada)</span>
+<span class="t">HarmoniQ</span>.<span class="fn">configure</span>(apiKey: <span class="s">"tu-api-key-de-planq"</span>)
+
+<span class="c">// Opcionalmente, con backend por defecto:</span>
+<span class="t">HarmoniQ</span>.<span class="fn">configure</span>(apiKey: <span class="s">"tu-api-key-de-planq"</span>, backend: <span class="s">"hopper"</span>)</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="ios-circuit">
+            <h3>Primer circuito: Deutsch-Jozsa</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El algoritmo de Deutsch-Jozsa distingue si una función booleana es constante o
+                balanceada con una sola consulta al oráculo. En el caso balanceado el resultado
+                de medición es siempre <code>|10⟩</code>; en el constante es <code>|00⟩</code>.
+                Es el ejemplo canónico de ventaja cuántica exponencial sobre algoritmos clásicos
+                deterministas.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>DeutschJozsa.swift</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> HarmoniQ
+
+<span class="c">// Circuito para función balanceada f(x) = x</span>
+<span class="k">let</span> gates: [<span class="t">Gate</span>] = [
+    <span class="t">Gate</span>(name: <span class="s">"x"</span>,    targets: [<span class="n">1</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">1</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"cnot"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">0</span>]),
+]
+
+<span class="k">do</span> {
+    <span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider: <span class="s">"hopper"</span>,  <span class="c">// "hopper" (20 q) o "hermann" (70 q)</span>
+        shots:    <span class="n">1024</span>,
+        qubits:   <span class="n">2</span>,
+        bits:     <span class="n">2</span>,
+        gates:    gates,
+        basis:    <span class="s">"Z"</span>
+    )
+
+    <span class="c">// Balanceada → "|10": 1024, constante → "|00": 1024</span>
+    <span class="fn">print</span>(<span class="s">"Distribución:"</span>, result.counts)
+    <span class="fn">print</span>(<span class="s">"Estado dominante:"</span>, result.mostFrequent)
+} <span class="k">catch</span> {
+    <span class="fn">print</span>(<span class="s">"Error:"</span>, error)
+}</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="ios-errors">
+            <h3>Manejo de errores</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                HarmoniQ lanza valores tipados de <code>HarmoniQError</code> que puedes capturar con
+                bloques <code>catch</code> específicos. Esto permite distinguir errores de configuración,
+                autenticación, límites de tasa y fallos de red sin analizar cadenas de texto.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Manejo de errores</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">do</span> {
+    <span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(...)
+
+} <span class="k">catch</span> <span class="t">HarmoniQError</span>.notConfigured {
+    <span class="fn">print</span>(<span class="s">"Llama a HarmoniQ.configure(apiKey:) antes de usar el SDK"</span>)
+
+} <span class="k">catch</span> <span class="t">HarmoniQError</span>.invalidResponse {
+    <span class="fn">print</span>(<span class="s">"Respuesta inválida del servidor"</span>)
+
+} <span class="k">catch</span> <span class="t">HarmoniQError</span>.httpError(<span class="k">let</span> code) {
+    <span class="k">switch</span> code {
+    <span class="k">case</span> <span class="n">401</span>: <span class="fn">print</span>(<span class="s">"API Key inválida o expirada"</span>)
+    <span class="k">case</span> <span class="n">429</span>: <span class="fn">print</span>(<span class="s">"Límite de solicitudes excedido. Espera e intenta de nuevo"</span>)
+    <span class="k">case</span> <span class="n">503</span>: <span class="fn">print</span>(<span class="s">"Servicio no disponible temporalmente"</span>)
+    <span class="k">default</span>:  <span class="fn">print</span>(<span class="s">"Error HTTP \(code)"</span>)
+    }
+
+} <span class="k">catch</span> {
+    <span class="fn">print</span>(<span class="s">"Error inesperado:"</span>, error.localizedDescription)
+}</code></pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── KOTLIN ─────────────────────────────────────────────── -->
+        <section id="android" class="qubits-section hq-lang-section">
+          <div class="hq-lang-head">
+            <img class="hq-lang-head__icon" src="../icons/kotlin.svg" width="36" height="36" alt="" aria-hidden="true" />
+            <h2 class="hq-lang-head__title">Kotlin</h2>
+            <span class="hq-lang-head__badge">Android · Kotlin 1.9+ · Coroutines</span>
+          </div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El SDK de Kotlin aprovecha las coroutines de Kotlinx para exponer llamadas asíncronas
+              sin callbacks. Todas las funciones de red son funciones <code>suspend</code> que se
+              llaman dentro de un <code>CoroutineScope</code> o con <code>launch</code>/<code>async</code>.
+            </p>
+          </div>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="android-install">
+            <h3>Instalación</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>Agrega la dependencia en tu archivo <code>build.gradle.kts</code> a nivel de módulo:</p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>build.gradle.kts</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code>dependencies {
+    implementation(<span class="s">"com.planq:harmoniq-android:1.0.0"</span>)
+    <span class="c">// Kotlinx Coroutines (requerido)</span>
+    implementation(<span class="s">"org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"</span>)
+}</code></pre>
+            </div>
+            <div class="qubits-prose qubits-prose--academic" style="margin-top:14px;">
+              <p>
+                Asegúrate de que tu <code>minSdk</code> sea 26 o superior y de tener habilitado
+                <code>compileOptions { sourceCompatibility = JavaVersion.VERSION_17 }</code>.
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="android-config">
+            <h3>Configuración</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Inicializa el SDK en tu clase <code>Application</code> para garantizar que la
+                configuración esté disponible antes de cualquier llamada.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>MyApplication.kt</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> android.app.Application
+<span class="k">import</span> com.planq.harmoniq.HarmoniQ
+
+<span class="k">class</span> <span class="t">MyApplication</span> : <span class="t">Application</span>() {
+    <span class="k">override fun</span> <span class="fn">onCreate</span>() {
+        <span class="k">super</span>.<span class="fn">onCreate</span>()
+        <span class="t">HarmoniQ</span>.<span class="fn">configure</span>(apiKey = <span class="s">"tu-api-key-de-planq"</span>)
+    }
+}</code></pre>
+            </div>
+            <div class="qubits-prose qubits-prose--academic" style="margin-top:12px;">
+              <p>
+                Registra <code>MyApplication</code> en tu <code>AndroidManifest.xml</code> con el
+                atributo <code>android:name=".MyApplication"</code> en la etiqueta
+                <code>&lt;application&gt;</code>.
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="android-circuit">
+            <h3>Primer circuito: Deutsch-Jozsa</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Las llamadas al SDK son funciones <code>suspend</code>; debes ejecutarlas dentro de
+                un scope de coroutines. En un <code>ViewModel</code> usa <code>viewModelScope.launch</code>;
+                en pruebas usa <code>runTest</code> de <code>kotlinx-coroutines-test</code>.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>QuantumViewModel.kt</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    <span class="t">Gate</span>(name = <span class="s">"x"</span>,    targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"cnot"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+)
+
+viewModelScope.<span class="fn">launch</span> {
+    <span class="k">val</span> result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider = <span class="s">"hopper"</span>,
+        shots    = <span class="n">1024</span>,
+        qubits   = <span class="n">2</span>,
+        bits     = <span class="n">2</span>,
+        gates    = gates,
+        basis    = <span class="s">"Z"</span>
+    )
+
+    <span class="fn">Log</span>.d(<span class="s">"HarmoniQ"</span>, <span class="s">"Distribución: ${result.counts}"</span>)
+    <span class="fn">Log</span>.d(<span class="s">"HarmoniQ"</span>, <span class="s">"Estado dominante: ${result.mostFrequent}"</span>)
+}</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="android-errors">
+            <h3>Manejo de errores</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Todas las excepciones de HarmoniQ heredan de <code>HarmoniQException</code>.
+                Puedes capturar casos específicos o el tipo base según el nivel de detalle que
+                necesites en tu lógica de negocio.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Manejo de errores — Kotlin</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> com.planq.harmoniq.error.HarmoniQException
+<span class="k">import</span> com.planq.harmoniq.error.NotConfiguredException
+<span class="k">import</span> com.planq.harmoniq.error.HttpException
+
+<span class="k">try</span> {
+    <span class="k">val</span> result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(...)
+
+} <span class="k">catch</span> (e: <span class="t">NotConfiguredException</span>) {
+    <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"API Key no configurada: ${e.message}"</span>)
+
+} <span class="k">catch</span> (e: <span class="t">HttpException</span>) {
+    <span class="k">when</span> (e.statusCode) {
+        <span class="n">401</span>  -> <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"API Key inválida o expirada"</span>)
+        <span class="n">429</span>  -> <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"Límite de solicitudes excedido"</span>)
+        <span class="n">503</span>  -> <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"Servicio no disponible"</span>)
+        <span class="k">else</span> -> <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"Error HTTP ${e.statusCode}"</span>)
+    }
+
+} <span class="k">catch</span> (e: <span class="t">HarmoniQException</span>) {
+    <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"Error de ejecución: ${e.message}"</span>)
+
+} <span class="k">catch</span> (e: <span class="t">Exception</span>) {
+    <span class="t">Log</span>.<span class="fn">e</span>(<span class="s">"HarmoniQ"</span>, <span class="s">"Error inesperado: ${e.localizedMessage}"</span>)
+}</code></pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── REACT ──────────────────────────────────────────────── -->
+        <section id="react" class="qubits-section hq-lang-section">
+          <div class="hq-lang-head">
+            <img class="hq-lang-head__icon" src="../icons/react.svg" width="36" height="36" alt="" aria-hidden="true" />
+            <h2 class="hq-lang-head__title">React</h2>
+            <span class="hq-lang-head__badge">TypeScript · React 18+ · Next.js compatible</span>
+          </div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El paquete <code>@planq/harmoniq</code> es un módulo ESM con tipos TypeScript completos.
+              Funciona con React, Next.js, Vite y cualquier entorno que soporte módulos ES2022.
+              Las llamadas de red son <code>Promise</code>-based y compatibles con <code>async/await</code>.
+            </p>
+          </div>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="react-install">
+            <h3>Instalación</h3>
+            <div class="hq-install-cmd">npm install @planq/harmoniq</div>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>O con tu gestor de paquetes preferido:</p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Gestores de paquetes</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="c"># npm</span>
+npm install @planq/harmoniq
+
+<span class="c"># yarn</span>
+yarn add @planq/harmoniq
+
+<span class="c"># pnpm</span>
+pnpm add @planq/harmoniq
+
+<span class="c"># bun</span>
+bun add @planq/harmoniq</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="react-config">
+            <h3>Configuración</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Crea un módulo de configuración que inicialice el SDK una vez. En Next.js, exporta
+                la instancia desde <code>lib/quantum.ts</code>; en Vite, llama a
+                <code>configure()</code> en el punto de entrada de tu app. Usa variables de entorno
+                con el prefijo <code>NEXT_PUBLIC_</code> (Next.js) o <code>VITE_</code> (Vite)
+                para no exponer la clave en el código fuente.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>lib/quantum.ts</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> { <span class="t">HarmoniQ</span> } <span class="k">from</span> <span class="s">'@planq/harmoniq'</span>
+
+<span class="t">HarmoniQ</span>.<span class="fn">configure</span>({
+  apiKey: process.env.<span class="p">NEXT_PUBLIC_PLANQ_API_KEY</span> ?? <span class="s">''</span>,
+  <span class="c">// backend opcional; se especifica en cada llamada si no se define aquí</span>
+})
+
+<span class="k">export</span> { <span class="t">HarmoniQ</span> }</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="react-circuit">
+            <h3>Primer circuito: Deutsch-Jozsa</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El ejemplo siguiente muestra un hook React que ejecuta el algoritmo de Deutsch-Jozsa
+                y almacena los resultados en estado local. El componente renderiza la distribución
+                de medición de forma reactiva.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>useDeutschJozsa.ts</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> { useState, useCallback } <span class="k">from</span> <span class="s">'react'</span>
+<span class="k">import</span> { <span class="t">HarmoniQ</span> } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+<span class="k">import type</span> { <span class="t">Gate</span>, <span class="t">ExecutionResult</span> } <span class="k">from</span> <span class="s">'@planq/harmoniq'</span>
+
+<span class="k">const</span> GATES: <span class="t">Gate</span>[] = [
+  { name: <span class="s">'x'</span>,    targets: [<span class="n">1</span>] },
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">1</span>] },
+  { name: <span class="s">'cnot'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">0</span>] },
+]
+
+<span class="k">export function</span> <span class="fn">useDeutschJozsa</span>() {
+  <span class="k">const</span> [result, setResult] = <span class="fn">useState</span>&lt;<span class="t">ExecutionResult</span> | <span class="k">null</span>&gt;(<span class="k">null</span>)
+  <span class="k">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="k">false</span>)
+  <span class="k">const</span> [error, setError] = <span class="fn">useState</span>&lt;<span class="t">string</span> | <span class="k">null</span>&gt;(<span class="k">null</span>)
+
+  <span class="k">const</span> run = <span class="fn">useCallback</span>(<span class="k">async</span> () =&gt; {
+    <span class="fn">setLoading</span>(<span class="k">true</span>)
+    <span class="fn">setError</span>(<span class="k">null</span>)
+    <span class="k">try</span> {
+      <span class="k">const</span> res = <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>({
+        provider: <span class="s">'hopper'</span>,
+        shots:    <span class="n">1024</span>,
+        qubits:   <span class="n">2</span>,
+        bits:     <span class="n">2</span>,
+        gates:    GATES,
+        basis:    <span class="s">'Z'</span>,
+      })
+      <span class="fn">setResult</span>(res)
+    } <span class="k">catch</span> (e) {
+      <span class="fn">setError</span>(e <span class="k">instanceof</span> <span class="t">Error</span> ? e.message : <span class="s">'Error desconocido'</span>)
+    } <span class="k">finally</span> {
+      <span class="fn">setLoading</span>(<span class="k">false</span>)
+    }
+  }, [])
+
+  <span class="k">return</span> { result, loading, error, run }
+}</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="react-errors">
+            <h3>Manejo de errores</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El SDK lanza instancias de <code>HarmoniQError</code> con un campo <code>code</code>
+                del enumerado <code>ErrorCode</code>. Esto permite distinguir casos sin analizar
+                mensajes de texto y facilita la localización.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Manejo de errores — TypeScript</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> { <span class="t">HarmoniQError</span>, <span class="t">ErrorCode</span> } <span class="k">from</span> <span class="s">'@planq/harmoniq'</span>
+
+<span class="k">try</span> {
+  <span class="k">const</span> result = <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>({ <span class="p">...</span> })
+
+} <span class="k">catch</span> (error) {
+  <span class="k">if</span> (error <span class="k">instanceof</span> <span class="t">HarmoniQError</span>) {
+    <span class="k">switch</span> (error.code) {
+      <span class="k">case</span> <span class="t">ErrorCode</span>.NotConfigured:
+        console.<span class="fn">error</span>(<span class="s">'Llama a HarmoniQ.configure() antes de usar el SDK'</span>)
+        <span class="k">break</span>
+      <span class="k">case</span> <span class="t">ErrorCode</span>.Unauthorized:
+        console.<span class="fn">error</span>(<span class="s">'API Key inválida o expirada'</span>)
+        <span class="k">break</span>
+      <span class="k">case</span> <span class="t">ErrorCode</span>.RateLimited:
+        console.<span class="fn">error</span>(<span class="s">'Límite de solicitudes excedido. Espera antes de reintentar'</span>)
+        <span class="k">break</span>
+      <span class="k">default</span>:
+        console.<span class="fn">error</span>(<span class="s">'Error HarmoniQ:'</span>, error.message)
+    }
+  } <span class="k">else</span> {
+    console.<span class="fn">error</span>(<span class="s">'Error inesperado:'</span>, error)
+  }
+}</code></pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── PYTHON ─────────────────────────────────────────────── -->
+        <section id="python" class="qubits-section hq-lang-section">
+          <div class="hq-lang-head">
+            <img class="hq-lang-head__icon" src="../icons/python.svg" width="36" height="36" alt="" aria-hidden="true" />
+            <h2 class="hq-lang-head__title">Python</h2>
+            <span class="hq-lang-head__badge">Python 3.10+ · asyncio · Jupyter compatible</span>
+          </div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              El paquete Python es síncrono por defecto pero ofrece una interfaz <code>async</code>
+              opcional para entornos basados en <code>asyncio</code>. También incluye utilidades
+              de visualización (<code>plot_histogram</code>, <code>plot_bloch</code>) pensadas para
+              flujos de trabajo en Jupyter Notebook.
+            </p>
+          </div>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="python-install">
+            <h3>Instalación</h3>
+            <div class="hq-install-cmd">pip install harmoniq</div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Gestores de paquetes</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="c"># pip (PyPI)</span>
+pip install harmoniq
+
+<span class="c"># conda</span>
+conda install -c planq harmoniq
+
+<span class="c"># Poetry</span>
+poetry add harmoniq
+
+<span class="c"># uv (recomendado para entornos rápidos)</span>
+uv add harmoniq</code></pre>
+            </div>
+            <div class="qubits-prose qubits-prose--academic" style="margin-top:14px;">
+              <p>
+                Requiere Python ≥ 3.10. Para usar las utilidades de visualización instala también
+                <code>pip install harmoniq[viz]</code>, que incluye <code>matplotlib</code> y
+                <code>ipywidgets</code>.
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="python-config">
+            <h3>Configuración</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Puedes configurar el SDK de tres formas: llamada directa, variable de entorno
+                <code>PLANQ_API_KEY</code> (cargada automáticamente al importar el módulo), o
+                archivo <code>~/.planq/credentials.toml</code> generado por el CLI de PlanQ.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Configuración — Python</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> harmoniq
+
+<span class="c"># Opción 1: llamada directa</span>
+harmoniq.<span class="fn">configure</span>(api_key=<span class="s">"tu-api-key-de-planq"</span>)
+
+<span class="c"># Opción 2: variable de entorno (sin llamada explícita)</span>
+<span class="c"># export PLANQ_API_KEY="tu-api-key-de-planq"</span>
+
+<span class="c"># Opción 3: con backend por defecto</span>
+harmoniq.<span class="fn">configure</span>(api_key=<span class="s">"tu-api-key-de-planq"</span>, backend=<span class="s">"hopper"</span>)</code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="python-circuit">
+            <h3>Primer circuito: Deutsch-Jozsa</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Python usa <code>snake_case</code> en lugar de <code>camelCase</code>: el método
+                es <code>execute_circuit</code> y el atributo del resultado es
+                <code>most_frequent</code>. En Jupyter puedes llamar a
+                <code>result.plot_histogram()</code> directamente para visualizar la distribución.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>deutsch_jozsa.py</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    <span class="t">Gate</span>(name=<span class="s">"x"</span>,    targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"cnot"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">0</span>]),
+]
+
+result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">execute_circuit</span>(
+    provider=<span class="s">"hopper"</span>,   <span class="c"># "hopper" (20 q) o "hermann" (70 q)</span>
+    shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>,
+    bits=<span class="n">2</span>,
+    gates=gates,
+    basis=<span class="s">"Z"</span>,
+)
+
+<span class="fn">print</span>(<span class="s">"Distribución:"</span>, result.counts)
+<span class="fn">print</span>(<span class="s">"Estado dominante:"</span>, result.most_frequent)
+
+<span class="c"># En Jupyter Notebook:</span>
+<span class="c"># result.plot_histogram()   → gráfica de barras de la distribución</span>
+<span class="c"># result.plot_bloch()       → esfera de Bloch para circuitos de 1 cúbit</span></code></pre>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;" id="python-errors">
+            <h3>Manejo de errores</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El SDK lanza excepciones específicas que heredan de <code>HarmoniQError</code>.
+                Puedes capturar la clase base o subtipos concretos para implementar lógica
+                de reintento o notificación al usuario.
+              </p>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>Manejo de errores — Python</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ
+<span class="k">from</span> harmoniq.errors <span class="k">import</span> (
+    HarmoniQError,
+    NotConfiguredError,
+    UnauthorizedError,
+    RateLimitError,
+)
+
+<span class="k">try</span>:
+    result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">execute_circuit</span>(...)
+
+<span class="k">except</span> <span class="t">NotConfiguredError</span>:
+    <span class="fn">print</span>(<span class="s">"Llama a harmoniq.configure(api_key=...) antes de usar el SDK"</span>)
+
+<span class="k">except</span> <span class="t">UnauthorizedError</span>:
+    <span class="fn">print</span>(<span class="s">"API Key inválida o expirada. Genera una nueva en planq.com"</span>)
+
+<span class="k">except</span> <span class="t">RateLimitError</span> <span class="k">as</span> e:
+    <span class="fn">print</span>(<span class="s">f"Límite excedido. Reintenta en {e.retry_after}s"</span>)
+
+<span class="k">except</span> <span class="t">HarmoniQError</span> <span class="k">as</span> e:
+    <span class="fn">print</span>(<span class="s">f"Error de ejecución [{e.status_code}]: {e.message}"</span>)
+
+<span class="k">except</span> <span class="t">Exception</span> <span class="k">as</span> e:
+    <span class="fn">print</span>(<span class="s">f"Error inesperado: {e}"</span>)</code></pre>
+            </div>
+          </section>
+        </section>
+
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Ejemplos</span>
+          </a>
+          <a href="#examples-basics" class="right-toc-sublink">Entrelazamiento</a>
+          <a href="#examples-oracle" class="right-toc-sublink">Algoritmos de oráculo</a>
+          <a href="#examples-search" class="right-toc-sublink">Búsqueda cuántica</a>
+
+          <a href="#ios" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>SDK — Swift</span>
+          </a>
+          <a href="#ios-install" class="right-toc-sublink">Instalación</a>
+          <a href="#ios-circuit" class="right-toc-sublink">Primer circuito</a>
+
+          <a href="#android" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>SDK — Kotlin</span>
+          </a>
+          <a href="#android-install" class="right-toc-sublink">Instalación</a>
+          <a href="#android-circuit" class="right-toc-sublink">Primer circuito</a>
+
+          <a href="#react" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>SDK — React</span>
+          </a>
+          <a href="#react-install" class="right-toc-sublink">Instalación</a>
+          <a href="#react-circuit" class="right-toc-sublink">Primer circuito</a>
+
+          <a href="#python" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>SDK — Python</span>
+          </a>
+          <a href="#python-install" class="right-toc-sublink">Instalación</a>
+          <a href="#python-circuit" class="right-toc-sublink">Primer circuito</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script>
+      (function () {
+        document.querySelectorAll("[data-codepeek]").forEach(function (root) {
+          var tabs = root.querySelectorAll("[data-codepeek-tab]");
+          var panels = root.querySelectorAll("[data-codepeek-panel]");
+          tabs.forEach(function (tab) {
+            tab.addEventListener("click", function () {
+              var id = tab.getAttribute("data-codepeek-tab");
+              tabs.forEach(function (t) {
+                var on = t === tab;
+                t.classList.toggle("is-active", on);
+                t.setAttribute("aria-selected", on ? "true" : "false");
+              });
+              panels.forEach(function (p) {
+                var show = p.getAttribute("data-codepeek-panel") === id;
+                p.classList.toggle("is-active", show);
+                if (show) p.removeAttribute("hidden");
+                else p.setAttribute("hidden", "");
+              });
+            });
+          });
+        });
+      })();
+    </script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+  </body>
+</html>

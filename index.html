@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation | Harmoniq Quantum</title>
+    <meta
+      name="description"
+      content="Documentación estilo IBM/Qiskit para Harmoniq con flujos completos de computación cuantica."
+    />
+    <link id="favicon" rel="icon" type="image/svg+xml" href="./favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="./styles.css?v=114" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="index.html#top" aria-label="Harmoniq Documentation">
+          <img src="./logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="paginas/qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="paginas/casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="paginas/teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="paginas/compositor.html"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="./Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="./icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#android"><img class="nav-sublink-brand" src="./icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#react"><img class="nav-sublink-brand" src="./icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#python"><img class="nav-sublink-brand" src="./icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content home-page">
+        <section id="intro" class="ft-blueprint-hero" aria-labelledby="intro-title">
+          <div class="ft-blueprint-hero__grid" aria-hidden="true"></div>
+          <div class="ft-blueprint-hero__inner">
+            <div class="ft-blueprint-hero__copy">
+              <p class="ft-blueprint-hero__kicker" data-i18n="home.hero.kicker">PlanQ · Documentación</p>
+              <h1 id="intro-title" class="ft-blueprint-hero__title">
+                <span class="ft-blueprint-hero__title-line ft-blueprint-hero__title-line--1" data-i18n="home.hero.line1">Documentación</span>
+                <span class="ft-blueprint-hero__title-line ft-blueprint-hero__title-line--2" data-i18n="home.hero.line2">de PlanQ</span>
+              </h1>
+              <div class="ft-blueprint-hero__rule" aria-hidden="true"></div>
+              <p class="ft-blueprint-hero__lead" data-i18n="home.hero.p1">
+                Bienvenido a la documentación de la plataforma PlanQ. Aquí encontrarás guías para empezar, tutoriales con casos de uso y referencias de API.
+              </p>
+            </div>
+            <div class="ft-blueprint-hero__viz" aria-hidden="true">
+              <!-- Esfera de Bloch -->
+              <svg class="ft-blueprint-svg ft-blueprint-svg--bloch" viewBox="10 5 200 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle style="opacity:0;animation:ftBpStrokeIn 0.5s ease 0.30s forwards" cx="110" cy="74" r="56" stroke="currentColor" stroke-width="1.3"/>
+                <ellipse class="bloch-equator" style="opacity:0;animation:ftBpStrokeIn 0.5s ease 0.50s forwards, blochDashFlow 12s linear 1.2s infinite" cx="110" cy="74" rx="56" ry="14" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3" opacity="0.65"/>
+                <line style="opacity:0;animation:ftBpStrokeIn 0.5s ease 0.66s forwards" x1="110" y1="12" x2="110" y2="136" stroke="currentColor" stroke-width="1" opacity="0.55"/>
+                <line style="opacity:0;animation:ftBpStrokeIn 0.5s ease 0.78s forwards" x1="54" y1="74" x2="166" y2="74" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.35"/>
+                <line style="opacity:0;animation:ftBpStrokeIn 0.5s ease 0.88s forwards" x1="138" y1="74" x2="138" y2="37" stroke="currentColor" stroke-width="0.9" stroke-dasharray="2.5 2" opacity="0.4"/>
+                <line style="opacity:0;animation:ftBpStrokeIn 0.5s ease 1.00s forwards" x1="110" y1="74" x2="138" y2="37" stroke="#0062ff" stroke-width="2.2" stroke-linecap="round"/>
+                <path style="opacity:0;animation:ftBpStrokeIn 0.5s ease 1.12s forwards" d="M110 52 A24 24 0 0 1 128 47" stroke="currentColor" stroke-width="1" opacity="0.5" stroke-linecap="round"/>
+                <circle style="opacity:0;animation:ftBpStrokeIn 0.5s ease 1.20s forwards" cx="110" cy="18" r="3.5" fill="currentColor" opacity="0.55"/>
+                <circle style="opacity:0;animation:ftBpStrokeIn 0.5s ease 1.26s forwards" cx="110" cy="130" r="3.5" fill="currentColor" opacity="0.55"/>
+                <text x="117" y="16" font-size="8" fill="currentColor" opacity="0.5" font-family="monospace">|0⟩</text>
+                <text x="117" y="141" font-size="8" fill="currentColor" opacity="0.5" font-family="monospace">|1⟩</text>
+                <text x="144" y="34" font-size="9" fill="#0062ff" opacity="0.95" font-family="monospace">|ψ⟩</text>
+                <text x="116" y="56" font-size="8" fill="currentColor" opacity="0.45" font-family="monospace">θ</text>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section id="explore" class="home-section" aria-labelledby="explore-title">
+          <h2 id="explore-title" class="home-section-title" data-i18n="home.explore.title">Explorar capacidades</h2>
+          <div class="home-card-grid">
+            <a class="home-card" href="paginas/compositor.html#entidades">
+              <h3 class="home-card-title" data-i18n="home.explore.c1.title">Construcción de circuitos</h3>
+              <p class="home-card-desc" data-i18n="home.explore.c1.desc">Construye circuitos cuánticos usando el SDK.</p>
+              <span class="home-card-cta" data-i18n="home.explore.c1.cta">Ver introducción <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="home-card" href="paginas/simuladores.html#sim-foundations">
+              <h3 class="home-card-title" data-i18n="home.explore.c2.title">Optimización</h3>
+              <p class="home-card-desc" data-i18n="home.explore.c2.desc">Reduce profundidad y mejora fidelidad para ejecución.</p>
+              <span class="home-card-cta" data-i18n="home.explore.c2.cta">Explorar detalles <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="home-card" href="paginas/teoria-cuantica.html">
+              <h3 class="home-card-title" data-i18n="home.explore.c3.title">Mitigación de errores</h3>
+              <p class="home-card-desc" data-i18n="home.explore.c3.desc">Técnicas de supresión y mitigación para tus experimentos.</p>
+              <span class="home-card-cta" data-i18n="home.explore.c3.cta">Leer resumen <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="home-card" href="paginas/simuladores.html#sim-usage">
+              <h3 class="home-card-title" data-i18n="home.explore.c4.title">Ejecución</h3>
+              <p class="home-card-desc" data-i18n="home.explore.c4.desc">Ejecuta jobs en simuladores y backends conectados.</p>
+              <span class="home-card-cta" data-i18n="home.explore.c4.cta">Saber más <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="home-card" href="referencias-api.html#primary-apis">
+              <h3 class="home-card-title" data-i18n="home.explore.c5.title">Post‑procesamiento</h3>
+              <p class="home-card-desc" data-i18n="home.explore.c5.desc">Refina resultados con flujos y utilidades.</p>
+              <span class="home-card-cta" data-i18n="home.explore.c5.cta">Ver addon <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="home-card" href="referencias-api.html#api-addons">
+              <h3 class="home-card-title" data-i18n="home.explore.c6.title">Servicios</h3>
+              <p class="home-card-desc" data-i18n="home.explore.c6.desc">Acelera workflows con servicios preconstruidos.</p>
+              <span class="home-card-cta" data-i18n="home.explore.c6.cta">Explorar <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+        </section>
+
+        <section id="get-started" class="home-section" aria-labelledby="get-started-title">
+          <h2 id="get-started-title" class="home-section-title" data-i18n="home.getStarted.title">Empezar</h2>
+          <div class="home-two-grid">
+            <a class="home-card home-card--wide" href="paginas/workflow.html#page-body">
+              <h3 class="home-card-title" data-i18n="home.getStarted.c1.title">Guía rápida</h3>
+              <p class="home-card-desc" data-i18n="home.getStarted.c1.desc">
+                Construye y ejecuta un circuito en minutos.
+              </p>
+              <span class="home-card-cta" data-i18n="home.getStarted.c1.cta">Comenzar <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="home-card home-card--wide" href="articulos.html#learning-modules">
+              <h3 class="home-card-title" data-i18n="home.getStarted.c2.title">Cursos</h3>
+              <p class="home-card-desc" data-i18n="home.getStarted.c2.desc">
+                Módulos y recursos con ejemplos de extremo a extremo.
+              </p>
+              <span class="home-card-cta" data-i18n="home.getStarted.c2.cta">Ver cursos <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+        </section>
+
+        <section id="support" class="home-section" aria-labelledby="support-title">
+          <h2 id="support-title" class="home-section-title" data-i18n="home.support.title">Soporte</h2>
+          <div class="home-two-grid">
+            <a class="home-card home-card--wide" href="paginas/overview.html#page-body">
+              <h3 class="home-card-title" data-i18n="home.support.c1.title">Registro de errores</h3>
+              <p class="home-card-desc" data-i18n="home.support.c1.desc">Busca códigos de error y soluciones sugeridas.</p>
+              <span class="home-card-cta" data-i18n="home.support.c1.cta">Ver errores <span aria-hidden="true">→</span></span>
+            </a>
+            <button type="button" class="home-card home-card--wide" data-help-trigger>
+              <h3 class="home-card-title" data-i18n="home.support.c2.title">Página de soporte</h3>
+              <p class="home-card-desc" data-i18n="home.support.c2.desc">
+                Preguntas frecuentes y cómo reportar bugs o solicitar contenido.
+              </p>
+              <span class="home-card-cta" data-i18n="home.support.c2.cta">Obtener ayuda <span aria-hidden="true">→</span></span>
+            </button>
+          </div>
+        </section>
+
+        <!-- legacy content hidden to match new home layout
+        <h1 data-i18n="main.title">Documentation</h1>
+
+        <section id="theoretical-foundation">
+          <h2 data-i18n="academy.title">Sección academica: modelado de iones atrapados</h2>
+          <p data-i18n="academy.p1">
+            Esta sección sintetiza, en formato académico, los principios del artículo de modelado
+            cuántico mediante iones atrapados y su traduccion directa al diseño de simuladores en
+            Harmoniq.
+          </p>
+          <p data-i18n="academy.p2">
+            El enfoque integra física de trampas iónicas, formalismo de matriz de densidad y
+            estrategias numéricas multiescala para mantener equilibrio entre fidelidad física y
+            costo computacional.
+          </p>
+          <p>
+            <a
+              href="file:///Users/developer/Downloads/Modelado%20de%20Sistemas%20Cua%CC%81nticos%20mediante%20Iones%20Atrapados%202.pdf"
+              download
+              data-i18n="academy.download"
+              >Descargar artículo base (PDF)</a
+            >
+          </p>
+
+          <div class="capabilities-grid">
+            <article class="capability-card">
+              <h3 id="subsec-plataforma" data-i18n="academy.card1.title">1) Hipótesis física y plataforma experimental</h3>
+              <p data-i18n="academy.card1.desc">
+                Se asume una plataforma de iones confinados electromagneticamente (trampas de Paul
+                y arquitectura segmentada) donde los estados internos codifican qubits y los modos
+                vibracionales colectivos median interacciones de dos qubits.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 id="subsec-formalismo" data-i18n="academy.card2.title">2) Formalismo de evolución</h3>
+              <p data-i18n="academy.card2.desc">
+                La dinámica ideal se modela con evolución unitaria; la dinámica real incorpora
+                apertura del sistema mediante ecuación maestra de Lindblad para capturar relajación,
+                dephasing, calentamiento y ruido ambiental.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 id="subsec-metricas" data-i18n="academy.card3.title">3) Metricas de validez</h3>
+              <p data-i18n="academy.card3.desc">
+                La calidad se evalua con fidelidad de estado/proceso, error de readout y estabilidad
+                temporal bajo perturbaciones térmicas, permitiendo comparar simulacion ideal contra
+                simulacion físicamente realista.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 id="subsec-decision" data-i18n="academy.card4.title">4) Decisión computacional por escala</h3>
+              <p data-i18n="academy.card4.desc">
+                El pipeline selecciona automáticamente paradigma de simulación según qubits,
+                profundidad de circuito y objetivo del experimento: exactitud física, exploración
+                de diseño o barrido estadístico de escenarios.
+              </p>
+            </article>
+          </div>
+
+          <div class="theory-charts">
+            <article class="theory-chart">
+              <h3 id="subsec-graficas" data-i18n="academy.chart1.title">Gráfica A: impacto de decoherencia vs tiempo</h3>
+              <div class="chart-canvas">
+                <div class="line-curve line-curve-a"></div>
+                <div class="line-curve line-curve-b"></div>
+                <span class="axis-x" data-i18n="academy.chart1.x">Tiempo de ejecución</span>
+                <span class="axis-y" data-i18n="academy.chart1.y">Fidelidad</span>
+              </div>
+            </article>
+            <article class="theory-chart">
+              <h3 data-i18n="academy.chart2.title">Gráfica B: costo computacional por simulador</h3>
+              <div class="bars-canvas">
+                <div class="bar-col"><span style="height: 82%"></span><label data-i18n="academy.chart2.b1">Densidad</label></div>
+                <div class="bar-col"><span style="height: 58%"></span><label data-i18n="academy.chart2.b2">Tensorial</label></div>
+                <div class="bar-col"><span style="height: 34%"></span><label data-i18n="academy.chart2.b3">Monte Carlo</label></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <hr />
+
+        <section id="overview">
+          <p data-i18n="overview.p1">
+            Bienvenido a la documentación de Harmoniq, una librería/plataforma para construir
+            aplicaciones de computación cuántica en Android, iOS, React y backend Node. Esta
+            página sigue un formato de documentación técnica clara, enfocado en integración y
+            ejecución de workloads cuánticos.
+          </p>
+          <p data-i18n="overview.p2">
+            Empieza con <a href="#workflow">Hello World</a> y luego escala hacia integraciones
+            empresariales con pipelines híbridos clásico-cuánticos.
+          </p>
+        </section>
+
+        <hr />
+
+        <section id="capabilities">
+          <h2 data-i18n="capabilities.title">Explore capabilities</h2>
+          <div class="capabilities-grid">
+            <article class="capability-card">
+              <h3 data-i18n="capabilities.c1.title">Circuit building</h3>
+              <p data-i18n="capabilities.c1.desc">
+                Construct quantum circuits by using the Harmoniq SDK.
+              </p>
+              <a href="#" data-i18n="capabilities.c1.cta">View introduction -></a>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="capabilities.c2.title">Optimization</h3>
+              <p data-i18n="capabilities.c2.desc">
+                Build high-fidelity circuits with reduced depth ready for execution.
+              </p>
+              <a href="#" data-i18n="capabilities.c2.cta">Explore transpiler details -></a>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="capabilities.c3.title">Error mitigation</h3>
+              <p data-i18n="capabilities.c3.desc">
+                Explore suppression and mitigation techniques available in Harmoniq.
+              </p>
+              <a href="#" data-i18n="capabilities.c3.cta">Read overview -></a>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="capabilities.c4.title">Execution</h3>
+              <p data-i18n="capabilities.c4.desc">
+                Use runtime primitives to run quantum circuits on hardware backends.
+              </p>
+              <a href="#" data-i18n="capabilities.c4.cta">Learn more -></a>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="capabilities.c5.title">Post-processing</h3>
+              <p data-i18n="capabilities.c5.desc">
+                Refine results with post-processing flows for enterprise use cases.
+              </p>
+              <a href="#" data-i18n="capabilities.c5.cta">View addon -></a>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="capabilities.c6.title">Harmoniq Functions</h3>
+              <p data-i18n="capabilities.c6.desc">
+                Accelerate workload creation with pre-built quantum service modules.
+              </p>
+              <a href="#" data-i18n="capabilities.c6.cta">Explore -></a>
+            </article>
+          </div>
+        </section>
+
+        <hr />
+
+        <section id="workflow">
+          <h2 data-i18n="workflow.title">Development workflow</h2>
+          <p data-i18n="workflow.p1">
+            Marco de trabajo para resolver problemas de negocio con software cuántico en etapas:
+          </p>
+          <ol>
+            <li data-i18n="workflow.li1">Mapear el problema a circuitos cuánticos y operadores.</li>
+            <li data-i18n="workflow.li2">Optimizar para el hardware o simulador objetivo.</li>
+            <li data-i18n="workflow.li3">Ejecutar en backend cuántico (sandbox o producción).</li>
+            <li data-i18n="workflow.li4">Post-procesar resultados para decisiones de negocio.</li>
+          </ol>
+        </section>
+
+        <hr />
+
+        <section id="simulator-theory">
+          <h2 data-i18n="theory.title">Fundamento teórico y simuladores Harmoniq</h2>
+          <p data-i18n="theory.p1">
+            Esta sección resume el artículo tecnico sobre modelado de sistemas cuánticos mediante
+            iones atrapados y conecta esos principios con los simuladores de Harmoniq.
+          </p>
+          <p>
+            <a
+              href="file:///Users/developer/Downloads/Modelado%20de%20Sistemas%20Cua%CC%81nticos%20mediante%20Iones%20Atrapados%202.pdf"
+              download
+              data-i18n="theory.download"
+              >Descargar artículo tecnico (PDF)</a
+            >
+          </p>
+
+          <div class="capabilities-grid">
+            <article class="capability-card">
+              <h3 data-i18n="theory.card1.title">Modelo físico base</h3>
+              <p data-i18n="theory.card1.desc">
+                Partimos de trampas de Paul/Penning, control láser y régimen Lamb-Dicke para
+                representar qubits iónicos y dinámica motional compartida.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="theory.card2.title">Sistemas abiertos</h3>
+              <p data-i18n="theory.card2.desc">
+                La evolución incluye decoherencia y ruido con ecuación maestra de Lindblad,
+                incorporando T1/T2, errores de lectura y fidelidades de puerta.
+              </p>
+            </article>
+          </div>
+
+          <div class="capabilities-grid">
+            <article class="capability-card">
+              <h3 data-i18n="theory.sim1.title">Simulador 1: Matriz de densidad completa</h3>
+              <p data-i18n="theory.sim1.desc">
+                Alta fidelidad física para circuitos pequeños (hasta ~12 qubits), ideal para
+                validación fina, benchmarking y análisis detallado de coherencias.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="theory.sim2.title">Simulador 2: Hibrido con redes tensoriales</h3>
+              <p data-i18n="theory.sim2.desc">
+                Enfoque adaptativo para tamaño intermedio, reduciendo costo computacional cuando la
+                estructura de entrelazamiento permite compresión.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="theory.sim3.title">Simulador 3: Monte Carlo estocástico</h3>
+              <p data-i18n="theory.sim3.desc">
+                Escala a sistemas grandes por trayectorias muestrales, útil para estimaciones de
+                comportamiento global, ruido agregado y tiempos de ejecucion.
+              </p>
+            </article>
+            <article class="capability-card">
+              <h3 data-i18n="theory.flow.title">Como seleccionar el simulador</h3>
+              <p data-i18n="theory.flow.desc">
+                Flujo recomendado: prototipo físico en densidad -> optimización en tensorial ->
+                corrida masiva/escenario en Monte Carlo, con comparación cruzada de fidelidad.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <hr />
+
+        <section id="code-examples">
+          <h2 data-i18n="code.title">Code examples with copy</h2>
+          <p data-i18n="code.subtitle">
+            Ejecuta estos snippets de integracion y copia cada bloque con un clic.
+          </p>
+
+          <div class="code-stack">
+            <article class="code-card">
+              <div class="code-card-head">
+                <h3 data-i18n="code.py.title">Python: Bell state</h3>
+                <button class="copy-btn" type="button" data-copy-target="code-python" data-i18n-aria-label="code.copy">
+                  <i class="ph ph-copy"></i>
+                </button>
+              </div>
+              <pre><code id="code-python">from harmoniq import QuantumCircuit, RuntimeClient
+
+qc = QuantumCircuit(2)
+qc.h(0)
+qc.cx(0, 1)
+qc.measure_all()
+
+client = RuntimeClient(api_key="hq_live_xxx")
+result = client.run(circuit=qc, backend="hq-sim-local", shots=1024)
+print(result.counts)</code></pre>
+            </article>
+
+            <article class="code-card">
+              <div class="code-card-head">
+                <h3 data-i18n="code.android.title">Android: Kotlin client</h3>
+                <button class="copy-btn" type="button" data-copy-target="code-android" data-i18n-aria-label="code.copy">
+                  <i class="ph ph-copy"></i>
+                </button>
+              </div>
+              <pre><code id="code-android">val client = HarmoniqClient(
+  apiKey = BuildConfig.HARMONIQ_API_KEY,
+  backend = "hq-sim-local"
+)
+
+val job = client.jobs.submit(
+  circuit = bellStateCircuit,
+  shots = 1024
+)
+
+val result = client.jobs.await(job.id)</code></pre>
+            </article>
+
+            <article class="code-card">
+              <div class="code-card-head">
+                <h3 data-i18n="code.ios.title">iOS: Swift async/await</h3>
+                <button class="copy-btn" type="button" data-copy-target="code-ios" data-i18n-aria-label="code.copy">
+                  <i class="ph ph-copy"></i>
+                </button>
+              </div>
+              <pre><code id="code-ios">let client = HarmoniqClient(
+  apiKey: Secrets.harmoniqApiKey,
+  backend: "hq-sim-local"
+)
+
+let job = try await client.jobs.submit(
+  circuit: bellStateCircuit,
+  shots: 1024
+)
+
+let result = try await client.jobs.awaitResult(jobId: job.id)</code></pre>
+            </article>
+
+            <article class="code-card">
+              <div class="code-card-head">
+                <h3 data-i18n="code.react.title">React: hook usage</h3>
+                <button class="copy-btn" type="button" data-copy-target="code-react" data-i18n-aria-label="code.copy">
+                  <i class="ph ph-copy"></i>
+                </button>
+              </div>
+              <pre><code id="code-react">import { useQuantumJob } from "@harmoniq/react-sdk";
+
+function Demo() {
+  const { runJob, data, loading } = useQuantumJob();
+
+  const run = async () => {
+    await runJob({ backend: "hq-sim-local", circuit: bellStateCircuit });
+  };
+
+  return &lt;button onClick={run}&gt;Run&lt;/button&gt;;
+}</code></pre>
+            </article>
+          </div>
+        </section>
+
+        <hr />
+
+        <section id="api-reference">
+          <h2 data-i18n="api.title">API reference</h2>
+          <p data-i18n="api.p1">Guías para usar los SDKs y servicios clave de Harmoniq:</p>
+          <ul>
+            <li>
+              <span data-i18n="api.li1"
+                ><a href="#">Harmoniq Android SDK</a> - Cliente Kotlin para ejecucion de jobs, polling
+                de estado y telemetría.</span
+              >
+            </li>
+            <li>
+              <span data-i18n="api.li2"
+                ><a href="#">Harmoniq iOS SDK</a> - Cliente Swift con soporte `async/await` y manejo de
+                sesiones seguras.</span
+              >
+            </li>
+            <li>
+              <span data-i18n="api.li3"
+                ><a href="#">Harmoniq React SDK</a> - Hooks para crear, monitorear y visualizar jobs en
+                UI web.</span
+              >
+            </li>
+            <li>
+              <span data-i18n="api.li4"
+                ><a href="#">Harmoniq Runtime API</a> - Plataforma para ejecutar y optimizar programas
+                cuánticos en tiempo real.</span
+              >
+            </li>
+          </ul>
+        </section>
+
+        <hr />
+
+        <section id="tutorials">
+          <h2 data-i18n="tutorials.title">Tutorials</h2>
+          <p data-i18n="tutorials.p1">Casos aplicados para uso real de computación cuantica:</p>
+          <ul>
+            <li>
+              <span data-i18n="tutorials.li1"
+                ><a href="#">Hello World cuántico</a> - Crea un circuito Bell State y ejecutalo en
+                `hq-sim-local`.</span
+              >
+            </li>
+            <li>
+              <span data-i18n="tutorials.li2"
+                ><a href="#">Optimizacion combinatoria</a> - Implementa QAOA para rutas y asignacion de
+                recursos.</span
+              >
+            </li>
+            <li>
+              <span data-i18n="tutorials.li3"
+                ><a href="#">Quantum ML hibrido</a> - Conecta features clasicas y capas cuanticas para
+                clasificacion.</span
+              >
+            </li>
+          </ul>
+          <p><a href="#" data-i18n="tutorials.viewAll">View all tutorials</a></p>
+        </section>
+
+        <hr />
+
+        <section id="source">
+          <h2 data-i18n="source.title">Source</h2>
+          <p data-i18n="source.p1">
+            Esta documentación esta orientada a guías practicas de integracion y arquitectura. El
+            contenido cubre flujos de producto completos desde onboarding y API Keys hasta
+            monitoreo, observabilidad y escalado.
+          </p>
+          <p data-i18n="source.p2">
+            Recomendacion de flujo principal:
+            <strong
+              >onboarding - SDK install - circuito inicial - ejecucion - análisis - despliegue</strong
+            >.
+          </p>
+        </section>
+        -->
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#intro" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span data-i18n="right.intro">Introducción</span>
+          </a>
+
+          <a href="#explore" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span data-i18n="right.explore">Explorar capacidades</span>
+          </a>
+
+          <a href="#get-started" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span data-i18n="right.getStarted">Empezar</span>
+          </a>
+
+          <a href="#support" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span data-i18n="right.support">Soporte</span>
+          </a>
+
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="./firebase-init.bundle.js?v=2"></script>
+    <script src="./script.js?v=49"></script>
+  </body>
+</html>

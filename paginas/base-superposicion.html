@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Superposición cuántica: estados, interferencia y medición | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+
+          <!-- ═══════════════════  HERO  ═══════════════════ -->
+          <section id="page-body" class="qubits-hero">
+            <div class="qubits-kicker-with-back">
+              <button type="button" class="doc-back-btn" data-i18n-aria-label="doc.backPrevious" aria-label="Volver a la página anterior" onclick="history.back()">
+                <i class="ph ph-arrow-left" aria-hidden="true"></i>
+              </button>
+              <p class="qubits-kicker qubits-kicker--row">
+                <span class="qubits-kicker-segment">Programación cuántica</span>
+                <span class="qubits-kicker-rule" aria-hidden="true"></span>
+                <span class="qubits-kicker-segment">Mecánica cuántica</span>
+              </p>
+            </div>
+
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img class="qubits-author-photo" src="../images/author-nogueron-mendez-planq.png" width="56" height="56" alt="Retrato de Noguerón Méndez José Antonio" loading="lazy" decoding="async" />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h1 class="qubits-hero-title">Superposición cuántica: estados, interferencia y medición</h1>
+
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                El principio de <strong>superposición</strong> constituye la piedra angular del formalismo cuántico y la característica más radicalmente
+                alejada de la física clásica. Mientras que un bit clásico ocupa en todo instante uno de dos estados definidos —0 o 1—, un
+                <em>cúbit</em> puede existir como combinación lineal coherente \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\), donde
+                \(\alpha,\beta\in\mathbb{C}\) y \(|\alpha|^2+|\beta|^2=1\). Esta combinación no es mera ignorancia estadística del observador;
+                las amplitudes complejas portan información de fase que produce fenómenos de <strong>interferencia</strong> sin análogo clásico,
+                verificables en interferómetros de Mach–Zehnder, circuitos superconductores y trampas de iones. La superposición se degrada por
+                interacción con grados de libertad no controlados —la <strong>decoherencia</strong>—, dando lugar a la transición cuántico-clásica
+                que limita la profundidad de los circuitos ejecutables en hardware real. Este artículo desarrolla rigurosamente el aparato
+                matemático de la superposición, su interpretación geométrica en la esfera de Bloch, la regla de Born, la interferencia
+                constructiva y destructiva, la extensión a registros de múltiples cúbits, la medición proyectiva de von Neumann y los
+                canales de ruido cuántico, conectando cada concepto con su implementación práctica en la plataforma <strong>Harmoniq</strong>.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §1 POSTULADOS  ═══════════════════ -->
+          <section id="postulados" class="qubits-section">
+            <h2>Postulados del espacio de Hilbert</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La mecánica cuántica se fundamenta axiomáticamente en cuatro postulados que relacionan los objetos matemáticos del
+                formalismo con los resultados experimentales. El primero establece que todo sistema físico aislado se describe mediante
+                un <strong>espacio de Hilbert</strong> \(\mathcal{H}\) —un espacio vectorial completo con producto interno— y que el estado del
+                sistema en un instante dado corresponde a un <em>vector de estado</em> (o <em>ket</em>) \(|\psi\rangle\in\mathcal{H}\)
+                normalizado: \(\langle\psi|\psi\rangle = 1\). Los vectores que difieren únicamente por una fase global
+                \(e^{i\varphi}|\psi\rangle\) representan el mismo estado físico, de modo que los estados puros son en rigor
+                <em>rayos</em> del espacio proyectivo \(\mathbb{P}(\mathcal{H})\).
+              </p>
+              <p>
+                Para un cúbit, \(\mathcal{H}=\mathbb{C}^2\). La base computacional canónica está formada por los vectores ortonormales
+                \(|0\rangle\) y \(|1\rangle\), que satisfacen \(\langle 0|1\rangle=0\) y \(\langle j|j\rangle=1\). Cualquier estado
+                puro se expresa entonces como una combinación lineal:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi\rangle = \alpha\,|0\rangle + \beta\,|1\rangle, \qquad \alpha,\beta\in\mathbb{C}, \quad |\alpha|^2+|\beta|^2=1.
+                \]
+              </div>
+              <p>
+                El segundo postulado dicta que la evolución temporal de un sistema cerrado es <strong>unitaria</strong>: existe un operador
+                \(U\) tal que \(U^\dagger U = \mathbb{I}\) y \(|\psi(t)\rangle = U(t,t_0)\,|\psi(t_0)\rangle\). En el caso de evolución
+                continua gobernada por un hamiltoniano independiente del tiempo \(H\), la unitaria es
+                \(U(t)=e^{-iHt/\hbar}\), lo que garantiza la conservación de la norma —y, por tanto, de las probabilidades—. La linealidad
+                de la ecuación de Schrödinger \(i\hbar\,\partial_t|\psi\rangle = H|\psi\rangle\) es precisamente lo que permite que una
+                superposición de soluciones siga siendo solución: si \(|\phi_1\rangle\) y \(|\phi_2\rangle\) son soluciones, también lo es
+                \(\alpha|\phi_1\rangle+\beta|\phi_2\rangle\).
+              </p>
+              <p>
+                El tercer postulado, relativo a la <strong>medición</strong>, introduce un quiebre con la evolución unitaria: la
+                observación de un observable \(\hat{A}=\sum_a a\,|a\rangle\langle a|\) colapsa el estado a uno de los autoestados \(|a\rangle\)
+                con probabilidad \(p(a)=|\langle a|\psi\rangle|^2\). Este proceso es irreversible, no unitario y estocástico. Finalmente,
+                el cuarto postulado establece que el espacio de Hilbert de un sistema compuesto es el <strong>producto tensorial</strong>
+                \(\mathcal{H}_A\otimes\mathcal{H}_B\) de los espacios de sus subsistemas, abriendo la puerta a estados entrelazados que
+                no son factorizables.
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Rayos y fases globales</p>
+                <p>
+                  Dos kets \(|\psi\rangle\) y \(e^{i\varphi}|\psi\rangle\) producen idénticas probabilidades para todo observable,
+                  por lo que son físicamente indistinguibles. Sin embargo, la <em>fase relativa</em> entre componentes de una superposición
+                  sí es observable: determina los patrones de interferencia y las probabilidades de medición en bases complementarias.
+                </p>
+              </aside>
+
+              <p>
+                La estructura de espacio de Hilbert impone restricciones fundamentales. La <strong>desigualdad de Cauchy–Schwarz</strong>
+                \(|\langle\phi|\psi\rangle|^2 \le \langle\phi|\phi\rangle\langle\psi|\psi\rangle\) garantiza que las probabilidades de
+                transición entre estados normalizados nunca exceden la unidad. El <strong>teorema espectral</strong> asegura que todo
+                observable hermítico admite una descomposición en autovalores reales y autovectores ortogonales, lo cual proporciona la
+                base sobre la que se proyecta al medir. Por último, la <strong>completitud</strong> del espacio —la convergencia de toda
+                sucesión de Cauchy— garantiza que los límites de secuencias de estados permanezcan dentro de \(\mathcal{H}\), una propiedad
+                esencial para definir operadores no acotados como el hamiltoniano de un oscilador armónico.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §2 BLOCH  ═══════════════════ -->
+          <section id="bloch" class="qubits-section">
+            <h2>Estados puros y la esfera de Bloch</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Puesto que la fase global es irrelevante, un estado puro de un cúbit posee únicamente <strong>dos grados de libertad
+                reales</strong>. Eligiendo la fase de \(\alpha\) como referencia (haciéndola real y no negativa), la parametrización
+                más natural emplea dos ángulos \(\theta\in[0,\pi]\) y \(\varphi\in[0,2\pi)\):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi\rangle = \cos\!\frac{\theta}{2}\,|0\rangle \;+\; e^{i\varphi}\sin\!\frac{\theta}{2}\,|1\rangle.
+                \]
+              </div>
+              <p>
+                Esta expresión establece una correspondencia biyectiva entre estados puros del cúbit y puntos de la
+                <strong>esfera de Bloch</strong> \(S^2\subset\mathbb{R}^3\). El polo norte \((\theta=0)\) representa \(|0\rangle\),
+                el polo sur \((\theta=\pi)\) corresponde a \(|1\rangle\), y el ecuador \((\theta=\pi/2)\) alberga las superposiciones
+                equilibradas con igual peso en ambas componentes, diferenciándose únicamente en la fase relativa \(\varphi\).
+                Los estados canónicos \(|+\rangle=\tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)\) y
+                \(|-\rangle=\tfrac{1}{\sqrt{2}}(|0\rangle-|1\rangle)\) se encuentran en los extremos del eje \(x\), mientras que
+                \(|{+i}\rangle\) y \(|{-i}\rangle\) residen sobre el eje \(y\).
+              </p>
+              <p>
+                Las coordenadas cartesianas del vector de Bloch \(\vec{r}=(r_x, r_y, r_z)\) se obtienen mediante los valores esperados
+                de las matrices de Pauli:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  r_x = \langle\psi|\sigma_x|\psi\rangle = \sin\theta\cos\varphi, \quad
+                  r_y = \langle\psi|\sigma_y|\psi\rangle = \sin\theta\sin\varphi, \quad
+                  r_z = \langle\psi|\sigma_z|\psi\rangle = \cos\theta.
+                \]
+              </div>
+              <p>
+                Para estados puros \(|\vec{r}|=1\); para estados mixtos descritos por una matriz de densidad
+                \(\rho=\tfrac{1}{2}(\mathbb{I}+\vec{r}\cdot\vec{\sigma})\), el vector de Bloch satisface \(|\vec{r}|&lt;1\) y reside en el
+                interior de la esfera. El centro \(\vec{r}=\vec{0}\) corresponde al estado máximamente mezclado \(\rho=\mathbb{I}/2\),
+                que no contiene información alguna sobre el cúbit.
+              </p>
+              <p>
+                La representación de Bloch convierte las puertas unitarias de un cúbit en <strong>rotaciones</strong> de la esfera.
+                Una rotación de ángulo \(\alpha\) alrededor del eje \(\hat{n}\) se expresa como
+                \(R_{\hat{n}}(\alpha)=e^{-i\alpha\hat{n}\cdot\vec{\sigma}/2}=\cos(\alpha/2)\,\mathbb{I}-i\sin(\alpha/2)\,\hat{n}\cdot\vec{\sigma}\).
+                La puerta Hadamard \(H\), por ejemplo, corresponde a una rotación de \(\pi\) alrededor del eje \((\hat{x}+\hat{z})/\sqrt{2}\),
+                llevando \(|0\rangle\) al estado \(|+\rangle\) sobre el ecuador. Las puertas \(R_z(\varphi)\) son rotaciones alrededor del
+                eje \(z\) que modifican la fase relativa sin alterar las probabilidades de medición en la base computacional, mientras que
+                \(R_x(\theta)\) intercambia peso entre \(|0\rangle\) y \(|1\rangle\).
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Estados antipodales y ortogonalidad</p>
+                <p>
+                  Dos estados cuánticos ortogonales \(\langle\phi|\psi\rangle=0\) están representados por puntos <em>diametralmente
+                  opuestos</em> en la esfera de Bloch. Nótese que la distancia angular en la esfera es el <em>doble</em> del ángulo en
+                  el espacio de Hilbert: un giro de \(\pi\) en \(\theta\) (de polo a polo) corresponde a pasar de \(|0\rangle\) a
+                  \(|1\rangle\), que difieren por un ángulo de \(\pi/2\) en \(\mathbb{C}^2\). Esta duplicación proviene del factor
+                  \(\theta/2\) en la parametrización.
+                </p>
+              </aside>
+
+              <p>
+                La esfera de Bloch proporciona además una interpretación geométrica de la <strong>fidelidad</strong> entre estados puros.
+                Si dos estados puros \(|\psi\rangle\) y \(|\phi\rangle\) tienen vectores de Bloch separados por un ángulo \(\Theta\)
+                en la esfera, la fidelidad es \(F=|\langle\phi|\psi\rangle|^2=\cos^2(\Theta/2)\). Para estados mixtos, la fidelidad
+                generalizada de Uhlmann satisface \(F(\rho,\sigma)=\bigl(\mathrm{tr}\sqrt{\sqrt{\rho}\,\sigma\sqrt{\rho}}\bigr)^2\),
+                una medida que se reduce al cuadrado del producto interno para estados puros y es ampliamente utilizada como figura de
+                mérito en tomografía cuántica y benchmarks de procesadores cuánticos.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §3 AMPLITUDES Y BORN  ═══════════════════ -->
+          <section id="amplitudes" class="qubits-section">
+            <h2>Amplitudes complejas y regla de Born</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Los coeficientes \(\alpha\) y \(\beta\) en la expansión \(|\psi\rangle=\alpha|0\rangle+\beta|1\rangle\) son
+                <strong>amplitudes de probabilidad</strong>. A diferencia de las probabilidades clásicas —reales y no negativas—,
+                las amplitudes son números complejos que pueden sumarse, restarse e interferir entre sí. La conexión con el mundo
+                experimental se establece mediante la <strong>regla de Born</strong> (1926):
+              </p>
+              <div class="qubits-equation">
+                \[
+                  p(a_k) = |\langle a_k|\psi\rangle|^2,
+                \]
+              </div>
+              <p>
+                donde \(|a_k\rangle\) es un autovector del observable medido. Para la base computacional del cúbit, esto se simplifica a
+                \(p(0)=|\alpha|^2\) y \(p(1)=|\beta|^2\). La condición de normalización \(\sum_k p(a_k)=1\) es consecuencia directa
+                de la normalización del estado y de la completitud de la base: \(\sum_k|a_k\rangle\langle a_k|=\mathbb{I}\).
+              </p>
+              <p>
+                La naturaleza compleja de las amplitudes tiene consecuencias profundas. Escribiendo \(\alpha=|\alpha|e^{i\phi_\alpha}\)
+                y \(\beta=|\beta|e^{i\phi_\beta}\), la <em>fase relativa</em> \(\delta=\phi_\beta-\phi_\alpha\) es inaccesible mediante
+                una medición en la base \(\{|0\rangle,|1\rangle\}\), pero se manifiesta inequívocamente al medir en una base
+                complementaria. Por ejemplo, la probabilidad de obtener el resultado \(|+\rangle\) es:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  p(+) = |\langle +|\psi\rangle|^2
+                       = \tfrac{1}{2}\bigl|\alpha+\beta\bigr|^2
+                       = \tfrac{1}{2}\bigl(|\alpha|^2+|\beta|^2+2\,\mathrm{Re}(\alpha^*\beta)\bigr)
+                       = \tfrac{1}{2}\bigl(1+2|\alpha||\beta|\cos\delta\bigr).
+                \]
+              </div>
+              <p>
+                El término \(2|\alpha||\beta|\cos\delta\) es el <strong>término de interferencia</strong>: depende exclusivamente de la
+                fase relativa y no aparece en una mezcla clásica de \(|0\rangle\) y \(|1\rangle\) con las mismas probabilidades marginales.
+                Este término puede variar continuamente entre \(-2|\alpha||\beta|\) y \(+2|\alpha||\beta|\), produciendo interferencia
+                destructiva o constructiva según el valor de \(\delta\).
+              </p>
+              <p>
+                La regla de Born se extiende de manera natural a espacios de dimensión arbitraria. Para un sistema de \(n\) cúbits
+                (\(\dim\mathcal{H}=2^n\)), un estado genérico se escribe
+                \(|\psi\rangle=\sum_{k=0}^{2^n-1}c_k|k\rangle\) con \(\sum_k|c_k|^2=1\), y la probabilidad de observar la cadena de
+                bits \(k\) es \(p(k)=|c_k|^2\). La riqueza computacional de la computación cuántica reside en la posibilidad de manipular
+                \(2^n\) amplitudes simultáneamente mediante puertas unitarias que actúan sobre \(n\) cúbits —un paralelismo de amplitudes
+                que no debe confundirse con el cómputo paralelo clásico—.
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Verificación experimental de Born</p>
+                <p>
+                  En la práctica, la regla de Born se verifica preparando un ensamble de sistemas idénticos, midiendo cada uno y
+                  construyendo un histograma de frecuencias relativas. El teorema de Gleason (1957) demuestra que, bajo supuestos
+                  mínimos de no-contextualidad, la regla de Born es la <em>única</em> medida de probabilidad consistente con la
+                  estructura del espacio de Hilbert de dimensión \(\ge 3\).
+                </p>
+              </aside>
+
+              <p>
+                En el contexto de la <strong>tomografía de estado cuántico</strong>, la regla de Born fundamenta el problema inverso:
+                a partir de estadísticas de medición en múltiples bases, se reconstruye la matriz de densidad \(\rho\) del sistema.
+                Para un cúbit, bastan las estadísticas en tres bases mutuamente no sesgadas (por ejemplo \(\sigma_x\), \(\sigma_y\),
+                \(\sigma_z\)) para determinar completamente \(\rho\). En general, para un sistema de \(d\) dimensiones se requieren
+                mediciones en al menos \(d+1\) bases mutuamente no sesgadas (cuando existen) o, alternativamente, \(d^2-1\) parámetros
+                reales independientes, lo cual escala exponencialmente con el número de cúbits y constituye uno de los principales
+                desafíos de la verificación cuántica a gran escala.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §4 INTERFERENCIA  ═══════════════════ -->
+          <section id="interferencia" class="qubits-section">
+            <h2>Interferencia cuántica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>interferencia</strong> es la firma operacional de la superposición: cuando un sistema cuántico puede
+                seguir dos o más caminos alternativos hacia un mismo estado final, las amplitudes asociadas a cada camino se suman
+                <em>antes</em> de calcular la probabilidad. Si las amplitudes tienen la misma fase, se produce <strong>interferencia
+                constructiva</strong> y la probabilidad se amplifica; si difieren en \(\pi\), la <strong>interferencia destructiva</strong>
+                puede cancelar la probabilidad por completo. Este mecanismo no tiene análogo clásico, donde las probabilidades de
+                caminos alternativos simplemente se suman.
+              </p>
+              <p>
+                El ejemplo paradigmático es el <strong>interferómetro de Mach–Zehnder</strong>. Un fotón incide sobre un divisor de haz
+                equilibrado (50/50), que produce la superposición
+                \(|0\rangle\mapsto\tfrac{1}{\sqrt{2}}(|0\rangle+i|1\rangle)\). Los dos caminos \(|0\rangle\) y \(|1\rangle\) acumulan
+                fases distintas \(\phi_0\) y \(\phi_1\) al atravesar ramas ópticas de longitudes diferentes. Un segundo divisor de haz
+                recombina las amplitudes:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi_{\mathrm{out}}\rangle
+                  = \frac{1}{2}\bigl[(e^{i\phi_0}-e^{i\phi_1})|0\rangle + i(e^{i\phi_0}+e^{i\phi_1})|1\rangle\bigr].
+                \]
+              </div>
+              <p>
+                La probabilidad de detección en el puerto \(|0\rangle\) es \(p(0)=\sin^2\!\bigl(\tfrac{\phi_0-\phi_1}{2}\bigr)\).
+                Cuando \(\phi_0=\phi_1\) (desfase nulo), la interferencia es perfectamente destructiva en ese puerto y el fotón
+                sale con certeza por \(|1\rangle\). Cuando \(\phi_0-\phi_1=\pi\), la situación se invierte. Variando la diferencia
+                de fase continuamente, se observan las célebres <strong>franjas de interferencia</strong> sinusoidales.
+              </p>
+              <p>
+                La <strong>visibilidad</strong> de las franjas se define como
+                \(\mathcal{V}=\frac{p_{\max}-p_{\min}}{p_{\max}+p_{\min}}\) y cuantifica el grado de coherencia del sistema.
+                Para un estado puro en superposición equilibrada, \(\mathcal{V}=1\). La decoherencia, el ruido de fase y la
+                distinción parcial de caminos reducen \(\mathcal{V}\) por debajo de la unidad. La visibilidad está directamente
+                relacionada con las coherencias fuera de la diagonal de la matriz de densidad: en la base del interferómetro,
+                \(\mathcal{V}=2|\rho_{01}|\).
+              </p>
+              <p>
+                En el contexto de la <strong>computación cuántica</strong>, la interferencia es el recurso que los algoritmos explotan
+                para amplificar las amplitudes de las soluciones correctas y suprimir las incorrectas. El algoritmo de Deutsch–Jozsa
+                constituye la demostración más simple: una sola evaluación del oráculo, seguida de puertas Hadamard, provoca que todas
+                las amplitudes de resultados incorrectos se cancelen destructivamente si la función es constante, mientras que se refuercen
+                constructivamente si es balanceada. El algoritmo de Grover generaliza este principio mediante el <em>operador de inversión sobre la
+                media</em>: en cada iteración, la amplitud de la solución marcada crece en \(\sim 1/\sqrt{N}\), logrando una aceleración
+                cuadrática respecto a la búsqueda clásica.
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Complementariedad onda-partícula</p>
+                <p>
+                  La relación de Englert \(\mathcal{D}^2 + \mathcal{V}^2 \le 1\) cuantifica el principio de complementariedad: la
+                  <em>distinguibilidad de camino</em> \(\mathcal{D}\) y la visibilidad de interferencia \(\mathcal{V}\) no pueden ser
+                  simultáneamente máximas. Adquirir información sobre por cuál brazo viajó el sistema destruye proporcionalmente la
+                  interferencia, un resultado verificado con fotones, neutrones y moléculas de fullereno.
+                </p>
+              </aside>
+
+              <p>
+                La interferencia cuántica se manifiesta también en el fenómeno de <strong>batido cuántico</strong> (<em>quantum beating</em>),
+                observable en sistemas de dos niveles acoplados a campos coherentes. Si un cúbit se prepara en el estado
+                \(|+\rangle\) y evoluciona bajo el hamiltoniano \(H=\tfrac{\omega}{2}\sigma_z\), la probabilidad de encontrarlo en
+                \(|+\rangle\) tras un tiempo \(t\) oscila como \(p(+,t)=\cos^2(\omega t/2)\), describiendo las
+                <strong>oscilaciones de Rabi</strong> cuando se incluye un campo transversal resonante. Estas oscilaciones son una
+                manifestación directa de la evolución coherente de la superposición y su observación es rutinaria en laboratorios de
+                cúbits superconductores, iones atrapados y puntos cuánticos.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §5 MULTI-CÚBIT  ═══════════════════ -->
+          <section id="multicubit" class="qubits-section">
+            <h2>Superposición en sistemas de múltiples cúbits</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La extensión de la superposición a registros de \(n\) cúbits revela una de las propiedades más extraordinarias de la
+                mecánica cuántica: el crecimiento exponencial del espacio de estados. El espacio de Hilbert compuesto es el
+                <strong>producto tensorial</strong> de los espacios individuales:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathcal{H}_n = \underbrace{\mathbb{C}^2\otimes\mathbb{C}^2\otimes\cdots\otimes\mathbb{C}^2}_{n\text{ veces}}
+                  = \mathbb{C}^{2^n},
+                  \qquad \dim\mathcal{H}_n = 2^n.
+                \]
+              </div>
+              <p>
+                Un estado genérico de \(n\) cúbits se escribe como una superposición de \(2^n\) cadenas de bits:
+                \(|\psi\rangle=\sum_{k=0}^{2^n-1}c_k|k\rangle\), donde cada \(|k\rangle\) representa una cadena binaria de \(n\)
+                dígitos. Para \(n=300\), la dimensión del espacio de Hilbert \(2^{300}\approx 10^{90}\) supera el número estimado de
+                partículas en el universo observable, lo cual ilustra por qué la simulación clásica exacta de un sistema cuántico
+                genérico es intratable.
+              </p>
+              <p>
+                No todos los estados de un sistema compuesto son iguales en su estructura. Un <strong>estado producto</strong> tiene
+                la forma \(|\psi\rangle=|\psi_A\rangle\otimes|\psi_B\rangle\), lo que implica que los subsistemas \(A\) y \(B\) no
+                poseen correlaciones cuánticas y pueden describirse de manera independiente. Sin embargo, la mayoría de los estados en
+                \(\mathcal{H}_A\otimes\mathcal{H}_B\) son <strong>estados entrelazados</strong> que no admiten tal factorización. El
+                ejemplo prototípico es el estado de Bell:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\Phi^+\rangle = \frac{1}{\sqrt{2}}\bigl(|00\rangle + |11\rangle\bigr).
+                \]
+              </div>
+              <p>
+                En este estado, medir el primer cúbit y obtener \(|0\rangle\) colapsa instantáneamente el segundo a \(|0\rangle\),
+                independientemente de la distancia espacial entre ambos. Las correlaciones resultantes violan las
+                <strong>desigualdades de Bell</strong>, descartando toda teoría local de variables ocultas y confirmando la naturaleza
+                no-local de la mecánica cuántica, como demostraron los experimentos de Aspect (1982) y los más recientes tests de Bell
+                sin lagunas (2015).
+              </p>
+              <p>
+                La <strong>entropía de entrelazamiento</strong> cuantifica la cantidad de entrelazamiento en un estado bipartito puro.
+                Se define como la entropía de von Neumann de la matriz de densidad reducida:
+                \(S(\rho_A)=-\mathrm{tr}(\rho_A\log_2\rho_A)\), donde \(\rho_A=\mathrm{tr}_B(|\psi\rangle\langle\psi|)\). Para un
+                estado producto, \(S=0\); para un estado de Bell, \(S=1\) ebit (bit de entrelazamiento). Esta cantidad es invariante
+                bajo operaciones unitarias locales y constituye el recurso fundamental que los protocolos de teleportación cuántica,
+                destilación de entrelazamiento y computación cuántica basada en mediciones consumen.
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Escalamiento exponencial y ventaja cuántica</p>
+                <p>
+                  Con \(n\) cúbits en superposición, un circuito cuántico manipula \(2^n\) amplitudes en paralelo mediante puertas
+                  unitarias. La <em>ventaja cuántica</em> emerge cuando la estructura del problema permite que la interferencia concentre
+                  amplitud en las soluciones correctas, eliminando la necesidad de explorar exponencialmente muchas posibilidades una a una.
+                  Algoritmos como Shor (factorización en tiempo polinómico) y Grover (búsqueda en \(O(\sqrt{N})\)) son manifestaciones
+                  directas de este principio.
+                </p>
+              </aside>
+
+              <p>
+                En la práctica, preparar y mantener superposiciones de muchos cúbits es un desafío formidable. Cada cúbit adicional
+                duplica la dimensión del espacio de Hilbert y, con ella, el número de modos de decoherencia potenciales. Los registros
+                cuánticos actuales —de decenas a centenares de cúbits— operan en el régimen <em>NISQ</em> (Noisy Intermediate-Scale
+                Quantum), donde la profundidad máxima de circuito está limitada por las tasas de error de las puertas y la decoherencia.
+                La <strong>corrección cuántica de errores</strong>, que codifica un cúbit lógico en múltiples cúbits físicos, es la
+                estrategia fundamental para escalar hacia computación cuántica tolerante a fallos, pero exige una sobrecarga significativa
+                en recursos físicos.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §6 MEDICIÓN  ═══════════════════ -->
+          <section id="medicion" class="qubits-section">
+            <h2>Medición proyectiva y colapso</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La <strong>medición proyectiva</strong>, o medición de von Neumann, constituye el formalismo estándar para describir
+                la extracción de información de un sistema cuántico. Sea \(\hat{A}=\sum_k a_k\,P_k\) un observable con descomposición
+                espectral en proyectores ortogonales \(P_k=|a_k\rangle\langle a_k|\) (asumiendo espectro no degenerado). Al medir
+                \(\hat{A}\) sobre el estado \(|\psi\rangle\), se obtiene el resultado \(a_k\) con probabilidad:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  p(a_k) = \langle\psi|P_k|\psi\rangle = |\langle a_k|\psi\rangle|^2,
+                \]
+              </div>
+              <p>
+                y el estado post-medición colapsa a:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi\rangle \;\xrightarrow{\;a_k\;}\; \frac{P_k|\psi\rangle}{\sqrt{p(a_k)}} = |a_k\rangle.
+                \]
+              </div>
+              <p>
+                Este proceso es <strong>irreversible</strong>: la información contenida en las amplitudes relativas respecto a la base
+                de medición se pierde irrecuperablemente. Si el observable tiene espectro degenerado, el proyector \(P_k\) proyecta
+                sobre el subespacio propio asociado al autovalor \(a_k\), y el estado post-medición retiene la superposición dentro de
+                ese subespacio.
+              </p>
+              <p>
+                La medición proyectiva satisface varias propiedades formales importantes: <strong>idempotencia</strong> (\(P_k^2=P_k\)),
+                <strong>hermiticidad</strong> (\(P_k^\dagger=P_k\)), <strong>ortogonalidad</strong> (\(P_jP_k=\delta_{jk}P_k\)) y
+                <strong>completitud</strong> (\(\sum_k P_k=\mathbb{I}\)). Estas condiciones garantizan que las probabilidades sumen
+                uno y que una medición repetida inmediatamente después produzca el mismo resultado con certeza
+                (<em>reproducibilidad</em>).
+              </p>
+              <p>
+                En sistemas compuestos, la <strong>medición parcial</strong> sobre un subsistema introduce correlaciones clásicas y
+                modifica el estado del subsistema no medido. Si el estado bipartito es
+                \(|\psi\rangle_{AB}=\sum_{j,k}c_{jk}|j\rangle_A|k\rangle_B\) y se mide el subsistema \(A\) obteniendo \(|j_0\rangle\),
+                el estado del subsistema \(B\) colapsa condicionalmente a:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  |\psi_B^{(j_0)}\rangle = \frac{\sum_k c_{j_0 k}|k\rangle_B}{\sqrt{\sum_k |c_{j_0 k}|^2}}.
+                \]
+              </div>
+              <p>
+                Para un estado de Bell \(|\Phi^+\rangle\), este colapso condicional es total: medir \(|0\rangle\) en \(A\) fuerza
+                a \(B\) a colapsar a \(|0\rangle\) con certeza. Este fenómeno subyace a la teleportación cuántica, el intercambio de
+                entrelazamiento (<em>entanglement swapping</em>) y los protocolos de distribución de claves cuánticas como BB84 y E91.
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Mediciones generalizadas (POVM)</p>
+                <p>
+                  El formalismo de la medición proyectiva se generaliza mediante las <em>mediciones de operador valorado positivo</em>
+                  (POVM), definidas por un conjunto \(\{E_k\}\) con \(E_k\ge 0\) y \(\sum_k E_k=\mathbb{I}\), donde
+                  \(p(k)=\mathrm{tr}(E_k\rho)\). Las POVM permiten modelar mediciones difusas, detección con eficiencia finita y
+                  estrategias óptimas de discriminación de estados, y son esenciales en criptografía cuántica y metrología.
+                </p>
+              </aside>
+
+              <p>
+                El <strong>problema de la medición</strong> sigue siendo una de las cuestiones fundacionales más debatidas en la
+                interpretación de la mecánica cuántica. La ecuación de Schrödinger, que gobierna la evolución unitaria, no contiene
+                ningún mecanismo para el colapso: el postulado de medición se introduce como una regla adicional. Las
+                interpretaciones de Copenhague, de muchos mundos, de historias consistentes y la decoherencia ambiental ofrecen
+                perspectivas distintas sobre esta aparente dualidad. Desde el punto de vista operacional —el relevante para la
+                computación cuántica—, el postulado de medición es una regla empíricamente verificada que describe cómo las
+                estadísticas de los detectores se relacionan con la descripción cuántica del sistema preparado.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §7 DECOHERENCIA  ═══════════════════ -->
+          <section id="decoherencia" class="qubits-section">
+            <h2>Decoherencia y canales cuánticos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                En la práctica, ningún sistema cuántico está perfectamente aislado. La interacción con grados de libertad ambientales
+                no controlados produce <strong>decoherencia</strong>: la pérdida gradual de las relaciones de fase entre las componentes
+                de una superposición, convirtiendo un estado puro coherente en una mezcla estadística clásica. Formalmente, la
+                decoherencia se describe mediante la evolución de la <strong>matriz de densidad reducida</strong> del sistema, obtenida
+                al trazar sobre los grados de libertad del ambiente:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \rho_S(t) = \mathrm{tr}_E\!\bigl[U(t)\,(\rho_S(0)\otimes\rho_E)\,U^\dagger(t)\bigr],
+                \]
+              </div>
+              <p>
+                donde \(U(t)\) es la unitaria del sistema total (sistema + ambiente) y \(\rho_E\) es el estado inicial del ambiente.
+                Esta evolución define un <strong>canal cuántico</strong> (mapa completamente positivo y que preserva la traza, CPTP),
+                que se expresa mediante la <strong>representación de operadores de Kraus</strong>:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathcal{E}(\rho) = \sum_k K_k\,\rho\,K_k^\dagger, \qquad \sum_k K_k^\dagger K_k = \mathbb{I}.
+                \]
+              </div>
+              <p>
+                Para un cúbit, los canales de ruido más relevantes experimentalmente se caracterizan por dos escalas temporales:
+                \(T_1\) (tiempo de relajación longitudinal, asociado a la pérdida de energía) y \(T_2\) (tiempo de coherencia
+                transversal, asociado a la pérdida de fase). En general, \(T_2\le 2T_1\), y la igualdad se alcanza cuando la
+                desfase pura (\(T_\varphi\)) es despreciable: \(1/T_2 = 1/(2T_1) + 1/T_\varphi\).
+              </p>
+              <p>
+                El <strong>canal de amortiguamiento de amplitud</strong> modela la relajación espontánea del estado excitado
+                \(|1\rangle\) al fundamental \(|0\rangle\), con operadores de Kraus:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  K_0 = \begin{pmatrix}1 & 0\\0 & \sqrt{1-\gamma}\end{pmatrix}, \qquad
+                  K_1 = \begin{pmatrix}0 & \sqrt{\gamma}\\0 & 0\end{pmatrix},
+                \]
+              </div>
+              <p>
+                donde \(\gamma=1-e^{-t/T_1}\) es la probabilidad de decaimiento. Este canal describe la emisión espontánea en
+                átomos, la relajación en cúbits superconductores y la pérdida de fotones en cavidades ópticas. A tiempo largo
+                (\(\gamma\to 1\)), cualquier estado converge al fundamental \(|0\rangle\langle 0|\).
+              </p>
+              <p>
+                El <strong>canal de desfase</strong> (<em>dephasing</em>) preserva las poblaciones diagonales pero atenúa las
+                coherencias fuera de la diagonal:
+                \(\mathcal{E}_{\mathrm{deph}}(\rho)=(1-p)\rho+p\,\sigma_z\rho\,\sigma_z\), donde \(p=\tfrac{1}{2}(1-e^{-t/T_\varphi})\).
+                Las coherencias \(\rho_{01}\) decaen como \(e^{-t/T_\varphi}\), convirtiendo la superposición en una mezcla clásica de
+                \(|0\rangle\) y \(|1\rangle\) sin modificar las probabilidades de medición en la base computacional.
+              </p>
+              <p>
+                El <strong>canal despolarizante</strong> modela un ruido isotrópico que empuja cualquier estado hacia el estado
+                máximamente mezclado:
+              </p>
+              <div class="qubits-equation">
+                \[
+                  \mathcal{E}_{\mathrm{depol}}(\rho) = (1-p)\,\rho + \frac{p}{3}\bigl(\sigma_x\rho\sigma_x + \sigma_y\rho\sigma_y + \sigma_z\rho\sigma_z\bigr)
+                  = \Bigl(1-\frac{4p}{3}\Bigr)\rho + \frac{4p}{3}\cdot\frac{\mathbb{I}}{2}.
+                \]
+              </div>
+              <p>
+                En la esfera de Bloch, el canal despolarizante contrae uniformemente el vector de Bloch: \(\vec{r}\mapsto(1-4p/3)\vec{r}\).
+                Cuando \(p=3/4\), el estado resultante es siempre \(\mathbb{I}/2\), independientemente del estado inicial. Este canal es
+                particularmente útil como modelo teórico de ruido por su simetría, y aparece como modelo efectivo en escenarios de
+                <em>twirling</em> aleatorio de puertas.
+              </p>
+
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Tiempos de coherencia en hardware actual</p>
+                <p>
+                  Los cúbits superconductores transmon alcanzan \(T_1\sim 100\text{–}500\;\mu\text{s}\) y
+                  \(T_2\sim 100\text{–}300\;\mu\text{s}\), mientras que los iones atrapados de \({}^{171}\text{Yb}^+\) exhiben
+                  \(T_2\) del orden de segundos. Estas cifras determinan la profundidad máxima de circuito ejecutable antes de que
+                  el ruido acumulado destruya la señal cuántica. Mejorar \(T_1\) y \(T_2\) es un objetivo central de la ingeniería
+                  de cúbits, paralelo al desarrollo de códigos correctores de errores como el código de superficie.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §8 HARMONIQ  ═══════════════════ -->
+          <section id="harmoniq" class="qubits-section">
+            <h2>Superposición en Harmoniq</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La plataforma <strong>Harmoniq</strong> materializa los conceptos de superposición desarrollados en las secciones
+                anteriores a través de dos simuladores cuánticos de alto rendimiento: <strong>Hopper</strong> y <strong>Hermann</strong>.
+                Ambos implementan la simulación de vector de estado completo, almacenando explícitamente las \(2^n\) amplitudes complejas
+                del registro y aplicando puertas unitarias como multiplicaciones de matrices dispersas o transformaciones indexadas.
+                Hopper está optimizado para circuitos de hasta 28 cúbits con ejecución en CPU multinúcleo, mientras que Hermann aprovecha
+                aceleración en GPU para sistemas de hasta 34 cúbits, permitiendo explorar superposiciones en espacios de Hilbert de
+                dimensión \(\sim 1.7\times 10^{10}\).
+              </p>
+              <p>
+                El <strong>compositor visual</strong> de Harmoniq permite construir circuitos arrastrando puertas sobre un diagrama de
+                líneas de cúbits. Al aplicar una puerta Hadamard \(H\) sobre un cúbit inicializado en \(|0\rangle\), el simulador
+                actualiza el vector de estado a \(|+\rangle=\tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)\) en tiempo real, y el panel de
+                probabilidades muestra inmediatamente la distribución \(p(0)=p(1)=0.5\). Cadenas de puertas \(R_z(\varphi)\) permiten
+                explorar cómo la fase relativa modifica las distribuciones al medir en bases complementarias, haciendo visible la
+                interferencia cuántica sin necesidad de ecuaciones explícitas.
+              </p>
+              <p>
+                Para circuitos más complejos, el SDK de Harmoniq (disponible en Python, Swift, Kotlin y React) expone una API
+                programática que permite construir, parametrizar y ejecutar circuitos con <em>shots</em> configurables. La ejecución
+                con múltiples <em>shots</em> reproduce el muestreo estocástico de la regla de Born, generando histogramas de frecuencia
+                que convergen a las probabilidades teóricas conforme crece el número de repeticiones. Funcionalidades avanzadas incluyen
+                la obtención del vector de estado completo (<code>statevector</code>), el cálculo de valores esperados de observables
+                arbitrarios y la simulación de canales de ruido —amortiguamiento de amplitud, desfase y despolarización— con parámetros
+                de \(T_1\) y \(T_2\) configurables, acercando la simulación a las condiciones de hardware real.
+              </p>
+              <p>
+                La integración de Harmoniq con los módulos de visualización permite representar el estado del cúbit en la esfera de
+                Bloch en cada paso del circuito, ofreciendo una conexión directa entre la notación abstracta del espacio de Hilbert y
+                la geometría del estado cuántico. Esta capacidad pedagógica es particularmente valiosa para instituciones educativas y
+                equipos de investigación que buscan desarrollar intuición sobre superposición, interferencia y entrelazamiento antes de
+                acceder a hardware cuántico real.
+              </p>
+              <p>
+                Los modelos de ruido disponibles en Harmoniq permiten además estudiar la degradación de la superposición bajo
+                condiciones realistas. El usuario puede configurar tasas de error de puerta, tiempos \(T_1\) y \(T_2\) por cúbit y
+                errores de lectura (<em>readout errors</em>), observando cómo las distribuciones de medición se alejan de las
+                predicciones ideales conforme aumenta la profundidad del circuito. Esta funcionalidad es esencial para validar la
+                viabilidad de algoritmos cuánticos antes de ejecutarlos en hardware real, donde cada ejecución consume recursos
+                limitados y costosos.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════  §9 REFERENCIAS  ═══════════════════ -->
+          <section id="referencias" class="qubits-section ref-cards-section">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="ref-cards-lead">
+              Selección de monografías, artículos fundamentales, apuntes de curso y recursos abiertos con criterio académico riguroso.
+              Los textos abarcan desde los fundamentos de la mecánica cuántica hasta la información y computación cuántica contemporánea.
+            </p>
+            <div class="qubits-ref-grid">
+              <article class="ref-card">
+                <p class="ref-card-source">Nielsen &amp; Chuang</p>
+                <p class="ref-card-book"><em>Quantum Computation and Quantum Information</em> <span class="ref-card-pub">(Cambridge, 2010)</span></p>
+                <p class="ref-card-desc">
+                  Texto de referencia canónico en información cuántica. Cubre postulados, circuitos, algoritmos, corrección de errores,
+                  entrelazamiento y canales cuánticos con rigor matemático y ejemplos detallados.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Sakurai &amp; Napolitano</p>
+                <p class="ref-card-book"><em>Modern Quantum Mechanics</em> <span class="ref-card-pub">(Cambridge, 3.ª ed., 2020)</span></p>
+                <p class="ref-card-desc">
+                  Tratamiento clásico de los postulados, momento angular, perturbaciones y dispersión. Base conceptual fundamental antes
+                  del formalismo de información cuántica.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Shankar</p>
+                <p class="ref-card-book"><em>Principles of Quantum Mechanics</em> <span class="ref-card-pub">(Springer, 2.ª ed.)</span></p>
+                <p class="ref-card-desc">
+                  Exposición pedagógica del formalismo de espacios de Hilbert, con énfasis en la lógica axiomática y problemas resueltos
+                  paso a paso; ideal como primer texto de posgrado.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Cohen-Tannoudji, Diu &amp; Laloë</p>
+                <p class="ref-card-book"><em>Quantum Mechanics</em> <span class="ref-card-pub">(Wiley, 2 vols.)</span></p>
+                <p class="ref-card-desc">
+                  Tratado enciclopédico con complementos detallados sobre simetría, perturbaciones y sistemas de muchos cuerpos.
+                  Referencia de mesa de trabajo en departamentos de física.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Preskill · notas Ph 219 / Ph 229</p>
+                <p class="ref-card-book"><em>Quantum Information and Computation</em> <span class="ref-card-pub">(Caltech)</span></p>
+                <p class="ref-card-desc">
+                  Apuntes de curso de referencia para cúbits, canales, complejidad y códigos topológicos; puente entre física teórica
+                  y ciencias de la computación cuántica.
+                </p>
+                <a class="ref-card-open" href="http://theory.caltech.edu/~preskill/ph229/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Wilde</p>
+                <p class="ref-card-book"><em>Quantum Information Theory</em> <span class="ref-card-pub">(Cambridge, 2.ª ed., 2017)</span></p>
+                <p class="ref-card-desc">
+                  Tratamiento riguroso de la teoría de la información cuántica: entropías, capacidades de canal, protocolos de comunicación
+                  cuántica y teoremas de codificación.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Zurek, W. H.</p>
+                <p class="ref-card-book"><em>Decoherence, einselection, and the quantum origins of the classical</em> <span class="ref-card-pub">(Rev. Mod. Phys. 75, 715, 2003)</span></p>
+                <p class="ref-card-desc">
+                  Artículo de revisión fundamental sobre decoherencia y la selección por el ambiente de los estados
+                  clásicos robustos; esencial para comprender la transición cuántico-clásica.
+                </p>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">arXiv · quant-ph</p>
+                <p class="ref-card-book"><em>Lista «recent» de prepublicaciones</em></p>
+                <p class="ref-card-desc">
+                  Preprints en física cuántica e información cuántica; recurso indispensable para seguir la frontera de resultados
+                  teóricos y experimentales.
+                </p>
+                <a class="ref-card-open" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Nature Reviews Physics</p>
+                <p class="ref-card-book"><em>Revisiones y perspectivas</em></p>
+                <p class="ref-card-desc">
+                  Artículos de revisión sobre fundamentos, experimentos de vanguardia y fronteras tecnológicas de la física cuántica.
+                </p>
+                <a class="ref-card-open" href="https://www.nature.com/natrevphys/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+              <article class="ref-card">
+                <p class="ref-card-source">Qiskit Textbook</p>
+                <p class="ref-card-book"><em>Texto abierto con laboratorios interactivos</em></p>
+                <p class="ref-card-desc">
+                  Fundamentos de computación cuántica, visualizaciones de estados y laboratorios numéricos con ejecución directa en
+                  simuladores y hardware.
+                </p>
+                <a class="ref-card-open" href="https://learning.quantum.ibm.com/" target="_blank" rel="noopener noreferrer"
+                  >Abrir <i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+              </article>
+            </div>
+            <p class="qubits-prose qubits-prose--academic ref-cards-foot">
+              <a href="fundamento-teorico.html#bases-cuantica">← Volver a Fundamentos teóricos</a>
+            </p>
+          </section>
+
+          <!-- ═══════════════════  ENDMATTER  ═══════════════════ -->
+          <section id="descargar-articulo-superposicion" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row"><dt>Título</dt><dd class="qubits-endmatter-doc-title">Superposición cuántica: estados, interferencia y medición</dd></div>
+              <div class="qubits-endmatter-row"><dt>Fecha de elaboración</dt><dd><time datetime="2026-04-10">10 de abril de 2026</time></dd></div>
+              <div class="qubits-endmatter-row"><dt>Autores</dt><dd><span>Noguerón Méndez José Antonio</span><span class="qubits-endmatter-affil">Head of Quantum Product</span></dd></div>
+            </dl>
+            <a id="superposicionArticleDownload" class="qubits-btn-artículo qubits-btn-artículo--disabled" href="#" aria-label="Descargar el artículo completo" aria-disabled="true">
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span>Descargar artículo</span>
+            </a>
+          </section>
+
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#postulados" class="right-toc-sublink">Postulados de Hilbert</a>
+          <a href="#bloch" class="right-toc-sublink">Esfera de Bloch</a>
+          <a href="#amplitudes" class="right-toc-sublink">Amplitudes y regla de Born</a>
+          <a href="#interferencia" class="right-toc-sublink">Interferencia cuántica</a>
+          <a href="#multicubit" class="right-toc-sublink">Sistemas multicúbit</a>
+          <a href="#medicion" class="right-toc-sublink">Medición y colapso</a>
+          <a href="#decoherencia" class="right-toc-sublink">Decoherencia</a>
+          <a href="#harmoniq" class="right-toc-sublink">Superposición en Harmoniq</a>
+          <a href="#referencias" class="right-toc-sublink">Referencias</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+  </body>
+</html>

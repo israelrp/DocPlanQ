@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>De Planck a la tecnología cuántica: historia, fenómenos y formalismo | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") {
+            document.body.classList.add("light-mode");
+            document.documentElement.classList.add("light-mode");
+          }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button
+                type="button"
+                class="search-toggle"
+                aria-label="Abrir buscador"
+                data-i18n-aria-label="search.open"
+                aria-expanded="false"
+                aria-controls="searchDropdown"
+              >
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <span data-i18n="search.label">Search</span>
+              </button>
+              <input
+                id="searchInput"
+                class="search-input"
+                type="search"
+                placeholder="Buscar en la documentación..."
+                aria-label="Buscar en la documentación"
+                data-i18n-placeholder="search.placeholder"
+                data-i18n-aria-label="search.placeholder"
+                autocomplete="off"
+              />
+            </div>
+            <div
+              class="search-dropdown"
+              id="searchDropdown"
+              role="dialog"
+              data-i18n-aria-label="search.dialogLabel"
+              hidden
+            >
+              <div class="search-dropdown-panel">
+                <div class="search-dropdown-body">
+                  <div class="search-empty" id="searchEmptyBlock">
+                    <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                    <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                    <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                  </div>
+                  <ul class="search-results-list" id="searchResultsList" hidden></ul>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <a
+          href="https://cloud.planq.com/blog"
+          class="header-platform-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i
+        ></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="fundamento-teorico.html"
+              ><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a
+            >
+            <a class="nav-item" href="../programacion-cuantica.html"
+              ><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a
+            >
+            <a class="nav-item" href="workflow.html"
+              ><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a
+            >
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"
+              ><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a
+            >
+            <a class="nav-item" href="casos-uso-cuanticos.html"
+              ><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a
+            >
+            <a class="nav-item" href="teoria-cuantica.html"
+              ><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a
+            >
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="simuladores.html#page-body"
+                  ><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-functioning"
+                  ><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-computers"
+                  ><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-foundations"
+                  ><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a
+                >
+                <a class="nav-sublink" href="simuladores.html#sim-usage"
+                  ><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a
+                >
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"
+                  ><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a
+                >
+                <a class="nav-sublink" href="compositor.html#entidades"
+                  ><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a
+                >
+                <a class="nav-sublink" href="compositor.html#arquitectura"
+                  ><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="code-examples.html#ios"
+                  ><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#android"
+                  ><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#react"
+                  ><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a
+                >
+                <a class="nav-sublink" href="code-examples.html#python"
+                  ><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a
+                >
+              </div>
+            </div>
+            <a class="nav-item" href="code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+          <section id="page-body" class="qubits-hero">
+            <p class="qubits-kicker qubits-kicker--row">
+              <span class="qubits-kicker-segment">Fundamento teórico</span>
+              <span class="qubits-kicker-rule" aria-hidden="true"></span>
+              <span class="qubits-kicker-segment">Teoría cuántica</span>
+            </p>
+            <div class="qubits-authors" aria-label="Créditos">
+              <p class="qubits-authors-label">Autor</p>
+              <div class="qubits-authors-row">
+                <div class="qubits-author-card">
+                  <img
+                    class="qubits-author-photo"
+                    src="../images/author-nogueron-mendez-planq.png"
+                    width="56"
+                    height="56"
+                    alt="Retrato de Noguerón Méndez José Antonio"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="qubits-author-meta">
+                    <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                    <span class="qubits-author-role">Head of Quantum Product</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h1 class="qubits-hero-title" data-i18n="teoria.endmatter.articleTitle">
+              De Planck a la tecnología cuántica: historia, fenómenos y formalismo de la teoría cuántica
+            </h1>
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                Esta guía ofrece un recorrido <strong>académico y panorámico</strong> por la teoría cuántica: desde los
+                indicios experimentales que forzaron a replantear la física clásica hasta los marcos matemáticos que hoy
+                sustentan la <em>información cuántica</em>, la simulación de materiales y los prototipos de computación con
+                corrección de errores. No sustituye a un curso de mecánica cuántica ni a una monografía especializada; pretende,
+                en cambio, ordenar conceptos, <strong>diagramas</strong> y citas de manera que un lector técnico pueda orientarse
+                sin perder el hilo histórico ni la intuición física.
+              </p>
+              <p>
+                El texto adopta un tono deliberadamente <em>humano</em>: reconoce debates abiertos, simplificaciones
+                pedagógicas y límites de lo que puede inferirse desde un único artículo. Donde la literatura diverge —por
+                ejemplo, en interpretaciones de la función de onda o en la extensión del formalismo a la gravedad— lo señalamos
+                con brevedad y remitimos a fuentes primarias y revisiones recientes.
+              </p>
+              <p>
+                La estructura combina <strong>historia</strong>, <strong>formalismo</strong>, <strong>fenomenología</strong> y
+                <strong>aplicaciones</strong>. Las figuras son esquemáticas: ilustran relaciones causales o geométricas, no
+                reemplazan datos experimentales ni simulaciones numéricas. Donde aparece una ecuación, asuma convenciones
+                estándar de unidades naturales o SI según contexto.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame qubits-figure-frame--flush" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--timeline" viewBox="0 0 640 120" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="40" y1="70" x2="600" y2="70" stroke="currentColor" stroke-width="1.5" opacity="0.35" />
+                  <circle cx="80" cy="70" r="7" fill="var(--qubits-accent)" class="qubits-svg-accent" opacity="0.9" />
+                  <text x="52" y="54" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1900 Planck</text>
+                  <circle cx="160" cy="70" r="6" fill="currentColor" opacity="0.55" />
+                  <text x="128" y="94" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1905 Einstein</text>
+                  <circle cx="240" cy="70" r="6" fill="currentColor" opacity="0.55" />
+                  <text x="210" y="54" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1913 Bohr</text>
+                  <circle cx="320" cy="70" r="6" fill="currentColor" opacity="0.55" />
+                  <text x="275" y="94" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1924 de Broglie</text>
+                  <circle cx="400" cy="70" r="7" fill="var(--qubits-accent)" class="qubits-svg-accent" opacity="0.85" />
+                  <text x="360" y="54" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1925–26 QM</text>
+                  <circle cx="500" cy="70" r="7" fill="var(--qubits-accent)" class="qubits-svg-accent" opacity="0.85" />
+                  <text x="455" y="94" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1960s Bell</text>
+                  <circle cx="580" cy="70" r="7" fill="currentColor" opacity="0.6" />
+                  <text x="520" y="54" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">1990s– QIP</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 1. Línea de tiempo esquemática (no a escala): hitos que condensan la transición de la física clásica a la
+                mecánica cuántica moderna y a la información cuántica.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="mapa-cronologia" class="qubits-section">
+            <h2>Mapa del documento y ejes conceptuales</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Conviene explicitar tres ejes que atraviesan todo el relato. El <strong>eje histórico</strong> muestra cómo
+                anomalías experimentales obligaron a revisar conceptos de continuidad, determinismo y localidad. El
+                <strong>eje formal</strong> introduce el lenguaje de espacios de Hilbert, operadores y medidas como
+                infraestructura común a la química cuántica, la óptica cuántica y los algoritmos. El <strong>eje
+                tecnológico</strong> conecta esos formalismos con dispositivos reales —desde láseres y resonancias magnéticas
+                hasta canales cuánticos ruidosos y procesadores superconductores— siempre con la advertencia de que la ingeniería
+                añade imperfecciones que el papel idealiza.
+              </p>
+              <p>
+                En paralelo, distinguimos <em>fenómenos de una partícula</em> (espectros, túnel, interferencia),
+                <em>fenómenos de muchos cuerpos</em> (estadísticas, fases topológicas en ciertos materiales) y
+                <em>fenómenos de correlación</em> (entrelazamiento, violaciones de Bell). Esta tripartición es pedagógica: en la
+                naturaleza los límites se difuminan, pero separar capas ayuda a leer la bibliografía sin perderse.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="24" y="24" width="120" height="64" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5" />
+                  <text x="38" y="52" font-size="11" fill="currentColor" opacity="0.85" font-family="system-ui,sans-serif">Historia</text>
+                  <text x="38" y="68" font-size="9" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">crisis 1900</text>
+                  <rect x="180" y="24" width="120" height="64" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5" />
+                  <text x="200" y="52" font-size="11" fill="currentColor" opacity="0.85" font-family="system-ui,sans-serif">Formalismo</text>
+                  <text x="200" y="68" font-size="9" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">Hilbert · medida</text>
+                  <rect x="336" y="24" width="72" height="64" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5" />
+                  <text x="348" y="52" font-size="11" fill="currentColor" opacity="0.85" font-family="system-ui,sans-serif">Tecnología</text>
+                  <text x="348" y="68" font-size="9" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">QKD · QC</text>
+                  <path d="M84 88 L84 118 L210 118 L210 88" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" marker-end="url(#teoria-mapa-arr)" />
+                  <path d="M240 88 L240 118 L372 118 L372 88" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
+                  <rect x="60" y="128" width="300" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.4" />
+                  <text x="78" y="152" font-size="10" fill="currentColor" opacity="0.8" font-family="system-ui,sans-serif">Fenómenos: una partícula · muchos cuerpos · correlación multipartita</text>
+                  <text x="78" y="170" font-size="9" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">Los tres bloques superiores alimentan modelos concretos en la franja inferior.</text>
+                  <defs>
+                    <marker id="teoria-mapa-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                      <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" opacity="0.4" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 2. Esquema de cómo historia, formalismo y aplicaciones convergen sobre una capa común de fenomenología
+                cuántica.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="origenes-crisis-1900" class="qubits-section">
+            <h2>Orígenes y crisis de 1900: del cuerpo negro al cuanto de acción</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                A finales del siglo XIX el espectro de radiación del cuerpo negro desafiaba la descripción electromagnética
+                clásica: la ley de Rayleigh–Jeans predice una divergencia ultravioleta incompatible con la medición. En 1900,
+                Max Planck introduce la hipótesis de que los osciladores del cuerpo negro intercambian energía en paquetes
+                discretos proporcionales a la frecuencia, con constante de proporcionalidad \(\hbar\) (hoy relacionada con la
+                constante de Planck \(h = 2\pi\hbar\)). La fórmula
+              </p>
+              <div class="qubits-equation" aria-label="Cuantización de Planck">
+                $$E = h\nu = \hbar \omega$$
+              </div>
+              <p>
+                no implica todavía una teoría completa de partículas, pero abre la puerta a la <strong>cuantización
+                energética</strong>. Albert Einstein (1905) extiende la idea al efecto fotoeléctrico, interpretando la luz como
+                cuantos de energía \(h\nu\) que interactúan con electrones; el modelo atómico de Bohr (1913) añade reglas
+                ad hoc de estabilidad que anticipan, sin aún disponer del formalismo completo, la discreción de niveles en
+                potenciales atómicos.
+              </p>
+              <p>
+                La hipótesis de de Broglie (1924) —dualidad onda–partícula para la materia— y los experimentos de difracción
+                electrónica consolidan la necesidad de un marco donde amplitudes complejas, no solo trayectorias, describan la
+                interferencia observable.
+              </p>
+              <p>
+                Desde el punto de vista termodinámico, la ley de Stefan–Boltzmann y el desplazamiento de Wien describen
+                correctamente el comportamiento integral del cuerpo negro en longitudes de onda largas o en la forma global del
+                espectro, pero <em>no</em> bastan para explicar la distribución espectral en el ultravioleta. La fórmula de
+                Planck,
+              </p>
+              <div class="qubits-equation" aria-label="Ley de Planck">
+                $$u(\nu, T) = \frac{8\pi h \nu^3}{c^3} \frac{1}{e^{h\nu / k_B T} - 1},$$
+              </div>
+              <p>
+                interpola entre el régimen de Wien y el de Rayleigh–Jeans y encaja con la medición de curvas espectrales en
+                cavidades. Físicamente, la novedad no es solo una función analítica distinta sino la sugerencia de que los
+                intercambios energéticos con el campo electromagnético ocurren en unidades discretas —idea que Einstein
+                extrapola al campo mismo en el efecto fotoeléctrico.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+                  <text x="28" y="24" font-size="11" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">Densidad espectral (esquema)</text>
+                  <line x1="48" y1="150" x2="360" y2="150" stroke="currentColor" stroke-width="1" opacity="0.4" />
+                  <line x1="48" y1="40" x2="48" y2="150" stroke="currentColor" stroke-width="1" opacity="0.4" />
+                  <text x="340" y="166" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">ν</text>
+                  <text x="22" y="48" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">u</text>
+                  <path
+                    d="M48 148 Q120 130 160 90 T280 52 L340 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    opacity="0.35"
+                  />
+                  <path
+                    d="M48 148 Q100 20 200 38 Q300 58 360 145"
+                    fill="none"
+                    stroke="var(--qubits-accent)"
+                    class="qubits-svg-accent"
+                    stroke-width="2"
+                    opacity="0.85"
+                  />
+                  <text x="200" y="100" font-size="9" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">Rayleigh–Jeans (diverge)</text>
+                  <text x="210" y="72" font-size="9" fill="var(--qubits-accent)" opacity="0.9" font-family="system-ui,sans-serif">Planck</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 3. Comparación esquemática: la aproximación clásica de Rayleigh–Jeans crece sin límite en alta frecuencia;
+                la curva de Planck reproduce el pico observado y decae exponencialmente (no es un trazado de datos reales).
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="atomo-onda-materia" class="qubits-section">
+            <h2>Átomo de Bohr, niveles discretos y ondas de materia</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El modelo de Bohr para el hidrógeno postula órbitas cuantizadas con momento angular \(L = n\hbar\) y saltos
+                discretos al emitir o absorber fotones de energía \(\Delta E = h\nu\). Aunque hoy lo entendemos como una primera
+                aproximación semiclásica antes del hidrógeno de Schrödinger, su papel histórico es central: unificó espectros
+                atómicos medidos en laboratorio con la noción de <em>cuantización de la acción</em>.
+              </p>
+              <p>
+                La relación de de Broglie \(\lambda = h/p\) propone que partículas masivas exhiban longitud de onda asociada.
+                La difracción de electrones en redes cristalinas (Davisson–Germer, 1927) confirmó patrones de interferencia
+                compatibles con ondas materiales, cerrando el círculo conceptual iniciado con la luz cuantizada.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="140" cy="100" r="18" fill="var(--qubits-accent)" class="qubits-svg-accent" opacity="0.85" />
+                  <circle cx="140" cy="100" r="48" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" stroke-dasharray="4 3" />
+                  <circle cx="140" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45" />
+                  <circle cx="140" cy="100" r="108" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
+                  <text x="200" y="104" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">n=3</text>
+                  <text x="188" y="72" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">n=2</text>
+                  <text x="168" y="52" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">n=1</text>
+                  <path d="M140 82 L200 40" fill="none" stroke="var(--qubits-accent)" stroke-width="1.5" opacity="0.7" marker-end="url(#teoria-bohr-arrow)" />
+                  <text x="208" y="36" font-size="9" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">hν</text>
+                  <defs>
+                    <marker id="teoria-bohr-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                      <path d="M0,0 L5,2.5 L0,5 Z" fill="var(--qubits-accent)" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 4. Representación esquemática de órbitas cuantizadas y transición radiativa en el modelo de Bohr (imagen
+                conceptual, no escala física real).
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="matriz-onda-interpretacion" class="qubits-section">
+            <h2>Formación de la teoría: matrices, ondas y la probabilidad de Born</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Entre 1925 y 1926 emergen dos formulaciones que Schrödinger pronto demostró equivalentes (bajo condiciones
+                habituales): la mecánica matricial de Heisenberg y la ecuación ondulatoria
+              </p>
+              <div class="qubits-equation" aria-label="Ecuación de Schrödinger dependiente del tiempo">
+                $$i\hbar \frac{\partial}{\partial t}|\psi(t)\rangle = H |\psi(t)\rangle.$$
+              </div>
+              <p>
+                Max Born propone la interpretación probabilística de \(|\psi|^2\) como densidad de probabilidad para resultados
+                de posición (1926), sentando la base de lo que hoy reconocemos como <strong>regla de Born</strong> en
+                mediciones proyectivas. El principio de incertidumbre de Heisenberg cuantifica límites conjuntos en la
+                precisión de observables no conmutativos, como posición e impulso, mediante relaciones del tipo
+                \(\Delta x\,\Delta p \gtrsim \hbar/2\).
+              </p>
+              <p>
+                La equivalencia entre mecánica de matrices y mecánica ondulatoria se entiende hoy como elección de
+                <em>representación</em> en \(\mathcal{H}\): el teorema de Stone–von Neumann (en el caso del oscilador lineal y
+                bajo hipótesis adecuadas) garantiza unicidad salvo unitariedades; en sistemas más ricos aparecen
+                representaciones inequivalentes que requieren cuidado al pasar al límite de muchos modos (preludio de teoría
+                cuántica de campos).
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame qubits-figure-frame--circuit" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg">
+                  <text x="20" y="28" font-size="10" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">Fuente</text>
+                  <line x1="60" y1="80" x2="120" y2="80" stroke="currentColor" stroke-width="1.4" opacity="0.5" />
+                  <line x1="120" y1="40" x2="120" y2="120" stroke="currentColor" stroke-width="1.4" opacity="0.5" />
+                  <line x1="120" y1="40" x2="200" y2="80" stroke="currentColor" stroke-width="1.4" opacity="0.5" />
+                  <line x1="120" y1="120" x2="200" y2="80" stroke="currentColor" stroke-width="1.4" opacity="0.5" />
+                  <rect x="200" y="64" width="56" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="1.3" opacity="0.55" />
+                  <text x="208" y="84" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Pantalla</text>
+                  <path d="M260 80 Q300 40 320 80 Q300 120 260 80" fill="none" stroke="var(--qubits-accent)" stroke-width="1.8" opacity="0.5" />
+                  <path d="M260 80 Q300 50 320 80 Q300 110 260 80" fill="none" stroke="var(--qubits-accent)" stroke-width="1.8" opacity="0.35" />
+                  <text x="248" y="28" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">Patrón de interferencia</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 5. Esquema de doble rendija: dos caminos indistinguibles producen interferencia en la distribución de
+                impactos; cualquier marcaje que revele la trayectoría destruye las franjas (complementariedad).
+              </figcaption>
+            </figure>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Lectura humana</p>
+              <p>
+                Es fácil presentar la dualidad onda–corpúsculo como paradoja «resuelta» por la mecánica cuántica. En la práctica,
+                lo que unifica el formalismo no es una imagen visual única sino un conjunto de reglas coherentes para predecir
+                estadísticas de medición; la intuición se construye con el uso, no con una analogía clásica perfecta.
+              </p>
+            </aside>
+          </section>
+
+          <section id="postulados-hilbert" class="qubits-section">
+            <h2>Postulados y espacio de Hilbert</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                En la formulación moderna, un sistema se asocia a un espacio de Hilbert \(\mathcal{H}\) (separable en
+                aplicaciones estándar). Los <em>estados puros</em> corresponden a rayos en \(\mathcal{H}\); los estados
+                mezcla se describen con operadores densidad \(\rho\) autoadjuntos, positivos y de traza uno. Los observables
+                relevantes son operadores autoadjuntos (o, más generalmente, medidas POVM cuando se modelan lecturas
+                imperfectas). La evolución de un sistema cerrado es unitaria, generada por un hamiltoniano \(H\).
+              </p>
+              <p>
+                La medición idealizada se modela mediante proyectores sobre subespacios propios; el conmutador canónico
+              </p>
+              <div class="qubits-equation" aria-label="Conmutador canónico">
+                $$[x, p] = i\hbar$$
+              </div>
+              <p>
+                resume la estructura algebraica que subyace a la no conmutatividad esencial. Este esqueleto axiomático —con
+                variantes en QFT y en enfoques algebraicos— es el lenguaje común de la química cuántica, la óptica cuántica y la
+                información cuántica.
+              </p>
+              <p>
+                El <strong>teorema espectral</strong> para operadores autoadjuntos (acotados o con dominio denso bien
+                comportado) proporciona descomposición en proyecciones ortogonales y, en el caso compacto, expansión en
+                autovectores ortonormales. En laboratorio, los «observables» son dispositivos calibrados cuya estadística de
+                clics se modela, idealmente, con un PVM o POVM; la brecha entre idealización y ruido experimental es donde
+                prospera la metrología cuántica y la caracterización de dispositivos.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 380 150" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="120" cy="75" rx="90" ry="56" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.4" />
+                  <text x="48" y="28" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">ℋ</text>
+                  <line x1="120" y1="75" x2="200" y2="35" stroke="var(--qubits-accent)" stroke-width="1.6" opacity="0.75" />
+                  <text x="205" y="38" font-size="9" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">|ψ⟩</text>
+                  <line x1="120" y1="75" x2="260" y2="110" stroke="currentColor" stroke-width="1" opacity="0.35" stroke-dasharray="3 2" />
+                  <text x="265" y="114" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">proyección medición</text>
+                  <rect x="268" y="48" width="88" height="56" rx="4" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.45" />
+                  <text x="278" y="72" font-size="9" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">Resultados</text>
+                  <text x="278" y="88" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">λ₁, λ₂, …</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 6. Estado como vector (o rayo) en \(\mathcal{H}\); una medición idealizada lo proyecta sobre subespacios
+                asociados a autovalores del observable.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="spin-estadisticas" class="qubits-section">
+            <h2>Momento angular, spin y estadísticas cuánticas</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El momento angular orbital se cuantiza en unidades de \(\hbar\) y está ligado al generador de rotaciones en el
+                espacio de configuración. El <strong>spin</strong> —propiedad intrínseca de partículas puntuales en el modelo
+                estándar— se describe con representaciones del grupo \(\mathrm{SU}(2)\); para electrones, \(s=\tfrac{1}{2}\) y
+                dos componentes magnéticas en presencia de campo externo (efecto Zeeman).
+              </p>
+              <p>
+                Al componer sistemas idénticos, la función de onda debe ser <em>simétrica</em> (bosones) o
+                <em>antisimétrica</em> (fermiones) bajo permutación. De ello derivan la estadística de Bose–Einstein y la de
+                Fermi–Dirac, con consecuencias dramáticas: conductividad en sólidos, superfluidez, degeneración en estrellas,
+                gaps de energía en semiconductores. La tabla periódica, leída con ojos cuánticos, es en buena medida geometría
+                de potenciales efectivos más exclusión de Pauli.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="32" y="40" width="96" height="72" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <text x="48" y="64" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Bosones</text>
+                  <text x="48" y="84" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">simétricos · BE</text>
+                  <rect x="172" y="40" width="96" height="72" rx="6" fill="none" stroke="var(--qubits-accent)" stroke-width="1.3" opacity="0.55" />
+                  <text x="188" y="64" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Fermiones</text>
+                  <text x="188" y="84" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">antisim. · FD · Pauli</text>
+                  <path d="M128 76 L172 76" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3" marker-end="url(#teoria-stat-arrow)" />
+                  <defs>
+                    <marker id="teoria-stat-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                      <path d="M0,0 L5,2.5 L0,5 Z" fill="currentColor" opacity="0.4" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 7. Simetría bajo permutación como bifurcación conceptual entre bosones y fermiones (esquema).
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="fenomenos-relevantes" class="qubits-section">
+            <h2>Fenómenos centrales</h2>
+            <p class="qubits-section-intro qubits-prose--academic">
+              La lista siguiente no es exhaustiva; agrupa efectos que reaparecen en casi todos los textos serios y en la
+              transición hacia aplicaciones tecnológicas.
+            </p>
+            <ul class="qubits-feature-list">
+              <li class="qubits-feature-item">
+                <div class="qubits-feature-icon" aria-hidden="true">
+                  <i class="ph ph-git-diff"></i>
+                </div>
+                <div class="qubits-feature-copy qubits-prose--academic">
+                  <h3>Interferencia y superposición coherente</h3>
+                  <p>
+                    La adición de amplitudes complejas explica patrones de interferencia en óptica y en interferometría de
+                    materia; su destrucción por acoplamiento al entorno es la cara práctica de la decoherencia.
+                  </p>
+                </div>
+              </li>
+              <li class="qubits-feature-item">
+                <div class="qubits-feature-icon" aria-hidden="true">
+                  <i class="ph ph-arrows-out-line-horizontal"></i>
+                </div>
+                <div class="qubits-feature-copy qubits-prose--academic">
+                  <h3>Efecto túnel y estados metaestables</h3>
+                  <p>
+                    La penetración en regiones clásicamente prohibidas sustenta decaimiento alfa, dispositivos de túnel (STM) y
+                    ciertos qubits superconductores donde las barreras de Josephson controlan la dinámica efectiva.
+                  </p>
+                </div>
+              </li>
+              <li class="qubits-feature-item">
+                <div class="qubits-feature-icon" aria-hidden="true">
+                  <i class="ph ph-atom"></i>
+                </div>
+                <div class="qubits-feature-copy qubits-prose--academic">
+                  <h3>Spin, simetrías y estadísticas</h3>
+                  <p>
+                    Las representaciones del grupo de rotaciones y la simetrización de estados multpartícula conducen a
+                    bosones y fermiones, con consecuencias directas en conductividad, superfluidez y estructura electrónica.
+                  </p>
+                </div>
+              </li>
+              <li class="qubits-feature-item">
+                <div class="qubits-feature-icon" aria-hidden="true">
+                  <i class="ph ph-magnet"></i>
+                </div>
+                <div class="qubits-feature-copy qubits-prose--academic">
+                  <h3>Efecto Zeeman y resonancia magnética</h3>
+                  <p>
+                    La separación de niveles en campo \(\mathbf{B}\) permite espectroscopía de precisión (EPR, NMR, MRI). La
+                    manipulación coherente con pulsos de radiofrecuencia es un antecedente cultural de las puertas de un cúbit
+                    en plataformas de espines.
+                  </p>
+                </div>
+              </li>
+              <li class="qubits-feature-item">
+                <div class="qubits-feature-icon" aria-hidden="true">
+                  <i class="ph ph-infinity"></i>
+                </div>
+                <div class="qubits-feature-copy qubits-prose--academic">
+                  <h3>Efecto Aharonov–Bohm y fases geométricas</h3>
+                  <p>
+                    Potenciales vectoriales producen desplazamientos de fase medibles aun cuando la partícula evite regiones de
+                    campo magnético local no nulo. Las fases de Berry y Wilczek–Zee generalizan esta idea a ciclos adiabáticos en
+                    espacio de parámetros, conectando con holonomías en qubits controlados.
+                  </p>
+                </div>
+              </li>
+              <li class="qubits-feature-item">
+                <div class="qubits-feature-icon" aria-hidden="true">
+                  <i class="ph ph-lightning"></i>
+                </div>
+                <div class="qubits-feature-copy qubits-prose--academic">
+                  <h3>Emisión y absorción, reglas de selección</h3>
+                  <p>
+                    Las transiciones dipolares eléctricas obedecen reglas de selección dictadas por simetría y paridad; la
+                    ingeniería de materiales para dispositivos optoelectrónicos y cavitades cuánticas explota estas restricciones
+                    cuánticas.
+                  </p>
+                </div>
+              </li>
+            </ul>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="40" y="55" width="80" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <text x="52" y="84" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">I</text>
+                  <rect x="240" y="55" width="80" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <text x="268" y="84" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">II</text>
+                  <path d="M120 80 Q180 20 240 80" fill="none" stroke="var(--qubits-accent)" stroke-width="2" opacity="0.55" />
+                  <path d="M120 80 Q180 140 240 80" fill="none" stroke="var(--qubits-accent)" stroke-width="2" opacity="0.55" />
+                  <text x="150" y="24" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">amplitud túnel</text>
+                  <text x="164" y="142" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">E &lt; V₀</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 8. Efecto túnel: dos regiones clásicamente permitidas (I y II) conectadas por penetración exponencial en la
+                barrera; la corriente de Josephson en uniones superconductoras es un análogo macroscópico de fase coherente.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="muchos-cuerpos-condensados" class="qubits-section">
+            <h2>Muchos cuerpos, materia condensada y campos efectivos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Cuando el número de partículas tiende a macroscópico, emergen cuasipartículas, simetrías rotas espontáneamente y
+                fases topológicas que no son evidentes en un único átomo aislado. La teoría de Landau–Fermi líquidos, los
+                modelos de Hubbard y t-J, y los hallazgos de transporte cuantizado (efecto Hall entero y fraccionario)
+                ilustran cómo la mecánica cuántica moldea propiedades colectivas medibles en laboratorio.
+              </p>
+              <p>
+                Los <em>hamiltonianos efectivos</em> —proyectados sobre subespacios de baja energía— son el lenguaje común entre
+                físicos de materiales e ingenieros de qubits: un transmon o un punto cuántico se describe, en primera
+                aproximación, con pocos niveles y parámetros fenomenológicos calibrados experimentalmente.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                  <text x="24" y="28" font-size="10" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">Microscópico (10²³)</text>
+                  <line x1="24" y1="60" x2="160" y2="60" stroke="currentColor" stroke-width="1.2" opacity="0.35" />
+                  <polygon points="160,60 190,50 190,70" fill="currentColor" opacity="0.35" />
+                  <text x="200" y="56" font-size="10" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">RG · coarse-graining</text>
+                  <line x1="300" y1="60" x2="370" y2="60" stroke="currentColor" stroke-width="1.2" opacity="0.35" />
+                  <polygon points="300,60 330,50 330,70" fill="currentColor" opacity="0.35" />
+                  <text x="200" y="88" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">Modelo de baja energía · quasipartículas · parámetros efectivos</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 9. Flujo conceptual: grados de libertad microscópicos → descripción efectiva en la ventana energética del
+                experimento (esquema, no flujo RG numérico).
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="entrelazamiento-correlaciones" class="qubits-section">
+            <h2>Entrelazamiento, no localidad y recursos cuánticos</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Estados que no factorizan en \(\mathcal{H}_A \otimes \mathcal{H}_B\) exhiben correlaciones que no pueden
+                reproducirse con variables ocultas locales, según límites cuantificados por desigualdades tipo
+                Bell–CHSH. Experimentalmente, trabajos posteriores a Aspect (1980s) y mediciones más recientes con
+                «cierre de grietas» (loopholes) refuerzan el consenso sobre las predicciones estándar —sin resolver, eso sí,
+                debates interpretativos.
+              </p>
+              <p>
+                En información cuántica, el entrelazamiento se entiende como <em>recurso</em>: habilita teleportación,
+                codificación superdensa y ciertos esquemas criptográficos; su cuantificación (entropía de entrelazamiento,
+                concurrencia, negativity, etc.) es un subcampo activo con implicaciones en materia condensada y en algoritmos.
+              </p>
+              <p>
+                La matriz densidad reducida \(\rho_A = \mathrm{Tr}_B(\rho_{AB})\) codifica correlaciones clásicas y cuánticas
+                accesibles localmente; la entropía de entrelazamiento mide grados de mezcla cuando el estado global es puro
+                entrelazado. Protocolos de distilación y medidas en redes tensoriales buscan extraer o aproximar dichos
+                recursos en sistemas de muchos cuerpos.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame qubits-figure-frame--circuit" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="90" cy="60" r="36" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.4" />
+                  <text x="62" y="56" font-size="9" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">Alice</text>
+                  <circle cx="330" cy="60" r="36" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.4" />
+                  <text x="298" y="56" font-size="9" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">Bob</text>
+                  <line x1="126" y1="60" x2="294" y2="60" stroke="var(--qubits-accent)" stroke-width="1.6" opacity="0.55" stroke-dasharray="5 3" />
+                  <text x="168" y="52" font-size="9" fill="currentColor" opacity="0.55" font-family="system-ui,sans-serif">par compartido</text>
+                  <rect x="52" y="108" width="64" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45" />
+                  <text x="58" y="126" font-size="8" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">a, a′</text>
+                  <rect x="304" y="108" width="64" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45" />
+                  <text x="312" y="126" font-size="8" fill="currentColor" opacity="0.6" font-family="system-ui,sans-serif">b, b′</text>
+                  <text x="120" y="150" font-size="9" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">CHSH |S| ≤ 2 clásico · 2√2 QM máximo (Tsirelson)</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 10. Esquema de escenario tipo CHSH: dos laboratorios eligen bases de medición independientes; correlaciones
+                cuánticas pueden superar el límite local oculto \(2\) hasta el valor Tsirelson \(2\sqrt{2}\) para sistemas
+                qubit–qubit maximamente entrelazados en el escenario ideal.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="sistemas-abiertos-decoherencia" class="qubits-section">
+            <h2>Sistemas abiertos y emergencia de lo clásico</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Ningún laboratorio aísla un sistema de modo perfecto. El acoplamiento a fonones, campos electromagnéticos o
+                grados de libertad internos del aparato de medida introduce ruido y disipación. Bajo aproximaciones markovianas,
+                la ecuación maestra de Lindblad describe evoluciones que preservan la positividad del operador densidad y
+                capturan canales de amortiguación y dephasing.
+              </p>
+              <p>
+                La <strong>decoherencia</strong> explica, en muchos escenarios, por qué ciertos subespacios «pointer» parecen
+                clásicos: la entrelazamiento con el entorno suprime coherencias entre estados macroscópicamente distinguibles.
+                Ello no resuelve por sí solo todas las preguntas de medición, pero sí conecta el formalismo con la experiencia
+                cotidiana de aparatos definitivos.
+              </p>
+              <p>
+                En forma de Lindblad (markoviana),
+              </p>
+              <div class="qubits-equation" aria-label="Lindblad">
+                $$\dot\rho = -\tfrac{i}{\hbar}[H,\rho] + \sum_k \gamma_k\Big(L_k\rho L_k^\dagger - \tfrac12\{L_k^\dagger L_k,\rho\}\Big),$$
+              </div>
+              <p>
+                los operadores \(L_k\) modelan canales de amortiguación y dephasing; las tasas \(\gamma_k\ge 0\) se extraen de
+                espectros de ruido \(1/f\), fonones o fluctuadores de carga según la plataforma. La tomografía de procesos y la
+                espectroscopía de ruido son herramientas estándar para contrastar estos modelos con datos de laboratorio.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="140" cy="70" rx="100" ry="48" fill="none" stroke="var(--qubits-accent)" stroke-width="1.4" opacity="0.45" />
+                  <text x="88" y="74" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">S sistema</text>
+                  <ellipse cx="300" cy="70" rx="72" ry="52" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
+                  <text x="258" y="74" font-size="10" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">ℰ entorno</text>
+                  <path d="M220 70 L248 70" stroke="currentColor" stroke-width="1.2" opacity="0.4" />
+                  <text x="168" y="118" font-size="9" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">Acoplamiento → traza parcial → canal cuántico en S</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 11. Sistema \(S\) acoplado a un entorno \(\mathcal{E}\): la dinámica conjunta es unitaria, pero la evolución
+                reducida de \(S\) es, en general, completamente positiva y no necesariamente invertible.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="informacion-cuantica-algoritmos" class="qubits-section">
+            <h2>Información cuántica, circuitos y complejidad</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El paradigma de <em>circuitos cuánticos</em> descompone algoritmos en puertas unitarias locales y de dos cúbits,
+                seguidas de mediciones. Teoremas de universalidad (aproximada) garantizan que conjuntos finitos de puertas
+                generan densamente \(\mathrm{SU}(2^n)\) con overhead polinómico en la precisión (Solovay–Kitaev). En la práctica,
+                transpiladores como los que subyacen a ecosistemas tipo Harmoniq traducen circuitos lógicos a nativos del
+                hardware con optimización de profundidad y mapa de conectividad.
+              </p>
+              <p>
+                La <strong>complejidad cuántica</strong> estudia clases como BQP y su relación con clases clásicas; algoritmos
+                como el de Shor (period finding) y el de Grover (búsqueda no estructurada) ilustran separaciones teóricas o
+                cuadráticas bajo supuestos específicos. La ventaja en dispositivos ruidosos de tamaño intermedio (NISQ) es un tema
+                de investigación activa, no un teorema único.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame qubits-figure-frame--circuit" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="24" y1="32" x2="296" y2="32" stroke="currentColor" stroke-width="1.5" opacity="0.55" />
+                  <line x1="24" y1="68" x2="296" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.55" />
+                  <rect x="52" y="18" width="40" height="28" fill="none" stroke="currentColor" stroke-width="1.4" rx="2" />
+                  <text x="62" y="36" font-size="12" font-weight="600" fill="currentColor" font-family="system-ui,sans-serif">H</text>
+                  <line x1="130" y1="32" x2="130" y2="68" stroke="currentColor" stroke-width="1.4" />
+                  <circle cx="130" cy="68" r="5" fill="none" stroke="currentColor" stroke-width="1.4" />
+                  <circle cx="130" cy="32" r="14" fill="none" stroke="currentColor" stroke-width="1.4" />
+                  <line x1="144" y1="32" x2="268" y2="32" stroke="currentColor" stroke-width="1.5" opacity="0.55" />
+                  <line x1="144" y1="68" x2="268" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.55" />
+                  <text x="14" y="36" font-size="10" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">q₀</text>
+                  <text x="14" y="72" font-size="10" fill="currentColor" opacity="0.65" font-family="system-ui,sans-serif">q₁</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 12. Fragmento ilustrativo (Hadamard + CNOT): primitiva universal en conjunción con rotaciones de un cúbit.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="aplicaciones-actuales" class="qubits-section">
+            <h2>De los fundamentos a las aplicaciones actuales</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Hoy la teoría cuántica atraviesa disciplinas enteras. En <strong>química y materiales</strong>, métodos como DFT
+                híbrido, funcionales dependientes del tiempo y simulaciones de muchos cuerpos buscan predicciones cuantitativas
+                de propiedades electrónicas. En <strong>metrología</strong>, interferometría atómica y relojes ópticos
+                explotan espectros discretos ultranarrow. En <strong>criptografía</strong>, QKD distribuye claves con seguridad
+                basada en principios físicos (con supuestos explícitos sobre implementación y espionaje de canal).
+              </p>
+              <p>
+                La <strong>computación cuántica</strong> propone algoritmos cuya ventaja depende del problema, del ruido y de la
+                escala; la <strong>corrección de errores cuánticos</strong> y los cúbits lógicos son el puente conceptual entre
+                demostraciones de principio y máquinas tolerantes a fallos. Ecosistemas como Harmoniq y PlanQ Quantum se apoyan
+                en estos cimientos para ofrecer simulación, transpilación y ejecución sobre hardware ruidoso —siempre con la
+                salvedad de que el rendimiento real lo fijan tasas de error, conectividad y profundidad de circuito.
+              </p>
+              <p>
+                En <strong>simulación química</strong>, variacionales e inspirados en física (VQE, QPE ruidoso) buscan estados
+                de baja energía de moléculas pequeñas; el cuello de botella sigue siendo la profundidad y la fidelidad. En
+                <strong>sensores</strong>, estados squeezed y protocolos de metrología cuántica mejoran límites de
+                interferometría (LIGO utiliza luz squeezed en ciertas bandas). En <strong>comunicaciones</strong>, QKD
+                comercial existe con advertencias de seguridad de implementación; la repetición cuántica y las redes cuánticas
+                siguen en fase de investigación intensiva.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--full" viewBox="0 0 440 160" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="28" y="36" width="92" height="88" rx="6" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.4" />
+                  <text x="40" y="62" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Materiales</text>
+                  <text x="40" y="80" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">DFT · DMFT</text>
+                  <rect x="174" y="36" width="92" height="88" rx="6" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.4" />
+                  <text x="188" y="62" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Sensores</text>
+                  <text x="188" y="80" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">atóm · ópt</text>
+                  <rect x="320" y="36" width="92" height="88" rx="6" fill="none" stroke="var(--qubits-accent)" stroke-width="1.2" opacity="0.45" />
+                  <text x="332" y="62" font-size="10" fill="currentColor" opacity="0.75" font-family="system-ui,sans-serif">Cómputo</text>
+                  <text x="332" y="80" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">QC · QEC</text>
+                  <text x="120" y="148" font-size="9" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">Todas las columnas comparten el mismo formalismo de estados, medidas y ruido —cada una estresa distintos parámetros.</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 13. Tres familias de aplicación (esquema): comparten cimientos cuánticos pero exigen distintos modelos
+                efectivos y métricas de éxito.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="qft-panorama" class="qubits-section">
+            <h2>Teoría cuántica de campos: horizonte conceptual</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Al promover grados de libertad a campos \(\phi(x)\) y cuantizar modos normales de energía positiva y negativa,
+                surge la imagen de partículas como excitaciones de un vacío estructurado. Las <strong>diagramas de Feynman</strong>
+                organizan series perturbativas; la renormalización absorbe divergencias en parámetros medidos. El modelo
+                estándar de partículas es, en esencia, una QFT gauge con simetría \(\mathrm{SU}(3)\times\mathrm{SU}(2)\times\mathrm{U}(1)\)
+                rota espontáneamente.
+              </p>
+              <p>
+                Este artículo no desarrolla cálculos de QFT; basta indicar que muchos fenómenos de materia condensada admiten
+                <em>teorías cuánticas de campos efectivas</em> en dimensionalidad menor (p. ej. bordos topológicos, modos de
+                edge). La gravedad cuántica —string theory, loop quantum gravity u otros programas— permanece fuera del alcance
+                de una guía introductoria única.
+              </p>
+            </div>
+            <figure class="qubits-figure">
+              <div class="qubits-figure-frame" aria-hidden="true">
+                <svg class="qubits-svg qubits-svg--wide" viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="40" y1="60" x2="100" y2="60" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <line x1="100" y1="60" x2="160" y2="30" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <line x1="100" y1="60" x2="160" y2="90" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <line x1="160" y1="30" x2="220" y2="60" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <line x1="160" y1="90" x2="220" y2="60" stroke="currentColor" stroke-width="1.2" opacity="0.45" />
+                  <circle cx="100" cy="60" r="4" fill="var(--qubits-accent)" class="qubits-svg-accent" />
+                  <circle cx="160" cy="30" r="3" fill="currentColor" opacity="0.5" />
+                  <circle cx="160" cy="90" r="3" fill="currentColor" opacity="0.5" />
+                  <circle cx="220" cy="60" r="3" fill="currentColor" opacity="0.5" />
+                  <text x="32" y="100" font-size="8" fill="currentColor" opacity="0.5" font-family="system-ui,sans-serif">Vértice simbólico (no amplitud calculada)</text>
+                </svg>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 14. Diagrama de Feynman esquemático: propagadores (líneas) y vértice de interacción —ilustración conceptual.
+              </figcaption>
+            </figure>
+          </section>
+
+          <section id="fronteras-interpretacion" class="qubits-section">
+            <h2>Fronteras: interpretación, gravedad y límites del texto</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Conviven múltiples <em>interpretaciones</em> (Copenhague, muchos mundos, mecánica bohemiana, etc.) que comparten,
+                en general, las mismas predicciones estadísticas en el régimen no relativista estándar. La unificación con la
+                relatividad general —una teoría cuántica de la gravedad— sigue abierta; la cosmología cuántica y los horizontes
+                de información (p. ej. radiación de Hawking como contexto teórico) marcan fronteras donde el formalismo aquí
+                expuesto debe refinarse o reemplazarse.
+              </p>
+              <p>
+                Sobre <strong>interpretación</strong>, conviene recordar que muchas variantes comparten predicciones en bancos
+                de pruebas estándar; las diferencias aparecen al formalizar qué es «real» antes de la medición o cómo tratar el
+                estado del aparato. Desde el punto de vista operacional —predicciones + protocolos— la mecánica cuántica es
+                extraordinariamente precisa; desde el punto de vista ontológico, el consenso es más delgado.
+              </p>
+              <p>
+                Este artículo es, en suma, un mapa: útil para orientarse, insuficiente para demostrar teoremas o diseñar
+                experimentos sin estudio adicional. La humildad frente al volumen de la literatura es parte del oficio.
+              </p>
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Para seguir leyendo</p>
+              <p>
+                Si el objetivo es <em>calcular</em>, abra un libro de texto (Sakurai, Shankar, Cohen-Tannoudji) y resuelva
+                problemas. Si el objetivo es <em>implementar</em>, combine estas ideas con hojas de datos de hardware y con
+                notas de error de fabricantes. Si el objetivo es <em>filosofar</em>, lea también historia de la ciencia y
+                entradas especializadas: la teoría cuántica no es solo matemática, también es cultura material de laboratorios.
+              </p>
+            </aside>
+          </section>
+
+          <section id="referencias-teoria" class="qubits-section qubits-refs">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="qubits-refs-intro qubits-prose--academic">
+              Se priorizan monografías ampliamente adoptadas, notas de curso accesibles en línea y revisiones de divulgación
+              rigurosa. Las URLs se ofrecen como punto de partida; verifique siempre la edición y la fecha de actualización.
+            </p>
+            <ul class="qubits-ref-grid">
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Sakurai &amp; Napolitano</span>
+                  <span class="qubits-ref-desc"
+                    ><em>Modern Quantum Mechanics</em> (Cambridge). Tratamiento estándar de postulados, angular momentum y
+                    perturbaciones.</span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Shankar</span>
+                  <span class="qubits-ref-desc"
+                    ><em>Principles of Quantum Mechanics</em> (Springer). Exposición clara con énfasis pedagógico y ejemplos
+                    resueltos.</span
+                  >
+                </div>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://theory.caltech.edu/~preskill/ph229/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Preskill · Ph 229 notes</span>
+                  <span class="qubits-ref-desc">Notas de curso sobre información y computación cuántica (Caltech).</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">arXiv · quant-ph</span>
+                  <span class="qubits-ref-desc">Prepublicaciones en física cuántica e información cuántica.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://www.nature.com/natrevphys/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Nature Reviews Physics</span>
+                  <span class="qubits-ref-desc">Revisiones sobre fundamentos, tecnologías cuánticas y fronteras experimentales.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://plato.stanford.edu/entries/qt-entangle/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Stanford Encyclopedia · Entanglement</span>
+                  <span class="qubits-ref-desc">Artículo filosófico y conceptual sobre entrelazamiento y no localidad.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Cohen-Tannoudji, Diu &amp; Laloë</span>
+                  <span class="qubits-ref-desc"
+                    ><em>Quantum Mechanics</em> (Wiley). Tratado enciclopédico con ejemplos detallados y complementos avanzados.</span
+                  >
+                </div>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://quantum.ibm.com/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">IBM Quantum</span>
+                  <span class="qubits-ref-desc">Hardware, calibración y tutoriales orientados a circuitos en la nube.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://qiskit.org/learn" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Qiskit Textbook</span>
+                  <span class="qubits-ref-desc">Texto abierto con visualizaciones y laboratorios numéricos.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section id="descargar-artículo-teoria" class="qubits-section qubits-article-endmatter">
+            <h2 class="qubits-endmatter-title" data-i18n="teoria.endmatter.sectionTitle">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta">
+              <div class="qubits-endmatter-row">
+                <dt data-i18n="teoria.endmatter.dtTitle">Título</dt>
+                <dd class="qubits-endmatter-doc-title" data-i18n="teoria.endmatter.articleTitle">
+                  De Planck a la tecnología cuántica: historia, fenómenos y formalismo de la teoría cuántica
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt data-i18n="teoria.endmatter.dtDate">Fecha de elaboración</dt>
+                <dd>
+                  <time datetime="2026-04-09" data-i18n="teoria.endmatter.dateValue">9 de abril de 2026</time>
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt data-i18n="teoria.endmatter.dtAuthors">Autores</dt>
+                <dd>
+                  <span data-i18n="teoria.endmatter.authorName">Noguerón Méndez José Antonio</span>
+                  <span class="qubits-endmatter-affil" data-i18n="teoria.endmatter.authorAffil">Head of Quantum Product</span>
+                </dd>
+              </div>
+            </dl>
+            <a
+              id="teoriaArticleDownload"
+              class="qubits-btn-artículo qubits-btn-artículo--disabled"
+              href="#"
+              data-i18n-aria-label="teoria.download.aria"
+              aria-label="Descargar el artículo completo"
+              aria-disabled="true"
+            >
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span data-i18n="teoria.download.button">Descargar artículo</span>
+            </a>
+          </section>
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#mapa-cronologia" class="right-toc-sublink">Mapa y cronología</a>
+          <a href="#origenes-crisis-1900" class="right-toc-sublink">Orígenes y crisis de 1900</a>
+          <a href="#atomo-onda-materia" class="right-toc-sublink">Bohr y ondas de materia</a>
+          <a href="#matriz-onda-interpretacion" class="right-toc-sublink">Matrices, ondas y Born</a>
+          <a href="#postulados-hilbert" class="right-toc-sublink">Postulados y medición</a>
+          <a href="#spin-estadisticas" class="right-toc-sublink">Spin y estadísticas</a>
+          <a href="#fenomenos-relevantes" class="right-toc-sublink">Fenómenos centrales</a>
+          <a href="#muchos-cuerpos-condensados" class="right-toc-sublink">Muchos cuerpos</a>
+          <a href="#entrelazamiento-correlaciones" class="right-toc-sublink">Entrelazamiento</a>
+          <a href="#sistemas-abiertos-decoherencia" class="right-toc-sublink">Sistemas abiertos</a>
+          <a href="#informacion-cuantica-algoritmos" class="right-toc-sublink">Información y circuitos</a>
+          <a href="#aplicaciones-actuales" class="right-toc-sublink">Aplicaciones</a>
+          <a href="#qft-panorama" class="right-toc-sublink">QFT (panorama)</a>
+          <a href="#fronteras-interpretacion" class="right-toc-sublink">Fronteras</a>
+          <a href="#referencias-teoria" class="right-toc-sublink">Referencias</a>
+          <a href="#descargar-artículo-teoria" class="right-toc-sublink" data-i18n="teoria.download.toc">Descargar</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+      (function () {
+        var TEORIA_ARTICLE_PDF_URL = "";
+        var a = document.getElementById("teoriaArticleDownload");
+        if (!a) return;
+        if (TEORIA_ARTICLE_PDF_URL) {
+          a.href = TEORIA_ARTICLE_PDF_URL;
+          a.setAttribute("download", "guia-teoria-cuantica-harmoniq.pdf");
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener noreferrer");
+          a.classList.remove("qubits-btn-artículo--disabled");
+          a.removeAttribute("aria-disabled");
+        } else {
+          a.classList.add("qubits-btn-artículo--disabled");
+          a.setAttribute("aria-disabled", "true");
+          a.removeAttribute("download");
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

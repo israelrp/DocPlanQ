@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algoritmo de Deutsch-Jozsa: consulta cuántica única al oráculo y discriminación por interferencia | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=105" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs"><i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span></a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api"><i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span></a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles"><i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span></a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i><span data-i18n="search.label">Search</span>
+              </button>
+              <input id="searchInput" class="search-input" type="search" placeholder="Buscar en la documentación..." aria-label="Buscar en la documentación" data-i18n-placeholder="search.placeholder" data-i18n-aria-label="search.placeholder" autocomplete="off" />
+            </div>
+            <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+              <div class="search-dropdown-panel"><div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div></div>
+            </div>
+          </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button type="button" class="lang-dropdown-toggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Seleccion de idioma" data-i18n-aria-label="lang.menu">
+            <span class="lang-current" data-lang-label>ES</span><i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true"><i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i><span class="lang-btn-label" data-i18n="lang.optionEs">Español</span><span class="lang-btn-code" aria-hidden="true">ES</span></button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false"><i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i><span class="lang-btn-label" data-i18n="lang.optionEn">English</span><span class="lang-btn-code" aria-hidden="true">EN</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button type="button" class="left-nav-toggle" id="leftNavToggle" aria-expanded="true" aria-controls="leftNavPanel">
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false"><i class="ph ph-cpu" aria-hidden="true"></i><span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span><i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i></button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false"><i class="ph ph-flow-arrow" aria-hidden="true"></i><span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span><i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i></button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item toc-active" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a>
+            <button type="button" class="nav-item nav-item-help" data-help-trigger><i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span></button>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+
+        <!-- ── HERO ────────────────────────────────────── -->
+        <section id="page-body" class="qubits-hero">
+          <div class="qubits-kicker-with-back">
+            <button
+              type="button"
+              class="doc-back-btn"
+              data-i18n-aria-label="doc.backPrevious"
+              aria-label="Volver a la página anterior"
+              onclick="history.back()"
+            >
+              <i class="ph ph-arrow-left" aria-hidden="true"></i>
+            </button>
+            <p class="qubits-kicker qubits-kicker--row">
+              <span class="qubits-kicker-segment">Fundamento teórico</span>
+              <span class="qubits-kicker-rule" aria-hidden="true"></span>
+              <span class="qubits-kicker-segment">Deutsch–Jozsa</span>
+            </p>
+          </div>
+          <div class="qubits-authors" aria-label="Créditos">
+            <p class="qubits-authors-label">Autor</p>
+            <div class="qubits-authors-row">
+              <div class="qubits-author-card">
+                <img
+                  class="qubits-author-photo"
+                  src="../images/author-nogueron-mendez-planq.png"
+                  width="56"
+                  height="56"
+                  alt="Retrato de Noguerón Méndez José Antonio"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="qubits-author-meta">
+                  <span class="qubits-author-name">Noguerón Méndez José Antonio</span>
+                  <span class="qubits-author-role">Head of Quantum Product</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h1 class="qubits-hero-title">Algoritmo de Deutsch-Jozsa: consulta cuántica única al oráculo y discriminación por interferencia</h1>
+          <div class="qubits-prose qubits-prose--academic qubits-lead">
+            <p>
+              El <strong>algoritmo de Deutsch-Jozsa</strong>, formulado por David Deutsch y Richard Jozsa
+              en 1992, fue históricamente el primer algoritmo cuántico en demostrar una ventaja exponencial
+              sobre cualquier algoritmo clásico determinista para un problema bien definido. Su importancia
+              radica no solo en el resultado práctico, sino en que introdujo el paradigma de computación
+              asistida por oráculo que subyace a algoritmos más poderosos como el de Grover y el de Shor.
+            </p>
+            <p>
+              Matemáticamente, el problema es una <em>promesa</em> sobre una función booleana
+              \(f: \{0,1\}^n \to \{0,1\}\): o bien es constante, o bien equilibrada en el sentido combinatorio
+              habitual. La solución cuántica explota la <strong>interferencia</strong> inducida por
+              \(H^{\otimes n}\) antes y después de un oráculo de fase obtenido mediante ancilla en
+              \(|{-}\rangle\). En simuladores HarmoniQ, la lectura del bit de salida tras ruido de puerta
+              exige distinguir la probabilidad residual en el estado «incorrecto» de fluctuaciones de
+              muestreo finito.
+            </p>
+          </div>
+          <div class="hq-example-meta">
+            <span class="hq-example-meta__item"><i class="ph ph-chart-bar"></i> <strong>Intermedio</strong></span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-circles-three-plus"></i> 2 cúbits</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-git-branch"></i> 5 puertas</span>
+            <span class="hq-example-meta__sep" aria-hidden="true"></span>
+            <span class="hq-example-meta__item"><i class="ph ph-cpu"></i> Hopper / Hermann</span>
+          </div>
+        </section>
+
+        <!-- ── FUNDAMENTO TEÓRICO ──────────────────────── -->
+        <section id="dj-theory" class="qubits-section">
+          <h2>Fundamento teórico</h2>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>El problema de promesa</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Se considera una función booleana \(f: \{0,1\}^n \to \{0,1\}\) sobre la que se garantiza
+                (<em>promesa</em>) que pertenece a exactamente una de dos clases:
+              </p>
+              <ul>
+                <li><strong>Constante</strong>: \(f(x) = c\) para todo \(x \in \{0,1\}^n\), con \(c \in \{0,1\}\).</li>
+                <li><strong>Balanceada</strong>: \(f\) retorna \(0\) exactamente en la mitad de las entradas y \(1\) en la otra mitad.</li>
+              </ul>
+              <p>
+                El objetivo es determinar a cuál de las dos clases pertenece \(f\) consultando al oráculo
+                \(\mathcal{O}_f\) el menor número posible de veces. Un algoritmo clásico determinista
+                necesita, en el peor caso, \(2^{n-1} + 1\) consultas para distinguir ambas clases. El
+                algoritmo cuántico de Deutsch-Jozsa lo resuelve con exactamente <strong>una</strong> consulta,
+                independientemente de \(n\).
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>El oráculo cuántico de fase</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El oráculo cuántico implementa la función \(f\) como una operación unitaria sobre dos
+                registros: el registro de entrada \(|x\rangle\) y un cúbit ancilla \(|a\rangle\):
+                \[
+                  \mathcal{O}_f : |x\rangle|a\rangle \mapsto |x\rangle|a \oplus f(x)\rangle,
+                \]
+                donde \(\oplus\) denota la suma módulo 2. Inicializando la ancilla en \(|{-}\rangle =
+                \frac{|0\rangle - |1\rangle}{\sqrt{2}}\), el oráculo produce la transformación de
+                <em>phase kickback</em>:
+                \[
+                  \mathcal{O}_f |x\rangle|{-}\rangle = (-1)^{f(x)}|x\rangle|{-}\rangle.
+                \]
+                El estado de la ancilla no cambia; solo adquiere una fase global relativa al valor de
+                \(f(x)\), que queda codificada en la amplitud del registro de entrada.
+              </p>
+            </div>
+          </section>
+
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Ventaja cuántica y transformada de Hadamard</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La clave es aplicar la transformada de Hadamard \(H^{\otimes n}\) al registro de entrada
+                antes y después del oráculo. La transformada de Hadamard sobre \(n\) cúbits mapea cada
+                estado de la base a la superposición:
+                \[
+                  H^{\otimes n}|x\rangle = \frac{1}{\sqrt{2^n}}
+                  \sum_{y=0}^{2^n-1} (-1)^{x \cdot y}|y\rangle,
+                \]
+                donde \(x \cdot y\) es el producto interior bit a bit. La composición
+                \(H^{\otimes n} \circ \mathcal{O}_f \circ H^{\otimes n}\) produce una interferencia
+                constructiva en \(|0\rangle^{\otimes n}\) si \(f\) es constante y destructiva si \(f\)
+                es balanceada:
+              </p>
+              <p>
+                \[
+                  \text{Estado final del registro de entrada} =
+                  \frac{1}{2^n}\sum_{y}\left(\sum_x (-1)^{f(x)+x\cdot y}\right)|y\rangle.
+                \]
+                Si \(f\) es constante, la amplitud de \(|0\rangle^{\otimes n}\) es \(\pm 1\) y la
+                probabilidad de medirlo es 1. Si \(f\) es balanceada, la amplitud de \(|0\rangle^{\otimes n}\)
+                es 0 y la probabilidad de medirlo es 0. Una única medición basta para discriminar ambos casos.
+              </p>
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Caso de 1 bit (problema de Deutsch)</p>
+              <p>
+                Para \(n = 1\), el problema se reduce al de Deutsch (1985): determinar si \(f(0) = f(1)\)
+                (constante) o \(f(0) \neq f(1)\) (balanceada) con una sola consulta al oráculo.
+                El algoritmo de Deutsch-Jozsa es la generalización exacta a \(n\) bits.
+              </p>
+            </aside>
+          </section>
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Complejidad de consulta y comparación con algoritmos clásicos</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                En el modelo de <em>consulta al oráculo</em>, el coste se mide únicamente por el número de
+                llamadas a \(\mathcal{O}_f\). Cualquier algoritmo clásico <strong>determinista</strong> que
+                distinga funciones constantes de balanceadas requiere, en el peor caso,
+                \(2^{n-1}+1\) consultas: hasta \(2^{n-1}\) respuestas idénticas no descartan la clase
+                balanceada. El algoritmo cuántico exhibido usa una sola consulta cuántica al oráculo en el
+                registro adecuadamente preparado.
+              </p>
+              <p>
+                Un algoritmo clásico <strong>aleatorio</strong> puede resolver el problema en
+                \(\mathcal{O}(1)\) consultas esperadas muestreando entradas al azar hasta hallar dos valores
+                distintos de \(f\) o agotar un criterio de parada; por ello la separación cuántico–clásico
+                más honesta se formula en el régimen determinista o contra oráculos adversos. La lección
+                pedagógica permanece: la interferencia cuántica global puede condensar en una medición la
+                información que clásicamente exige exploración extensiva del dominio.
+              </p>
+            </div>
+            <div class="qubits-equation" aria-label="Amplitud del estado todo ceros tras el algoritmo">
+              \[
+                \langle 0|^{\otimes n} H^{\otimes n} U_f H^{\otimes n} |0\rangle^{\otimes n}
+                = \frac{1}{2^n} \sum_{x \in \{0,1\}^n} (-1)^{f(x)}.
+              \]
+            </div>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                Si \(f\) es constante, la suma es \(\pm 2^n\) y la amplitud de \(|0\rangle^{\otimes n}\) tiene
+                módulo unidad. Si \(f\) es balanceada, los términos se cancelan par a par y dicha amplitud es
+                nula. Esta dicotomía es puramente algebraica y no depende de la representación interna del
+                oráculo, siempre que implemente la fase \((-1)^{f(x)}\) sobre la superposición uniforme.
+              </p>
+            </div>
+          </section>
+          <section class="qubits-section" style="padding-left:0;border-left:none;">
+            <h3>Implementación en \(n\) cúbits y robustez frente a ruido</h3>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La extensión a \(n > 1\) mantiene la estructura: preparación de ancilla en
+                \(|{-}\rangle\), superposición uniforme en el registro de datos, oráculo de fase, segunda
+                capa Hadamard y medición en la base computacional. La profundidad del circuito crece con la
+                descomposición del oráculo \(U_f\) en puertas nativas; en la práctica, la ventaja asintótica
+                puede verse erosionada por tasas de error por puerta y por decoherencia antes de que \(n\)
+                alcance valores interesantes en hardware ruidoso.
+              </p>
+              <p>
+                En HarmoniQ, los backends Hopper y Hermann modelan ruido phenomenológico en puertas; la
+                fidelidad compuesta de la secuencia de cinco puertas del ejemplo de dos cúbits permite
+                cuantificar la probabilidad residual en el estado no deseado y compararla con la varianza
+                estadística \(\mathcal{O}(1/\sqrt{N_{\text{shots}}})\) del estimador de frecuencias.
+              </p>
+            </div>
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Algoritmos relacionados</p>
+              <p>
+                Simon y Shor explotan periodicidad y estructura oculta en grupos; Bernstein–Vazirani
+                recupera una cadena lineal con una consulta. Deutsch–Jozsa permanece como el primer ejemplo
+                canónico donde la ventaja cuántica se expresa en términos de complejidad de consulta
+                determinista frente a promesas combinatorias simples.
+              </p>
+            </aside>
+          </section>
+        </section>
+
+        <!-- ── CIRCUITO ────────────────────────────────── -->
+        <section id="dj-circuit" class="qubits-section">
+          <h2>Circuito cuántico (2 cúbits, función balanceada \(f(x)=x\))</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              En la implementación de 2 cúbits, \(q_0\) es el registro de entrada (\(n=1\) bit) y
+              \(q_1\) es la ancilla. El oráculo para la función balanceada \(f(x) = x\) se implementa
+              con una puerta CNOT con control en \(q_0\) y objetivo en \(q_1\).
+            </p>
+          </div>
+          <div class="hq-circuit-block" aria-label="Circuito Deutsch-Jozsa">
+<span class="q-l">q₀</span><span class="q-w"> (entrada) : ─────</span><span class="q-g">[H]</span><span class="q-w">────</span><span class="q-c">●</span><span class="q-w">────</span><span class="q-g">[H]</span><span class="q-w">──── </span><span class="q-m">┤M├</span>
+<span class="q-w">                              │</span>
+<span class="q-l">q₁</span><span class="q-w"> (ancilla): </span><span class="q-g">[X]</span><span class="q-w"> </span><span class="q-g">[H]</span><span class="q-w">────</span><span class="q-c">⊕</span><span class="q-w">──────────────────</span>
+
+            <span class="q-w">Estado:</span>  <span class="q-w">|00⟩  →  |+−⟩  →  oráculo  →  |10⟩ o |00⟩</span></div>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              <strong>Paso 1 — Preparación de la ancilla:</strong> \(q_1\) se lleva a \(|1\rangle\) con
+              la puerta X y luego a \(|{-}\rangle\) con Hadamard. Esto activa el mecanismo de phase kickback.
+            </p>
+            <p>
+              <strong>Paso 2 — Superposición del registro de entrada:</strong> \(q_0\) se lleva a
+              \(|{+}\rangle\) con Hadamard, creando el estado global
+              \(|{+}\rangle|{-}\rangle = \frac{1}{2}(|0\rangle + |1\rangle)(|0\rangle - |1\rangle)\).
+            </p>
+            <p>
+              <strong>Paso 3 — Oráculo (CNOT):</strong> implementa \(f(x)=x\) (función balanceada).
+              El phase kickback transforma \(|{+}\rangle\) en \(|{-}\rangle\) en el registro de entrada.
+            </p>
+            <p>
+              <strong>Paso 4 — Hadamard de inversión:</strong> transforma \(|{-}\rangle\) de nuevo a
+              \(|1\rangle\), por lo que la medición de \(q_0\) siempre produce <code>1</code> → función
+              balanceada. Si se usara un oráculo constante, el resultado sería siempre <code>0</code>.
+            </p>
+          </div>
+        </section>
+
+        <!-- ── IMPLEMENTACIÓN ──────────────────────────── -->
+        <section id="dj-impl" class="qubits-section">
+          <h2>Implementación en HarmoniQ</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              La secuencia de puertas es: <code>x</code> en \(q_1\), <code>h</code> en \(q_0\),
+              <code>h</code> en \(q_1\), <code>cnot</code> (control \(q_0\), objetivo \(q_1\)) y
+              finalmente <code>h</code> en \(q_0\). Solo \(q_0\) se mide. La ancilla \(q_1\) no se
+              incluye en el resultado de interés.
+            </p>
+          </div>
+
+          <!-- Swift -->
+          <section id="dj-impl-swift" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/swift.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Swift</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>DeutschJozsa.swift</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> HarmoniQ
+
+<span class="c">// Oráculo para función balanceada f(x) = x</span>
+<span class="k">let</span> gates: [<span class="t">Gate</span>] = [
+    <span class="t">Gate</span>(name: <span class="s">"x"</span>,    targets: [<span class="n">1</span>]),          <span class="c">// ancilla → |1⟩</span>
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">0</span>]),          <span class="c">// entrada en superposición</span>
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">1</span>]),          <span class="c">// ancilla → |−⟩</span>
+    <span class="t">Gate</span>(name: <span class="s">"cnot"</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>]),  <span class="c">// oráculo</span>
+    <span class="t">Gate</span>(name: <span class="s">"h"</span>,    targets: [<span class="n">0</span>]),          <span class="c">// inversión</span>
+]
+
+<span class="k">do</span> {
+    <span class="k">let</span> result = <span class="k">try</span> <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider: <span class="s">"hopper"</span>,
+        shots:    <span class="n">1024</span>,
+        qubits:   <span class="n">2</span>,
+        bits:     <span class="n">2</span>,
+        gates:    gates,
+        basis:    <span class="s">"Z"</span>
+    )
+    <span class="c">// Balanceada → q₀ = 1 → estado "10" dominante</span>
+    <span class="c">// Constante  → q₀ = 0 → estado "00" dominante</span>
+    <span class="k">let</span> dominant = result.mostFrequent
+    <span class="k">let</span> tipo = dominant.<span class="fn">hasPrefix</span>(<span class="s">"0"</span>) ? <span class="s">"Constante"</span> : <span class="s">"Balanceada"</span>
+    <span class="fn">print</span>(<span class="s">"Función: \(tipo)"</span>)
+} <span class="k">catch</span> {
+    <span class="fn">print</span>(<span class="s">"Error:"</span>, error)
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- Kotlin -->
+          <section id="dj-impl-kotlin" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/kotlin.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Kotlin</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>DeutschJozsa.kt</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> com.planq.harmoniq.HarmoniQ
+<span class="k">import</span> com.planq.harmoniq.model.Gate
+
+<span class="k">val</span> gates = <span class="fn">listOf</span>(
+    <span class="t">Gate</span>(name = <span class="s">"x"</span>,    targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">1</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"cnot"</span>, targets = <span class="fn">listOf</span>(<span class="n">1</span>), controls = <span class="fn">listOf</span>(<span class="n">0</span>)),
+    <span class="t">Gate</span>(name = <span class="s">"h"</span>,    targets = <span class="fn">listOf</span>(<span class="n">0</span>)),
+)
+
+viewModelScope.<span class="fn">launch</span> {
+    <span class="k">val</span> result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>(
+        provider = <span class="s">"hopper"</span>,
+        shots    = <span class="n">1024</span>,
+        qubits   = <span class="n">2</span>,
+        bits     = <span class="n">2</span>,
+        gates    = gates,
+        basis    = <span class="s">"Z"</span>
+    )
+    <span class="k">val</span> tipo = <span class="k">if</span> (result.mostFrequent.<span class="fn">startsWith</span>(<span class="s">"0"</span>)) <span class="s">"Constante"</span> <span class="k">else</span> <span class="s">"Balanceada"</span>
+    <span class="t">Log</span>.<span class="fn">d</span>(<span class="s">"DJ"</span>, <span class="s">"Función: $tipo | Distribución: ${result.counts}"</span>)
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- React -->
+          <section id="dj-impl-react" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/react.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>React / TypeScript</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>deutschJozsa.ts</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">import</span> { <span class="t">HarmoniQ</span> } <span class="k">from</span> <span class="s">'./lib/quantum'</span>
+<span class="k">import type</span> { <span class="t">Gate</span> } <span class="k">from</span> <span class="s">'@planq/harmoniq'</span>
+
+<span class="k">const</span> gates: <span class="t">Gate</span>[] = [
+  { name: <span class="s">'x'</span>,    targets: [<span class="n">1</span>] },
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">1</span>] },
+  { name: <span class="s">'cnot'</span>, targets: [<span class="n">1</span>], controls: [<span class="n">0</span>] },
+  { name: <span class="s">'h'</span>,    targets: [<span class="n">0</span>] },
+]
+
+<span class="k">const</span> result = <span class="k">await</span> <span class="t">HarmoniQ</span>.quantum.<span class="fn">executeCircuit</span>({
+  provider: <span class="s">'hopper'</span>,
+  shots:    <span class="n">1024</span>,
+  qubits:   <span class="n">2</span>,
+  bits:     <span class="n">2</span>,
+  gates,
+  basis:    <span class="s">'Z'</span>,
+})
+
+<span class="k">const</span> tipo = result.mostFrequent.<span class="fn">startsWith</span>(<span class="s">'0'</span>) ? <span class="s">'Constante'</span> : <span class="s">'Balanceada'</span>
+console.<span class="fn">log</span>(<span class="s">`Función: ${tipo}`</span>, result.counts)</code></pre>
+            </div>
+          </section>
+
+          <!-- Python -->
+          <section id="dj-impl-python" class="qubits-section" style="padding-left:0;border-left:none;">
+            <div class="hq-impl-head">
+              <img src="../icons/python.svg" width="26" height="26" alt="" aria-hidden="true" />
+              <h3>Python</h3>
+            </div>
+            <div class="code-card">
+              <div class="code-card-head">
+                <h3>deutsch_jozsa.py</h3>
+                <button type="button" class="copy-btn" aria-label="Copiar código"><i class="ph ph-copy"></i></button>
+              </div>
+              <pre><code><span class="k">from</span> harmoniq <span class="k">import</span> HarmoniQ, Gate
+
+gates = [
+    <span class="t">Gate</span>(name=<span class="s">"x"</span>,    targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">1</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"cnot"</span>, targets=[<span class="n">1</span>], controls=[<span class="n">0</span>]),
+    <span class="t">Gate</span>(name=<span class="s">"h"</span>,    targets=[<span class="n">0</span>]),
+]
+
+result = <span class="t">HarmoniQ</span>.quantum.<span class="fn">execute_circuit</span>(
+    provider=<span class="s">"hopper"</span>,
+    shots=<span class="n">1024</span>,
+    qubits=<span class="n">2</span>,
+    bits=<span class="n">2</span>,
+    gates=gates,
+    basis=<span class="s">"Z"</span>,
+)
+
+tipo = <span class="s">"Constante"</span> <span class="k">if</span> result.most_frequent.<span class="fn">startswith</span>(<span class="s">"0"</span>) <span class="k">else</span> <span class="s">"Balanceada"</span>
+<span class="fn">print</span>(<span class="s">f"Función: {tipo}"</span>)
+<span class="fn">print</span>(<span class="s">"Distribución:"</span>, result.counts)</code></pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── ANÁLISIS DE RESULTADOS ──────────────────── -->
+        <section id="dj-results" class="qubits-section">
+          <h2>Análisis de resultados</h2>
+          <div class="qubits-prose qubits-prose--academic">
+            <p>
+              Dado que este ejemplo implementa la función balanceada \(f(x) = x\), el estado final de
+              \(q_0\) es \(|1\rangle\) con probabilidad teórica 1. Los resultados esperados tras
+              1024 shots son:
+            </p>
+          </div>
+          <table class="hq-backends-table">
+            <thead>
+              <tr><th>Estado</th><th>Función</th><th>Probabilidad ideal</th><th>Conteo típico</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>|10⟩</code></td><td>Balanceada</td><td>1.000</td><td>990 – 1024</td></tr>
+              <tr><td><code>|00⟩</code></td><td>Constante</td><td>0.000</td><td>0 – 34</td></tr>
+            </tbody>
+          </table>
+          <div class="qubits-prose qubits-prose--academic" style="margin-top:16px;">
+            <p>
+              Los conteos en <code>|00⟩</code> con función balanceada son únicamente debidos al ruido
+              del simulador. Para evaluar la fidelidad del algoritmo se puede calcular la
+              <em>tasa de éxito</em>:
+              \[\text{Fidelidad} = \frac{\text{conteo}(|10\rangle)}{N_{\text{shots}}}.\]
+              Con el backend Hopper, la fidelidad típica supera el 97%, coherente con la composición de
+              errores de las cinco puertas empleadas.
+            </p>
+            <p>
+              Para cambiar al oráculo constante (\(f(x) = 0\)) basta con eliminar la puerta CNOT de la
+              lista de puertas. En ese caso, el estado dominante será <code>|00⟩</code>.
+            </p>
+          </div>
+        </section>
+
+        <!-- ── REFERENCIAS ─────────────────────────────── -->
+        <section id="dj-refs" class="qubits-section qubits-refs">
+          <h2>Referencias y lecturas recomendadas</h2>
+          <p class="qubits-refs-intro qubits-prose--academic">
+            La selección siguiente orienta al lector hacia monografías y recursos cuya rigurosidad ha sido
+            contrastada por la comunidad científica; complementa la bibliografía citada al pie de esta guía.
+          </p>
+          <ul class="qubits-ref-grid">
+            <li>
+              <a class="qubits-ref-card" href="https://quantum.ibm.com/" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">IBM Quantum</span>
+                <span class="qubits-ref-desc">Plataforma experimental y documentación orientada a circuitos y calibración.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://qiskit.org/learn" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">Qiskit Textbook</span>
+                <span class="qubits-ref-desc">Texto abierto con derivaciones paso a paso y ejercicios numéricos.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="qubits-ref-card"
+                href="https://learn.microsoft.com/azure/quantum/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="qubits-ref-name">Microsoft Learn · Azure Quantum</span>
+                <span class="qubits-ref-desc">Fundamentos y modelos de programación cuántica en entornos administrados.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">arXiv · quant-ph</span>
+                <span class="qubits-ref-desc">Prepublicaciones recientes en información cuántica y computación cuántica.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <a class="qubits-ref-card" href="https://www.nist.gov/quantum-information-science" target="_blank" rel="noopener noreferrer">
+                <span class="qubits-ref-name">NIST · Quantum information</span>
+                <span class="qubits-ref-desc">Marcos metrológicos y estándares en ciencia cuántica aplicada.</span>
+                <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+            <li>
+              <div class="qubits-ref-card qubits-ref-card--static">
+                <span class="qubits-ref-name">Nielsen &amp; Chuang</span>
+                <span class="qubits-ref-desc"
+                  ><em>Quantum Computation and Quantum Information</em> (Cambridge University Press). Obra de referencia para
+                  demostraciones formales, complejidad cuántica y códigos correctores.</span
+                >
+              </div>
+            </li>
+          </ul>
+          <h3 class="qubits-refs-biblio-title">Bibliografía citada</h3>
+          <ol class="qubits-refs-list">
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[1]</span>
+              <div class="qubits-ref-body">
+                Deutsch, D., & Jozsa, R. (1992). <em>Rapid solution of problems by quantum computation.</em> Proceedings of the Royal Society of London A, 439(1907), 553–558.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[2]</span>
+              <div class="qubits-ref-body">
+                Deutsch, D. (1985). <em>Quantum theory, the Church-Turing principle and the universal quantum computer.</em> Proceedings of the Royal Society of London A, 400(1818), 97–117.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[3]</span>
+              <div class="qubits-ref-body">
+                Nielsen, M. A., & Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information.</em> Cambridge University Press. Sección 1.4.3.
+              </div>
+            </li>
+            <li class="qubits-ref-item">
+              <span class="qubits-ref-num">[4]</span>
+              <div class="qubits-ref-body">
+                Cleve, R., Ekert, A., Macchiavello, C., & Mosca, M. (1998). <em>Quantum algorithms revisited.</em> Proceedings of the Royal Society of London A, 454(1969), 339–354.
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section id="descargar-articulo-deutsch-jozsa" class="qubits-section qubits-article-endmatter">
+          <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+          <dl class="qubits-endmatter-meta">
+            <div class="qubits-endmatter-row">
+              <dt>Título</dt>
+              <dd class="qubits-endmatter-doc-title">
+                Algoritmo de Deutsch-Jozsa: consulta cuántica única al oráculo y discriminación por interferencia
+              </dd>
+            </div>
+            <div class="qubits-endmatter-row">
+              <dt>Fecha de elaboración</dt>
+              <dd>
+                <time datetime="2026-03-30">30 de marzo de 2026</time>
+              </dd>
+            </div>
+            <div class="qubits-endmatter-row">
+              <dt>Autores</dt>
+              <dd>
+                <span>Noguerón Méndez José Antonio</span>
+                <span class="qubits-endmatter-affil">Head of Quantum Product</span>
+              </dd>
+            </div>
+          </dl>
+          <a
+            id="djArticleDownload"
+            class="qubits-btn-artículo qubits-btn-artículo--disabled"
+            href="#"
+            aria-label="Descargar el artículo completo"
+            aria-disabled="true"
+          >
+            <i class="ph ph-download-simple" aria-hidden="true"></i>
+            <span>Descargar artículo</span>
+          </a>
+        </section>
+
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#dj-theory" class="right-toc-sublink">Fundamento teórico</a>
+          <a href="#dj-circuit" class="right-toc-sublink">Circuito cuántico</a>
+          <a href="#dj-impl" class="right-toc-link">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Implementación</span>
+          </a>
+          <a href="#dj-impl-swift" class="right-toc-sublink">Swift</a>
+          <a href="#dj-impl-kotlin" class="right-toc-sublink">Kotlin</a>
+          <a href="#dj-impl-react" class="right-toc-sublink">React</a>
+          <a href="#dj-impl-python" class="right-toc-sublink">Python</a>
+          <a href="#dj-results" class="right-toc-sublink">Análisis de resultados</a>
+          <a href="#dj-refs" class="right-toc-sublink">Referencias y lecturas</a>
+          <a href="#descargar-articulo-deutsch-jozsa" class="right-toc-sublink">Descargar artículo</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light"><i class="ph ph-sun"></i></button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system"><i class="ph ph-desktop"></i></button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark"><i class="ph ph-moon"></i></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+              { left: "\\[", right: "\\]", display: true },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artículos | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="./favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="./styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="index.html#top" aria-label="Harmoniq Documentation">
+          <img src="./logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="paginas/qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="paginas/casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="paginas/teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="paginas/compositor.html"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="./Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="./icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#android"><img class="nav-sublink-brand" src="./icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#react"><img class="nav-sublink-brand" src="./icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="paginas/code-examples.html#python"><img class="nav-sublink-brand" src="./icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content learning-page">
+        <section id="learning-hero" class="learning-hero" aria-labelledby="learning-hero-title">
+          <div class="learning-hero-chapter learning-enter ld-1">
+            <h1 id="learning-hero-title" class="learning-hero-title" data-i18n="learning.hero.title">
+              Explorando el mundo cuántico
+            </h1>
+            <div class="learning-hero-rule" aria-hidden="true"></div>
+            <div class="learning-featured-teaser" aria-labelledby="learning-hero-title">
+              <div class="learning-featured-asset" aria-hidden="true">
+                <div class="learning-art-stack">
+                  <div class="learning-art-card learning-art-folder">
+                    <i class="ph ph-folder-notch-open"></i>
+                    <span class="learning-art-lines"></span>
+                  </div>
+                  <div class="learning-art-card learning-art-doc">
+                    <i class="ph ph-arrow-bend-up-left"></i>
+                    <span class="learning-art-lines"></span>
+                    <span class="learning-art-lines short"></span>
+                  </div>
+                  <div class="learning-art-qubit" title="Qubit — Esfera de Bloch">
+                    <svg class="bloch-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <ellipse cx="40" cy="40" rx="28" ry="28" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".45"/>
+                      <ellipse cx="40" cy="40" rx="28" ry="9" fill="none" stroke="currentColor" stroke-width="1" opacity=".3"/>
+                      <ellipse cx="40" cy="40" rx="9" ry="28" fill="none" stroke="currentColor" stroke-width="1" opacity=".25" transform="rotate(0,40,40)"/>
+                      <line x1="40" y1="10" x2="40" y2="70" stroke="currentColor" stroke-width="1" opacity=".3"/>
+                      <line x1="10" y1="40" x2="70" y2="40" stroke="currentColor" stroke-width="1" opacity=".3"/>
+                      <line x1="40" y1="40" x2="24" y2="20" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
+                      <circle cx="24" cy="20" r="3.2" fill="currentColor" opacity=".9"/>
+                      <circle cx="40" cy="12" r="1.5" fill="currentColor" opacity=".5"/>
+                      <circle cx="40" cy="68" r="1.5" fill="currentColor" opacity=".5"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div class="learning-featured-copy">
+                <p class="learning-featured-desc" data-i18n="learning.hero.subtitle">
+                  Módulos, cursos sugeridos y recursos. La guía de programación cuántica con Harmoniq está en «Programación
+                  cuántica» del menú lateral.
+                </p>
+                <a class="learning-cta-ghost" href="#learning-modules" data-i18n="learning.hero.cta">Ver todos los modulos</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="learning-modules" class="learning-section learning-section-modules" aria-labelledby="learning-modules-title">
+          <h2 id="learning-modules-title" class="learning-section-title learning-enter ld-4" data-i18n="learning.modules.title">
+            Modulos destacados
+          </h2>
+          <div class="learning-module-grid">
+            <a class="learning-card learning-card-link learning-enter ld-5" href="paginas/base-superposicion.html">
+              <p class="learning-card-cat">
+                <i class="ph ph-file-text" aria-hidden="true"></i>
+                <span data-i18n="learning.card1.cat">Mecanica cuantica</span>
+              </p>
+              <h3 class="learning-card-title" data-i18n="learning.card1.title">Superposicion</h3>
+              <p class="learning-card-desc" data-i18n="learning.card1.desc">
+                Explora como un sistema cuántico puede existir en una combinacion de estados hasta la medicion.
+              </p>
+            </a>
+            <a class="learning-card learning-card-link learning-enter ld-6" href="paginas/base-incertidumbre.html">
+              <p class="learning-card-cat">
+                <i class="ph ph-file-text" aria-hidden="true"></i>
+                <span data-i18n="learning.card2.cat">Mecanica cuantica</span>
+              </p>
+              <h3 class="learning-card-title" data-i18n="learning.card2.title">Incertidumbre</h3>
+              <p class="learning-card-desc" data-i18n="learning.card2.desc">
+                Relacion de incertidumbre y limites de precision en observables conjugados.
+              </p>
+            </a>
+            <a class="learning-card learning-card-link learning-enter ld-7" href="paginas/base-algoritmos.html">
+              <p class="learning-card-cat">
+                <i class="ph ph-file-code" aria-hidden="true"></i>
+                <span data-i18n="learning.card3.cat">Informatica cuantica</span>
+              </p>
+              <h3 class="learning-card-title" data-i18n="learning.card3.title">Algoritmos</h3>
+              <p class="learning-card-desc" data-i18n="learning.card3.desc">
+                Introduccion a algoritmos cuánticos y su traduccion a circuitos ejecutables.
+              </p>
+            </a>
+            <a class="learning-card learning-card-link learning-enter ld-8" href="paginas/base-circuitos-puertas.html">
+              <p class="learning-card-cat">
+                <i class="ph ph-file-code" aria-hidden="true"></i>
+                <span data-i18n="learning.card4.cat">Informatica cuantica</span>
+              </p>
+              <h3 class="learning-card-title" data-i18n="learning.card4.title">Circuitos y puertas</h3>
+              <p class="learning-card-desc" data-i18n="learning.card4.desc">
+                Construye circuitos con puertas de uno y dos qubits y simulalos con Harmoniq.
+              </p>
+            </a>
+          </div>
+        </section>
+
+        <section id="learning-courses" class="learning-section learning-section-courses" aria-labelledby="learning-courses-title">
+          <h2 id="learning-courses-title" class="visually-hidden" data-i18n="learning.courses.a11yTitle">Cursos sugeridos</h2>
+          <div class="learning-course-grid">
+            <article class="learning-course-card learning-enter ld-9">
+              <div class="learning-course-copy">
+                <span class="learning-course-label" data-i18n="learning.course1.label">Curso:</span>
+                <h3 class="learning-course-title" data-i18n="learning.course1.title">Fundamentos de informacion cuantica</h3>
+                <p class="learning-course-meta" data-i18n="learning.course1.meta">Recorrido introductorio con ejemplos en Harmoniq</p>
+                <a
+                  class="learning-course-btn learning-course-btn--ghost"
+                  href="paginas/curso-fundamentos-informacion-cuantica.html"
+                  data-i18n="learning.course1.cta"
+                  >Comenzar este curso</a
+                >
+              </div>
+              <div class="learning-course-media" aria-hidden="true">
+                <div class="learning-course-photo learning-course-photo--a">
+                  <i class="ph ph-user" aria-hidden="true"></i>
+                </div>
+              </div>
+            </article>
+            <article class="learning-course-card learning-enter ld-10">
+              <div class="learning-course-copy">
+                <span class="learning-course-label" data-i18n="learning.course2.label">Curso:</span>
+                <h3 class="learning-course-title" data-i18n="learning.course2.title">Circuitos y simulacion</h3>
+                <p class="learning-course-meta" data-i18n="learning.course2.meta">Del diagrama al runtime en la plataforma</p>
+                <a
+                  class="learning-course-btn learning-course-btn--solid"
+                  href="paginas/curso-circuitos-simulacion.html"
+                  data-i18n="learning.course2.cta"
+                  >Ver practicas</a
+                >
+              </div>
+              <div class="learning-course-media" aria-hidden="true">
+                <div class="learning-course-photo learning-course-photo--b">
+                  <i class="ph ph-user" aria-hidden="true"></i>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="learning-resources" class="learning-section learning-section-resources" aria-labelledby="learning-res-title">
+          <div class="learning-resources-layout">
+            <h2 id="learning-res-title" class="learning-resources-heading learning-enter ld-11" data-i18n="learning.resources.title">
+              Recursos adicionales
+            </h2>
+            <div class="learning-res-grid">
+              <article class="learning-res-card learning-enter ld-12">
+                <div class="learning-res-icon" aria-hidden="true">
+                  <i class="ph ph-play-circle"></i>
+                </div>
+                <h3 class="learning-res-title" data-i18n="learning.res1.title">Harmoniq en video</h3>
+                <p class="learning-res-desc" data-i18n="learning.res1.desc">
+                  Recorridos visuales del SDK, runtime y ejemplos de integracion.
+                </p>
+                <a class="learning-res-link learning-res-link--external" href="#" data-i18n="learning.res1.cta">Explorar videos</a>
+              </article>
+              <article class="learning-res-card learning-enter ld-13">
+                <div class="learning-res-icon" aria-hidden="true">
+                  <i class="ph ph-scroll"></i>
+                </div>
+                <h3 class="learning-res-title" data-i18n="learning.res2.title">Tutoriales practicos</h3>
+                <p class="learning-res-desc" data-i18n="learning.res2.desc">
+                  Guías paso a paso con código listo para copiar y ejecutar.
+                </p>
+                <a class="learning-res-link" href="paginas/tutoriales.html" data-i18n="learning.res2.cta">Ver tutoriales</a>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#learning-hero" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span data-i18n="right.intro">Introducción</span>
+          </a>
+
+          <div class="toc-accordion is-open" data-toc-accordion>
+            <button type="button" class="toc-accordion-btn" aria-expanded="true">
+              <span data-i18n="right.quick">Guía rápida</span>
+              <i class="ph ph-caret-down toc-accordion-caret" aria-hidden="true"></i>
+            </button>
+            <div class="toc-accordion-panel">
+              <a href="#learning-modules" class="right-toc-sublink" data-i18n="learning.toc.modules">Modulos</a>
+              <a href="#learning-courses" class="right-toc-sublink" data-i18n="learning.toc.courses">Cursos</a>
+              <a href="#learning-resources" class="right-toc-sublink" data-i18n="learning.toc.resources">Recursos</a>
+            </div>
+          </div>
+
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <script src="./firebase-init.bundle.js?v=2"></script>
+    <script src="./script.js?v=49"></script>
+  </body>
+</html>

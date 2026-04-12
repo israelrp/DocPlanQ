@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Votos del pie «¿Te sirvió esta página?» → colección docs_page_feedback
+    // Sube estas reglas en Firebase Console → Firestore → Reglas (o firebase deploy).
+    match /docs_page_feedback/{docId} {
+      allow create: if request.resource.data.helpful is bool
+        && request.resource.data.vote in ["yes", "no"]
+        && request.resource.data.url is string
+        && request.resource.data.pathname is string
+        && request.resource.data.hash is string
+        && request.resource.data.lang is string;
+      allow read, update, delete: if false;
+    }
+  }
+}

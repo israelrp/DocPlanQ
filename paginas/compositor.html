@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compositor: arquitectura, compilación y análisis de circuitos cuánticos | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=106" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") {
+            document.body.classList.add("light-mode");
+            document.documentElement.classList.add("light-mode");
+          }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+          <form class="search-box" id="headerSearch" role="search">
+            <div class="search-box-field">
+              <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <span data-i18n="search.label">Search</span>
+              </button>
+              <input id="searchInput" class="search-input" type="search" placeholder="Buscar en la documentación..." aria-label="Buscar en la documentación" data-i18n-placeholder="search.placeholder" data-i18n-aria-label="search.placeholder" autocomplete="off" />
+            </div>
+            <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+              <div class="search-dropdown-panel">
+                <div class="search-dropdown-body">
+                  <div class="search-empty" id="searchEmptyBlock">
+                    <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                    <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                    <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                  </div>
+                  <ul class="search-results-list" id="searchResultsList" hidden></ul>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i
+        ></a>
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button type="button" class="lang-dropdown-toggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Seleccion de idioma" data-i18n-aria-label="lang.menu">
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button type="button" class="left-nav-toggle" id="leftNavToggle" aria-expanded="true" aria-controls="leftNavPanel">
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg" alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a>
+            <button type="button" class="nav-item nav-item-help" data-help-trigger><i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span></button>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+
+          <!-- ── HERO ────────────────────────────────────── -->
+          <section id="page-body" class="qubits-hero">
+            <div class="qubits-kicker-with-back">
+              <button type="button" class="doc-back-btn" data-i18n-aria-label="doc.backPrevious" aria-label="Volver a la página anterior" onclick="history.back()">
+                <i class="ph ph-arrow-left" aria-hidden="true"></i>
+              </button>
+              <p class="qubits-kicker qubits-kicker--row">
+                <span class="qubits-kicker-segment">Productos</span>
+                <span class="qubits-kicker-rule" aria-hidden="true"></span>
+                <span class="qubits-kicker-segment">Compositor</span>
+              </p>
+            </div>
+            <h1 class="qubits-hero-title">Funcionamiento del Compositor: arquitectura, compilación y análisis de circuitos cuánticos</h1>
+            <div class="qubits-prose qubits-prose--academic qubits-lead">
+              <p>
+                El <strong>Compositor</strong> es el entorno integrado de diseño, compilación y ejecución de circuitos cuánticos dentro del
+                ecosistema PlanQ. A diferencia de un editor gráfico convencional, constituye un sistema de ingeniería de experimentos cuánticos
+                que abarca desde la especificación abstracta del circuito —definida sobre un espacio de Hilbert
+                \(\mathcal{H} = (\mathbb{C}^2)^{\otimes n}\)— hasta la obtención, almacenamiento y análisis estadístico de las muestras
+                de medición devueltas por un backend simulado o físico.
+              </p>
+              <p>
+                Esta guía describe el Compositor como un <strong>sistema técnico</strong>: qué entidades modela, cómo convierte una
+                descripción de alto nivel en un <em>job</em> ejecutable, y cómo interpretar los resultados que devuelve un backend.
+                El objetivo no es documentar la interfaz como secuencia de clics, sino articular el <em>porqué</em> formal de cada
+                componente para que el experimentador pueda diseñar, reproducir y auditar circuitos con rigor científico.
+              </p>
+              <p>
+                El flujo completo implementa una tubería determinista: <strong>modelado</strong> del circuito (registros, puertas,
+                mediciones y metadatos), <strong>compilación</strong> a un conjunto nativo de instrucciones, <strong>ejecución</strong>
+                gestionada por un runtime con trazabilidad de jobs, y <strong>análisis</strong> que transforma distribuciones de
+                bitstrings en métricas cuantitativas. Cada etapa introduce restricciones y transformaciones cuya comprensión es
+                indispensable para interpretar correctamente los resultados.
+              </p>
+            </div>
+          </section>
+
+          <!-- ── ANATOMÍA VISUAL ────────────────────────── -->
+          <section id="anatomia" class="qubits-section">
+            <h2>Anatomía del Compositor</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El Compositor organiza su interfaz en paneles especializados que reflejan las etapas de la tubería
+                de ejecución. El siguiente esquema identifica cada región funcional y su correspondencia con las
+                entidades descritas a lo largo de este artículo.
+              </p>
+            </div>
+
+            <figure class="qubits-figure">
+              <div class="compositor-schematic" aria-label="Esquema de la interfaz del Compositor">
+                <div class="cs-header">
+                  <span class="cs-label-sm">Barra de menú</span>
+                  <span class="cs-items">Archivo &nbsp;·&nbsp; Editar &nbsp;·&nbsp; Ver &nbsp;·&nbsp; Ayuda</span>
+                </div>
+                <div class="cs-body">
+                  <div class="cs-sidebar">
+                    <span class="cs-label">Navegación</span>
+                    <span class="cs-sidebar-item">Compositor</span>
+                    <span class="cs-sidebar-item">Backend</span>
+                    <span class="cs-sidebar-item">APIKeys</span>
+                    <span class="cs-sidebar-item">Compatibilidad</span>
+                    <span class="cs-sidebar-item">Tutoriales</span>
+                  </div>
+                  <div class="cs-center">
+                    <div class="cs-canvas">
+                      <span class="cs-label">Lienzo del circuito</span>
+                      <div class="cs-canvas-lines">
+                        <div class="cs-qline"><span class="cs-qlabel">q₀</span><span class="cs-wire"></span><span class="cs-gate">H</span><span class="cs-wire"></span><span class="cs-ctrl">●</span><span class="cs-wire"></span><span class="cs-meas">M</span></div>
+                        <div class="cs-qline"><span class="cs-qlabel">q₁</span><span class="cs-wire"></span><span class="cs-wire"></span><span class="cs-wire"></span><span class="cs-tgt">⊕</span><span class="cs-wire"></span><span class="cs-meas">M</span></div>
+                        <div class="cs-qline"><span class="cs-qlabel">q₂</span><span class="cs-wire"></span><span class="cs-gate">X</span><span class="cs-wire"></span><span class="cs-wire"></span><span class="cs-wire"></span><span class="cs-meas">M</span></div>
+                        <div class="cs-qline"><span class="cs-qlabel">q₃</span><span class="cs-wire"></span><span class="cs-wire"></span><span class="cs-gate">RZ</span><span class="cs-wire"></span><span class="cs-wire"></span><span class="cs-meas">M</span></div>
+                      </div>
+                    </div>
+                    <div class="cs-ops">
+                      <span class="cs-label">Biblioteca de operaciones</span>
+                      <div class="cs-ops-row">
+                        <span class="cs-op">RX</span><span class="cs-op">RY</span><span class="cs-op">RZ</span>
+                        <span class="cs-op">H</span><span class="cs-op">X</span><span class="cs-op">Y</span>
+                        <span class="cs-op">Z</span><span class="cs-op">S</span><span class="cs-op">T</span>
+                        <span class="cs-op cs-op--2q">CX</span><span class="cs-op cs-op--2q">CZ</span>
+                        <span class="cs-op cs-op--2q">SW</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cs-right">
+                    <div class="cs-code">
+                      <span class="cs-label">Panel de código</span>
+                      <div class="cs-code-lines">
+                        <span class="cs-codeln"><span class="cs-ln">1</span> creg q[4];</span>
+                        <span class="cs-codeln"><span class="cs-ln">2</span> h q[0];</span>
+                        <span class="cs-codeln"><span class="cs-ln">3</span> cx q[0], q[1];</span>
+                        <span class="cs-codeln"><span class="cs-ln">4</span> x q[2];</span>
+                        <span class="cs-codeln"><span class="cs-ln">5</span> rz(π/4) q[3];</span>
+                        <span class="cs-codeln"><span class="cs-ln">6</span> measure q → c;</span>
+                      </div>
+                    </div>
+                    <div class="cs-results">
+                      <span class="cs-label">Resultados</span>
+                      <div class="cs-bloch">
+                        <div class="cs-bloch-sphere">
+                          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="40" cy="40" r="32" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                            <ellipse cx="40" cy="40" rx="32" ry="12" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.2"/>
+                            <line x1="40" y1="40" x2="40" y2="10" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+                            <circle cx="52" cy="28" r="4" fill="currentColor" class="qubits-svg-accent" opacity="0.85"/>
+                          </svg>
+                        </div>
+                        <div class="cs-hist">
+                          <div class="cs-bar" style="height:80%"><span>00</span></div>
+                          <div class="cs-bar" style="height:10%"><span>01</span></div>
+                          <div class="cs-bar" style="height:5%"><span>10</span></div>
+                          <div class="cs-bar" style="height:75%"><span>11</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="cs-footer">
+                  <span class="cs-label-sm">Chat AI</span>
+                  <span class="cs-items">Asistencia contextual del experimento</span>
+                </div>
+              </div>
+              <figcaption class="qubits-figure-caption">
+                Figura 1. Esquema funcional del Compositor: navegación lateral, lienzo del circuito con líneas de
+                cúbits y puertas, biblioteca de operaciones, panel de código serializado, visualizaciones de
+                resultados (esfera de Bloch e histograma) y chat contextual.
+              </figcaption>
+            </figure>
+          </section>
+
+          <!-- ── ARQUITECTURA LÓGICA ─────────────────────── -->
+          <section id="arquitectura" class="qubits-section">
+            <h2>Arquitectura lógica</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El Compositor implementa una tubería (<em>pipeline</em>) con cuatro responsabilidades claramente delimitadas. La
+                separación en etapas no es un detalle de implementación sino una decisión de diseño con implicaciones directas
+                sobre la reproducibilidad experimental: cada capa produce un artefacto inmutable que sirve de entrada a la
+                siguiente, permitiendo auditar retrospectivamente cualquier punto de la cadena.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Modelo de circuito</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La primera capa mantiene una representación interna del circuito como un grafo acíclico dirigido (DAG) en el que
+                  los nodos representan operaciones unitarias o mediciones y las aristas codifican dependencias temporales sobre
+                  registros compartidos. Formalmente, un circuito sobre \(n\) cúbits es una secuencia ordenada de operaciones
+                  \(\{U_1, U_2, \ldots, U_d\}\) donde cada \(U_k \in \mathrm{U}(2^n)\) actúa sobre un subconjunto de los
+                  \(n\) cúbits. La profundidad \(d\) del circuito —número de capas temporales con operaciones paralelizables— es
+                  una métrica crítica porque determina la exposición acumulada a decoherencia.
+                </p>
+                <p>
+                  El DAG admite optimizaciones topológicas: dos operaciones que actúan sobre cúbits disjuntos pueden reordenarse
+                  sin alterar la unitaria global \(U = U_d \cdots U_2 U_1\), lo que permite al compilador reducir la profundidad
+                  efectiva mediante planificación (<em>scheduling</em>) sin modificar la semántica del experimento.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Compilación y transpilación</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La segunda capa transforma el circuito abstracto en un circuito nativo compatible con el backend seleccionado.
+                  Este proceso involucra descomposición de puertas, enrutamiento de cúbits (<em>qubit routing</em>) y, opcionalmente,
+                  optimizaciones de cancelación de puertas adyacentes. La sección dedicada a compilación desarrolla estos aspectos
+                  en profundidad.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Runtime de ejecución</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La tercera capa empaqueta el circuito compilado junto con los parámetros experimentales (número de shots, semilla
+                  pseudoaleatoria, modelo de ruido) en un <em>job</em> serializado, lo envía al backend y gestiona el ciclo de vida
+                  del trabajo (en cola → ejecutando → completado/fallido). El artefacto de entrada se preserva íntegramente para
+                  garantizar la trazabilidad: dado un identificador de job, siempre es posible reconstruir el circuito exacto que
+                  se ejecutó.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Capa de análisis</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La cuarta capa recibe las muestras de medición \(\{x_1, x_2, \ldots, x_{N_{\text{shots}}}\}\) con
+                  \(x_i \in \{0,1\}^n\) y las transforma en distribuciones de probabilidad empíricas, histogramas, métricas
+                  derivadas y, cuando el backend lo permite, representaciones del vector de estado o la matriz de densidad.
+                  La distinción entre resultados muestrales y estados idealizados es fundamental para evitar
+                  sobreinterpretaciones en presencia de ruido.
+                </p>
+              </div>
+            </section>
+
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Inmutabilidad de artefactos</p>
+              <p>
+                Cada transición entre etapas genera un artefacto inmutable (circuito abstracto → circuito nativo → job → resultado).
+                Esta cadena de custodia permite reproducir el experimento, comparar corridas y diagnosticar discrepancias entre
+                ejecuciones con distintos backends o configuraciones de ruido.
+              </p>
+            </aside>
+          </section>
+
+          <!-- ── ENTIDADES ───────────────────────────────── -->
+          <section id="entidades" class="qubits-section">
+            <h2>Entidades del sistema</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                El Compositor organiza la información del experimento en entidades semánticamente diferenciadas. Cada entidad
+                corresponde a un panel de la interfaz, pero su significado trasciende la disposición visual: define un dominio
+                formal con invariantes propios. A continuación se describe cada una con el formalismo necesario para interpretar
+                su comportamiento y sus limitaciones.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Registros cuánticos y clásicos</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Un <strong>registro cuántico</strong> \(\mathbf{q} = (q_0, q_1, \ldots, q_{n-1})\) indexa los \(n\) grados de
+                  libertad cuánticos del sistema. Cada \(q_i\) se inicializa en \(|0\rangle\) por convención; el estado global
+                  del registro es el producto tensorial \(|0\rangle^{\otimes n}\). Las puertas del circuito actúan exclusivamente
+                  sobre este registro.
+                </p>
+                <p>
+                  Un <strong>registro clásico</strong> \(\mathbf{c} = (c_0, c_1, \ldots, c_{m-1})\) almacena los resultados de
+                  las mediciones proyectivas. La separación explícita entre \(\mathbf{q}\) y \(\mathbf{c}\) refleja la distinción
+                  fundamental entre información cuántica (coherente, no clonable, sujeta a superposición) e información clásica
+                  (copiable, persistente, determinista una vez registrada). Confundir ambos registros conduce a errores
+                  conceptuales graves: no es posible aplicar una puerta sobre un bit clásico ni retroalimentar un resultado
+                  de medición al registro cuántico sin operaciones condicionales explícitas.
+                </p>
+                <p>
+                  El número de bits clásicos \(m\) puede diferir de \(n\): no todos los cúbits requieren medición, y ciertos
+                  protocolos (p. ej., teleportación) miden solo un subconjunto del registro cuántico.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Lienzo del circuito</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El lienzo (<em>canvas</em>) es la representación visual del DAG del circuito. Cada línea horizontal corresponde
+                  a un cúbit; el eje horizontal codifica el tiempo lógico (de izquierda a derecha). Las puertas se disponen en
+                  columnas temporales (<em>moments</em>) que agrupan operaciones paralelizables, es decir, operaciones que actúan
+                  sobre conjuntos disjuntos de cúbits y pueden ejecutarse simultáneamente sin violar causalidad.
+                </p>
+                <p>
+                  Las puertas controladas se representan mediante líneas verticales que conectan el cúbit de control con el
+                  cúbit objetivo. La notación visual sigue las convenciones estándar de la literatura: un punto sólido (●)
+                  indica control, un símbolo ⊕ indica el objetivo de una CNOT, y las cajas etiquetadas representan rotaciones
+                  parametrizadas o puertas compuestas.
+                </p>
+                <p>
+                  El lienzo no es meramente decorativo: su estructura determina la profundidad del circuito, parámetro que
+                  el compilador intentará minimizar durante la transpilación. Toda reorganización manual de puertas en el
+                  lienzo modifica potencialmente la profundidad y, por tanto, la fidelidad esperada del experimento en
+                  backends ruidosos.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Biblioteca de operaciones</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La biblioteca expone el conjunto universal de puertas disponibles, organizadas por categoría: puertas de
+                  un cúbit (rotaciones de Pauli \(R_X(\theta)\), \(R_Y(\theta)\), \(R_Z(\theta)\); Hadamard \(H\);
+                  fase \(S\), \(T\)), puertas de dos cúbits (CNOT, CZ, SWAP) y operaciones especiales (medición,
+                  barreras, reset).
+                </p>
+                <p>
+                  Cada operación tiene una <strong>firma</strong> que especifica su aridad (número de cúbits sobre los que
+                  actúa), parámetros continuos (ángulos de rotación) y, en su caso, cúbits de control. La inserción de una
+                  puerta en el lienzo modifica el DAG del circuito: se crea un nuevo nodo con aristas hacia los registros
+                  afectados, respetando el orden temporal.
+                </p>
+                <p>
+                  La universalidad del conjunto de puertas garantiza que cualquier operación unitaria
+                  \(U \in \mathrm{U}(2^n)\) puede aproximarse con precisión arbitraria mediante una secuencia finita de
+                  puertas de la biblioteca, resultado formalizado por el <strong>teorema de Solovay–Kitaev</strong>. En la
+                  práctica, el compilador se encarga de esta descomposición cuando el usuario emplea puertas que no
+                  pertenecen al conjunto nativo del backend.
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Descomposición ZYZ de puerta unitaria">
+                \[
+                  U = e^{i\alpha} R_Z(\beta)\, R_Y(\gamma)\, R_Z(\delta),
+                  \qquad R_K(\theta) = e^{-i\theta K/2},\quad K \in \{X, Y, Z\}.
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  La descomposición ZYZ anterior muestra que cualquier puerta de un cúbit puede expresarse con tres
+                  rotaciones y una fase global (irrelevante para la medición). Para puertas de dos cúbits, la
+                  descomposición KAK generaliza este resultado al grupo \(\mathrm{SU}(4)\).
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Panel de código</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El panel de código presenta la representación serializada del circuito en el formato del SDK activo
+                  (HarmoniQ para Swift, Kotlin, React/TypeScript o Python). Esta serialización no es una vista auxiliar
+                  sino el <strong>artefacto de referencia</strong> del experimento: contiene la secuencia exacta de
+                  instrucciones, los parámetros numéricos de cada puerta y la configuración del backend.
+                </p>
+                <p>
+                  La trazabilidad científica exige que el experimento pueda reconstruirse íntegramente a partir de esta
+                  descripción. Por ello, el Compositor mantiene sincronización bidireccional: toda modificación en el
+                  lienzo se refleja en el código, y toda edición del código actualiza el lienzo. El hash del artefacto
+                  serializado se incluye en los metadatos del job para verificar integridad.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Panel de resultados y visualización</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Tras la ejecución, el panel de resultados presenta la distribución empírica de bitstrings. Para
+                  \(N_{\text{shots}}\) muestras y un espacio de \(2^n\) estados posibles, la probabilidad estimada de
+                  cada estado \(x\) es el estimador de frecuencia relativa:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Estimador de frecuencia relativa">
+                \[
+                  \hat{p}(x) = \frac{N(x)}{N_{\text{shots}}},
+                  \qquad \sigma[\hat{p}(x)] = \sqrt{\frac{\hat{p}(x)(1 - \hat{p}(x))}{N_{\text{shots}}}}.
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El histograma muestra \(\hat{p}(x)\) para cada bitstring observado. La barra de error asociada
+                  (desviación estándar binomial) decrece como \(\mathcal{O}(1/\sqrt{N_{\text{shots}}})\), lo que
+                  justifica la práctica de incrementar shots para mejorar la resolución estadística.
+                </p>
+                <p>
+                  Para sistemas de un solo cúbit, el Compositor ofrece adicionalmente la representación en la
+                  <strong>esfera de Bloch</strong>. En simulación ideal, el vector de estado \(|\psi\rangle\) se
+                  proyecta directamente sobre la esfera; en backends ruidosos, la representación
+                  corresponde al estado ideal teórico y debe interpretarse con las reservas correspondientes.
+                </p>
+                <p>
+                  El panel también muestra la <strong>tabla de conteos</strong> con los valores absolutos \(N(x)\),
+                  el estado más frecuente (<em>most frequent bitstring</em>), y métricas derivadas como la entropía
+                  de Shannon de la distribución empírica:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Entropía de Shannon de la distribución empírica">
+                \[
+                  H(\hat{p}) = -\sum_{x} \hat{p}(x) \log_2 \hat{p}(x).
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Un circuito que produce un estado de producto (sin entrelazamiento) sobre \(n\) cúbits tendrá
+                  \(H \le n\) bits; un estado entrelazado máximamente (como una superposición uniforme de \(2^n\)
+                  estados) alcanza \(H = n\). La comparación entre la entropía observada y la teórica es un
+                  diagnóstico rápido de la calidad del experimento.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Selector de backend</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El Compositor permite seleccionar el backend de ejecución entre los simuladores disponibles (Hopper,
+                  Hermann) y, en el futuro, dispositivos físicos. Cada backend define su propio conjunto nativo de
+                  puertas, topología de conectividad entre cúbits y modelo de ruido. La elección del backend no es
+                  neutral: un mismo circuito abstracto puede producir resultados cualitativamente distintos según el
+                  nivel de fidelidad del simulador seleccionado.
+                </p>
+                <p>
+                  Hopper implementa un modelo de ruido depolarizante con fidelidades de puerta de \(F_{1Q} = 0.998\) y
+                  \(F_{2Q} = 0.985\); Hermann ofrece \(F_{2Q} = 0.979\) con un modelo de ruido más realista que incluye
+                  errores de lectura (<em>readout errors</em>). El experimentador debe reportar siempre el backend
+                  utilizado como parte de los metadatos del resultado.
+                </p>
+              </div>
+            </section>
+          </section>
+
+          <!-- ── COMPILACIÓN ─────────────────────────────── -->
+          <section id="compilacion" class="qubits-section">
+            <h2>Compilación: de puertas lógicas a instrucciones ejecutables</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La compilación traduce un circuito abstracto a un conjunto nativo de instrucciones, respetando las
+                restricciones impuestas por el backend: conjunto de puertas nativas, topología de conectividad entre
+                cúbits y parámetros de calibración. Este proceso es análogo a la compilación de código fuente a
+                código máquina en computación clásica, pero con una diferencia crítica: cada transformación del
+                circuito modifica la profundidad y, por tanto, la exposición a decoherencia.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Descomposición de puertas</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Cuando el circuito contiene puertas que no pertenecen al conjunto nativo del backend, el compilador
+                  aplica identidades de descomposición. Para puertas de un cúbit, la descomposición ZYZ garantiza que
+                  cualquier \(U \in \mathrm{SU}(2)\) puede expresarse con tres rotaciones. Para puertas de dos cúbits,
+                  la descomposición KAK expresa cualquier \(U \in \mathrm{SU}(4)\) como producto de rotaciones locales
+                  y a lo sumo tres puertas CNOT:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Descomposición KAK">
+                \[
+                  U = (A_1 \otimes A_2) \cdot \exp\!\left(-i\sum_{k=1}^{3} \theta_k \sigma_k \otimes \sigma_k\right) \cdot (B_1 \otimes B_2),
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  donde \(A_j, B_j \in \mathrm{SU}(2)\) son rotaciones locales y \(\sigma_k\) son las matrices de
+                  Pauli. El número de CNOTs requerido depende de los valores de \(\theta_k\): si alguno es nulo,
+                  la descomposición puede reducirse a dos o incluso una CNOT.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Enrutamiento de cúbits</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Si el backend impone una topología de conectividad limitada (no todos los pares de cúbits pueden
+                  interactuar directamente), el compilador debe insertar puertas SWAP para mover la información
+                  cuántica entre cúbits adyacentes. Cada SWAP equivale a tres CNOTs, incrementando la profundidad en
+                  tres capas adicionales por cada reubicación.
+                </p>
+                <p>
+                  El problema de enrutamiento óptimo es NP-difícil en general; el compilador emplea heurísticas
+                  (algoritmos voraces, <em>simulated annealing</em>) que buscan un compromiso entre profundidad
+                  adicional y número total de puertas de dos cúbits. El Compositor reporta la profundidad del
+                  circuito compilado junto a la del circuito abstracto, permitiendo al experimentador evaluar el
+                  <em>overhead</em> de transpilación.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Optimización de circuito</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Tras la descomposición y el enrutamiento, el compilador aplica pasadas de optimización:
+                  cancelación de puertas adyacentes inversas (\(H \cdot H = I\), \(X \cdot X = I\)),
+                  fusión de rotaciones consecutivas sobre el mismo eje
+                  (\(R_Z(\alpha) \cdot R_Z(\beta) = R_Z(\alpha + \beta)\)), y eliminación de identidades.
+                  Estas optimizaciones preservan la unitaria global pero reducen la profundidad y el número
+                  total de puertas, mejorando la fidelidad esperada.
+                </p>
+              </div>
+              <aside class="qubits-callout">
+                <p class="qubits-callout-label">Separación diseño–ejecución</p>
+                <p>
+                  Un mismo circuito lógico puede producir circuitos nativos distintos según el backend y su estado de
+                  calibración. El Compositor separa explícitamente el diseño (circuito abstracto) de la ejecución
+                  (circuito compilado) para que el experimentador pueda comparar el comportamiento del mismo algoritmo
+                  en diferentes backends sin ambigüedad.
+                </p>
+              </aside>
+            </section>
+          </section>
+
+          <!-- ── EJECUCIÓN ───────────────────────────────── -->
+          <section id="ejecucion" class="qubits-section">
+            <h2>Ejecución: jobs, shots y estados del runtime</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La ejecución transforma un circuito compilado en datos experimentales. El Compositor empaqueta el
+                circuito junto con los parámetros experimentales en un <strong>job</strong>: un objeto inmutable que
+                contiene toda la información necesaria para reproducir la ejecución.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Número de shots y estadística de muestreo</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El parámetro \(N_{\text{shots}}\) determina cuántas veces se prepara, evoluciona y mide el sistema
+                  cuántico. Cada shot produce un bitstring \(x_i \in \{0,1\}^n\) muestreado de la distribución de
+                  probabilidad \(p(x) = |\langle x | U | 0 \rangle^{\otimes n}|^2\). La incertidumbre estadística
+                  del estimador de frecuencia relativa decrece como:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Error estadístico del estimador">
+                \[
+                  \Delta \hat{p}(x) \sim \frac{1}{\sqrt{N_{\text{shots}}}}.
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Para un circuito con \(k\) estados equiprobables, distinguir entre distribuciones con resolución
+                  \(\epsilon\) requiere \(N_{\text{shots}} \gtrsim k / \epsilon^2\). En la práctica, \(1024\) shots
+                  ofrecen una resolución de aproximadamente 3 % para distribuciones sobre 4 estados; \(8192\) shots
+                  reducen la incertidumbre a menos de 1 %.
+                </p>
+                <p>
+                  Es fundamental distinguir la <strong>incertidumbre estadística</strong> (reducible con más shots)
+                  del <strong>error sistemático</strong> (introducido por ruido de puerta, errores de lectura y
+                  decoherencia, no reducible con más shots). El Compositor muestra ambas fuentes de error cuando el
+                  backend las modela.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Ciclo de vida del job</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El runtime gestiona el job a través de una máquina de estados con las transiciones:
+                </p>
+                <p>
+                  <strong>Creado → En cola → Ejecutando → Completado</strong> (flujo nominal), con una transición
+                  alternativa a <strong>Fallido</strong> si el backend rechaza el circuito (profundidad excesiva,
+                  cúbits no disponibles) o si ocurre un error de comunicación. Cada transición se registra con
+                  marca temporal, lo que permite calcular latencias y diagnosticar cuellos de botella.
+                </p>
+                <p>
+                  El artefacto de entrada (circuito compilado + parámetros) se almacena junto con el resultado,
+                  garantizando que cualquier job completado pueda auditarse sin dependencia del estado actual
+                  del Compositor. Esta propiedad es esencial para la reproducibilidad: dos ejecuciones del mismo
+                  artefacto deben producir distribuciones estadísticamente compatibles (dentro de las barras de
+                  error) si el backend no ha cambiado su calibración.
+                </p>
+              </div>
+            </section>
+
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Metadatos de reproducibilidad</p>
+              <p>
+                Un resultado experimental bien documentado debe incluir: identificador del job, circuito compilado,
+                número de shots, backend utilizado, modelo de ruido activo, semilla pseudoaleatoria (si aplica) y
+                fecha de ejecución. Sin estos metadatos, la comparación entre corridas se vuelve ambigua.
+              </p>
+            </aside>
+          </section>
+
+          <!-- ── ANÁLISIS ────────────────────────────────── -->
+          <section id="analisis" class="qubits-section">
+            <h2>Análisis: de bitstrings a métricas cuantitativas</h2>
+            <div class="qubits-prose qubits-prose--academic">
+              <p>
+                La capa de análisis del Compositor transforma las cuentas brutas \(\{N(x)\}\) en información
+                interpretable. El proceso sigue una jerarquía de abstracción creciente: distribución empírica,
+                métricas de primer orden, comparación con distribuciones teóricas y, cuando el backend lo permite,
+                reconstrucción del estado cuántico.
+              </p>
+            </div>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Distribución empírica y métricas de primer orden</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  El estimador primario es la frecuencia relativa \(\hat{p}(x) = N(x) / N_{\text{shots}}\). A
+                  partir de ella se derivan: el <strong>estado más frecuente</strong> (<em>mode</em>), la
+                  <strong>entropía de Shannon</strong> \(H(\hat{p})\), y las <strong>probabilidades marginales</strong>
+                  de cada cúbit individual:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Probabilidad marginal del cúbit k">
+                \[
+                  \hat{p}_k(1) = \sum_{x:\, x_k = 1} \hat{p}(x),
+                  \qquad k = 0, 1, \ldots, n-1.
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Las marginales son útiles para detectar asimetrías: si un cúbit debería estar en superposición
+                  uniforme pero \(\hat{p}_k(1)\) se desvía significativamente de \(0.5\), esto indica error de
+                  puerta, error de lectura o un defecto en el diseño del circuito.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Comparación con distribuciones teóricas</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Cuando se dispone de la distribución teórica \(p_{\text{ideal}}(x)\) (calculada por simulación
+                  exacta del circuito), el Compositor puede calcular la <strong>distancia de variación total</strong>
+                  (TVD) y la <strong>fidelidad clásica</strong> entre la distribución observada y la ideal:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Distancia de variación total y fidelidad clásica">
+                \[
+                  \mathrm{TVD} = \frac{1}{2}\sum_x |\hat{p}(x) - p_{\text{ideal}}(x)|,
+                  \qquad F_{\text{cl}} = \left(\sum_x \sqrt{\hat{p}(x)\, p_{\text{ideal}}(x)}\right)^{\!2}.
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Una TVD cercana a cero indica alta concordancia entre experimento y teoría; \(F_{\text{cl}}\)
+                  cercana a 1 indica fidelidad alta. Estas métricas permiten cuantificar objetivamente la calidad
+                  del experimento y comparar el desempeño de distintos backends sobre el mismo circuito.
+                </p>
+              </div>
+            </section>
+
+            <section class="qubits-section" style="padding-left:0;border-left:none;">
+              <h3>Observables y valores esperados</h3>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Para algoritmos variacionales y aplicaciones en química cuántica, el resultado de interés no es
+                  una distribución de bitstrings sino el valor esperado de un observable \(\hat{O}\). Si \(\hat{O}\)
+                  es diagonal en la base computacional, su estimación es directa:
+                </p>
+              </div>
+              <div class="qubits-equation" aria-label="Valor esperado de un observable diagonal">
+                \[
+                  \langle \hat{O} \rangle \approx \sum_x O(x)\, \hat{p}(x),
+                  \qquad \sigma[\langle \hat{O} \rangle] = \sqrt{\frac{\mathrm{Var}[\hat{O}]}{N_{\text{shots}}}}.
+                \]
+              </div>
+              <div class="qubits-prose qubits-prose--academic">
+                <p>
+                  Para observables no diagonales (p. ej., operadores de Pauli \(\sigma_X\), \(\sigma_Y\)), es
+                  necesario rotar la base de medición antes del paso de medición. El Compositor facilita esta
+                  operación permitiendo especificar la base de medición por cúbit, insertando automáticamente
+                  las rotaciones de cambio de base necesarias antes de las mediciones en base \(Z\).
+                </p>
+              </div>
+            </section>
+
+            <aside class="qubits-callout">
+              <p class="qubits-callout-label">Simulación vs. hardware</p>
+              <p>
+                En simulación, el Compositor puede acceder al vector de estado completo \(|\psi\rangle\) y
+                mostrar amplitudes y fases individuales. En hardware real, solo se dispone de muestras de
+                medición. Las visualizaciones del vector de estado deben interpretarse como resultados
+                idealizados, no como datos experimentales directos.
+              </p>
+            </aside>
+          </section>
+
+          <!-- ── REFERENCIAS ─────────────────────────────── -->
+          <section id="compositor-refs" class="qubits-section qubits-refs">
+            <h2>Referencias y lecturas recomendadas</h2>
+            <p class="qubits-refs-intro qubits-prose--academic">
+              La selección siguiente orienta al lector hacia monografías y recursos cuya rigurosidad ha sido
+              contrastada por la comunidad científica.
+            </p>
+            <ul class="qubits-ref-grid">
+              <li>
+                <a class="qubits-ref-card" href="https://quantum.ibm.com/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">IBM Quantum</span>
+                  <span class="qubits-ref-desc">Plataforma experimental y documentación orientada a circuitos y calibración.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://qiskit.org/learn" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Qiskit Textbook</span>
+                  <span class="qubits-ref-desc">Texto abierto con derivaciones paso a paso y ejercicios numéricos.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://learn.microsoft.com/azure/quantum/" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">Microsoft Learn · Azure Quantum</span>
+                  <span class="qubits-ref-desc">Fundamentos y modelos de programación cuántica en entornos administrados.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <a class="qubits-ref-card" href="https://arxiv.org/list/quant-ph/recent" target="_blank" rel="noopener noreferrer">
+                  <span class="qubits-ref-name">arXiv · quant-ph</span>
+                  <span class="qubits-ref-desc">Prepublicaciones recientes en información cuántica y computación cuántica.</span>
+                  <span class="qubits-ref-go">Abrir <span aria-hidden="true">↗</span></span>
+                </a>
+              </li>
+              <li>
+                <div class="qubits-ref-card qubits-ref-card--static">
+                  <span class="qubits-ref-name">Nielsen &amp; Chuang</span>
+                  <span class="qubits-ref-desc"><em>Quantum Computation and Quantum Information</em> (Cambridge University Press). Obra de referencia para demostraciones formales, complejidad cuántica y códigos correctores.</span>
+                </div>
+              </li>
+            </ul>
+            <h3 class="qubits-refs-biblio-title">Bibliografía citada</h3>
+            <ol class="qubits-refs-list">
+              <li class="qubits-ref-item">
+                <span class="qubits-ref-num">[1]</span>
+                <div class="qubits-ref-body">
+                  Nielsen, M. A., & Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information.</em> Cambridge University Press. Cap. 4 (Circuitos cuánticos).
+                </div>
+              </li>
+              <li class="qubits-ref-item">
+                <span class="qubits-ref-num">[2]</span>
+                <div class="qubits-ref-body">
+                  Dawson, C. M., & Nielsen, M. A. (2006). <em>The Solovay-Kitaev algorithm.</em> Quantum Information & Computation, 6(1), 81–95.
+                </div>
+              </li>
+              <li class="qubits-ref-item">
+                <span class="qubits-ref-num">[3]</span>
+                <div class="qubits-ref-body">
+                  Cross, A. W., Bishop, L. S., Smolin, J. A., & Gambetta, J. M. (2017). <em>Open Quantum Assembly Language.</em> arXiv:1707.03429.
+                </div>
+              </li>
+              <li class="qubits-ref-item">
+                <span class="qubits-ref-num">[4]</span>
+                <div class="qubits-ref-body">
+                  Zulehner, A., Paler, A., & Wille, R. (2019). <em>An efficient methodology for mapping quantum circuits to the IBM QX architectures.</em> IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems, 38(7), 1226–1236.
+                </div>
+              </li>
+              <li class="qubits-ref-item">
+                <span class="qubits-ref-num">[5]</span>
+                <div class="qubits-ref-body">
+                  Vatan, F., & Williams, C. (2004). <em>Optimal quantum circuits for general two-qubit gates.</em> Physical Review A, 69(3), 032315.
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <!-- ── ENDMATTER ───────────────────────────────── -->
+          <section id="descargar-articulo-compositor" class="qubits-section qubits-article-endmatter" style="margin-top:48px; padding-top:36px;">
+            <h2 class="qubits-endmatter-title">Descargar artículo</h2>
+            <dl class="qubits-endmatter-meta" style="gap:18px 24px; margin-bottom:28px;">
+              <div class="qubits-endmatter-row">
+                <dt>Título</dt>
+                <dd class="qubits-endmatter-doc-title">
+                  Funcionamiento del Compositor: arquitectura, compilación y análisis de circuitos cuánticos
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt>Fecha de elaboración</dt>
+                <dd>
+                  <time datetime="2026-04-10">10 de abril de 2026</time>
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt>Creador</dt>
+                <dd>
+                  <div class="compositor-credits">
+                    <div class="compositor-credit-card">
+                      <img
+                        class="compositor-credit-photo"
+                        src="../images/author-nogueron-mendez-planq.png"
+                        width="48" height="48"
+                        alt="Noguerón Méndez José Antonio"
+                        loading="lazy" decoding="async"
+                      />
+                      <div class="compositor-credit-meta">
+                        <span class="compositor-credit-name">Noguerón Méndez José Antonio</span>
+                        <span class="compositor-credit-role">Head of Quantum Product</span>
+                      </div>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+              <div class="qubits-endmatter-row">
+                <dt>Diseñador</dt>
+                <dd>
+                  <div class="compositor-credits">
+                    <div class="compositor-credit-card">
+                      <div class="compositor-credit-photo" style="display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--accent) 15%, var(--surface));font-size:1.1rem;font-weight:600;color:var(--accent);">RM</div>
+                      <div class="compositor-credit-meta">
+                        <span class="compositor-credit-name">Raúl Meza</span>
+                        <span class="compositor-credit-role">Head of Design</span>
+                      </div>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+            <a
+              id="compositorArticleDownload"
+              class="qubits-btn-artículo qubits-btn-artículo--disabled"
+              href="#"
+              aria-label="Descargar el artículo completo"
+              aria-disabled="true"
+            >
+              <i class="ph ph-download-simple" aria-hidden="true"></i>
+              <span>Descargar artículo</span>
+            </a>
+          </section>
+
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#anatomia" class="right-toc-sublink">Anatomía visual</a>
+          <a href="#arquitectura" class="right-toc-sublink">Arquitectura lógica</a>
+          <a href="#entidades" class="right-toc-sublink">Entidades</a>
+          <a href="#compilacion" class="right-toc-sublink">Compilación</a>
+          <a href="#ejecucion" class="right-toc-sublink">Ejecución</a>
+          <a href="#analisis" class="right-toc-sublink">Análisis</a>
+          <a href="#compositor-refs" class="right-toc-sublink">Referencias y lecturas</a>
+          <a href="#descargar-articulo-compositor" class="right-toc-sublink">Descargar artículo</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light"><i class="ph ph-sun"></i></button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system"><i class="ph ph-desktop"></i></button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark"><i class="ph ph-moon"></i></button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+              { left: "\\[", right: "\\]", display: true },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+    </script>
+  </body>
+</html>

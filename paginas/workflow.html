@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuestra tecnología: simulación, ejecución y backends | Harmoniq Docs</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="../favicon-dark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../styles.css?v=102" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        try {
+          document.documentElement.classList.add("page-prep");
+          var mode = localStorage.getItem("harmoniq-docs-theme") || "system";
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+          if (resolved === "light") { document.body.classList.add("light-mode"); document.documentElement.classList.add("light-mode"); }
+          if (localStorage.getItem("harmoniq-docs-sidebar") === "collapsed") {
+            document.body.classList.add("sidebar-nav-collapsed");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <header class="top-header">
+      <div class="top-header-left">
+        <a class="brand" href="../index.html#top" aria-label="Harmoniq Documentation">
+          <img src="../logo-harmoniq.svg" alt="" />
+          <span class="brand-docs" data-i18n="top.brandDocs">Docs</span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="../index.html" class="top-nav-link" data-nav="docs">
+            <i class="ph ph-file-text" aria-hidden="true"></i><span data-i18n="top.docs">Documentación</span>
+          </a>
+          <a href="../referencias-api.html" class="top-nav-link" data-nav="api">
+            <i class="ph ph-brackets-curly" aria-hidden="true"></i><span data-i18n="top.api">Referencias API</span>
+          </a>
+          <a href="../articulos.html#learning-hero" class="top-nav-link" data-nav="articles">
+            <i class="ph ph-book-open" aria-hidden="true"></i><span data-i18n="top.articles">Articulos</span>
+          </a>
+        </nav>
+      </div>
+      <div class="top-header-right">
+        <div class="search-wrap" id="searchWrap">
+        <form class="search-box" id="headerSearch" role="search">
+          <div class="search-box-field">
+            <button type="button" class="search-toggle" aria-label="Abrir buscador" data-i18n-aria-label="search.open" aria-expanded="false" aria-controls="searchDropdown">
+              <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+              <span data-i18n="search.label">Search</span>
+            </button>
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Buscar en la documentación..."
+              aria-label="Buscar en la documentación"
+              data-i18n-placeholder="search.placeholder"
+              data-i18n-aria-label="search.placeholder"
+              autocomplete="off"
+            />
+          </div>
+          <div class="search-dropdown" id="searchDropdown" role="dialog" data-i18n-aria-label="search.dialogLabel" hidden>
+            <div class="search-dropdown-panel">
+              <div class="search-dropdown-body">
+                <div class="search-empty" id="searchEmptyBlock">
+                  <i class="ph ph-magnifying-glass search-empty-icon" aria-hidden="true"></i>
+                  <p class="search-empty-hint" id="searchEmptyHint" data-i18n="search.enterPrompt">Ingrese una búsqueda</p>
+                  <p class="search-empty-none" id="searchNoResultsMsg" data-i18n="search.noResults" hidden>Sin resultados</p>
+                </div>
+                <ul class="search-results-list" id="searchResultsList" hidden></ul>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+        <a href="https://cloud.planq.com/blog" class="header-platform-link" target="_blank" rel="noopener noreferrer"
+          ><span data-i18n="top.platform">Ir a plataforma</span><i class="ph ph-arrow-square-out" aria-hidden="true"></i></a
+        >
+        <div class="lang-dropdown" data-lang-dropdown>
+          <button
+            type="button"
+            class="lang-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Seleccion de idioma"
+            data-i18n-aria-label="lang.menu"
+          >
+            <span class="lang-current" data-lang-label>ES</span>
+            <i class="ph ph-caret-down" aria-hidden="true"></i>
+          </button>
+          <div class="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-btn is-active" data-lang="es" role="option" aria-selected="true">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEs">Español</span>
+              <span class="lang-btn-code" aria-hidden="true">ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" role="option" aria-selected="false">
+              <i class="ph ph-translate lang-btn-icon" aria-hidden="true"></i>
+              <span class="lang-btn-label" data-i18n="lang.optionEn">English</span>
+              <span class="lang-btn-code" aria-hidden="true">EN</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-layout" id="top">
+      <aside class="left-nav" aria-label="Menu lateral">
+        <button
+          type="button"
+          class="left-nav-toggle"
+          id="leftNavToggle"
+          aria-expanded="true"
+          aria-controls="leftNavPanel"
+        >
+          <span class="left-nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <nav id="leftNavPanel" class="left-nav-panel">
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.start">Primeros pasos</p>
+            <a class="nav-item" href="../paginas/fundamento-teorico.html"><i class="ph ph-notebook" aria-hidden="true"></i><span data-i18n="left.start.foundations">Fundamentos teóricos</span></a>
+            <a class="nav-item" href="../programacion-cuantica.html"><i class="ph ph-code-block" aria-hidden="true"></i><span data-i18n="left.start.quantumProgramming">Programación cuántica</span></a>
+            <a class="nav-item" href="../paginas/workflow.html"><i class="ph ph-blueprint" aria-hidden="true"></i><span data-i18n="left.start.technology">Nuestra tecnología</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.theory">Fundamento teórico</p>
+            <a class="nav-item" href="qubits.html"><i class="ph ph-sphere" aria-hidden="true"></i><span data-i18n="left.theory.qubits">Qubits</span></a>
+            <a class="nav-item" href="casos-uso-cuanticos.html"><i class="ph ph-puzzle-piece" aria-hidden="true"></i><span data-i18n="left.theory.useCases">Casos de uso</span></a>
+            <a class="nav-item" href="teoria-cuantica.html"><i class="ph ph-wave-sine" aria-hidden="true"></i><span data-i18n="left.theory.quantumTheory">Teoría cuántica</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.products">Productos</p>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <i class="ph ph-cpu" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.sim">Simuladores</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/simuladores.html#page-body"><i class="ph ph-book-open-text nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.docs">Documentación</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-functioning"><i class="ph ph-sliders-horizontal nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.functioning">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-computers"><i class="ph ph-desktop nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.computers">Computadoras</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-foundations"><i class="ph ph-books nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.foundations">Fundamentos</span></a>
+                <a class="nav-sublink" href="../paginas/simuladores.html#sim-usage"><i class="ph ph-cursor-click nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.sim.usage">Modo de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="false">
+                <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+                <span class="nav-group-toggle-label" data-i18n="left.products.composer">Compositor</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="compositor.html#page-body"><i class="ph ph-tree-structure nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.how">Funcionamiento</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#entidades"><i class="ph ph-palette nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.usage">Modo de uso</span></a>
+                <a class="nav-sublink" href="../paginas/compositor.html#arquitectura"><i class="ph ph-graduation-cap nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.products.composer.foundations">Fundamentos</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.harmoniq">Harmoniq</p>
+            <div class="nav-group" data-nav-group>
+              <button type="button" class="nav-group-toggle" aria-expanded="true">
+                <img class="nav-icon-svg harmoniq-mark" src="../Harm.svg"  alt="" aria-hidden="true" />
+                <span class="nav-group-toggle-label" data-i18n="left.harmoniq.group">Harmoniq</span>
+                <i class="ph ph-caret-down nav-group-caret" aria-hidden="true"></i>
+              </button>
+              <div class="nav-group-panel">
+                <a class="nav-sublink" href="../paginas/source.html"><i class="ph ph-scroll nav-sublink-icon" aria-hidden="true"></i><span data-i18n="left.harmoniq.history">Nuestra historia</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#ios"><img class="nav-sublink-brand" src="../icons/swift.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.swift">Swift</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#android"><img class="nav-sublink-brand" src="../icons/kotlin.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.kotlin">Kotlin</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#react"><img class="nav-sublink-brand" src="../icons/react.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.react">React</span></a>
+                <a class="nav-sublink" href="../paginas/code-examples.html#python"><img class="nav-sublink-brand" src="../icons/python.svg" alt="" width="18" height="18" loading="lazy" decoding="async" aria-hidden="true" /><span data-i18n="left.harmoniq.python">Python</span></a>
+              </div>
+            </div>
+            <a class="nav-item" href="../paginas/code-examples.html"><i class="ph ph-code" aria-hidden="true"></i><span data-i18n="left.harmoniq.examples">Ejemplos</span></a>
+          </div>
+
+          <div class="nav-section">
+            <p class="nav-section-title" data-i18n="left.sec.support">Soporte</p>
+            <a class="nav-item" href="https://cloud.planq.com/blog" target="_blank" rel="noopener noreferrer"
+              ><i class="ph ph-arrow-square-out" aria-hidden="true"></i><span data-i18n="left.support.platform">Usar la plataforma</span></a
+            >
+            <button type="button" class="nav-item nav-item-help" data-help-trigger>
+              <i class="ph ph-question" aria-hidden="true"></i><span data-i18n="left.support.help">Ayuda</span>
+            </button>
+          </div>
+
+        </nav>
+      </aside>
+
+      <main class="doc-content qubits-article">
+        <article class="qubits-article-inner">
+          <section id="page-body" class="pq-doc-hero" aria-labelledby="nt-hero-title">
+            <div class="pq-doc-hero__grid" aria-hidden="true"></div>
+            <div class="pq-doc-hero__inner">
+              <div class="pq-doc-hero__copy">
+                <p class="pq-doc-hero__kicker">Infraestructura cuántica</p>
+                <h1 id="nt-hero-title" class="pq-doc-hero__title">
+                  <span class="pq-doc-hero__title-line pq-doc-hero__title-line--1">Simuladores y computadoras</span>
+                  <span class="pq-doc-hero__title-line pq-doc-hero__title-line--2">cuánticas de PlanQ</span>
+                </h1>
+                <div class="pq-doc-hero__rule" aria-hidden="true"></div>
+                <p class="pq-doc-hero__lead">
+                  Desde simulación de matriz de densidad hasta backends de iones atrapados: arquitectura, compilación y ejecución de workloads cuánticos reales en Harmoniq.
+                </p>
+              </div>
+              <div class="pq-doc-hero__viz" aria-hidden="true">
+                <svg class="ft-blueprint-svg ft-blueprint-svg--tech" viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path
+                    class="ft-blueprint-svg__stroke ft-blueprint-svg__draw"
+                    d="M16 24 L16 116 L68 116 L68 24 Z"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linejoin="miter"
+                  />
+                  <path
+                    class="ft-blueprint-svg__stroke ft-blueprint-svg__draw"
+                    d="M16 52 L68 52 M16 70 L68 70 M16 88 L68 88"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    class="ft-blueprint-svg__stroke ft-blueprint-svg__draw ft-blueprint-svg__accent"
+                    d="M68 70 L96 70"
+                    stroke="#0062ff"
+                    stroke-width="1.35"
+                    stroke-linecap="round"
+                  />
+                  <rect class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" x="96" y="48" width="60" height="44" stroke="currentColor" stroke-width="1.2" />
+                  <circle class="ft-blueprint-svg__stroke ft-blueprint-svg__draw" cx="126" cy="70" r="12" stroke="currentColor" stroke-width="1.2" fill="none" />
+                  <path
+                    class="ft-blueprint-svg__stroke ft-blueprint-svg__draw"
+                    d="M156 58 L200 58 M156 70 L200 70 M156 82 L200 82"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    class="ft-blueprint-svg__stroke ft-blueprint-svg__draw"
+                    d="M190 52 L190 88"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </section>
+          
+
+          <!-- ── SIMULADORES ── -->
+          <section id="nt-simuladores" class="nt-section">
+            <div class="nt-section-head">
+              <h2 class="nt-section-title">Simuladores</h2>
+              <p class="nt-section-lead">Procesadores de software que replican la dinámica cuántica para desarrollo y validación de circuitos.</p>
+            </div>
+            <div class="nt-hw-list">
+
+              <div class="nt-hw-card">
+                <div class="nt-hw-card__body">
+                  <p class="nt-hw-card__qubits">20 Qubits</p>
+                  <h3 class="nt-hw-card__name">Hopper</h3>
+                  <p class="nt-hw-card__processor">Procesador — Curiosity</p>
+                  <p class="nt-hw-card__desc">Simulador de iones atrapados de 20 qubits para experimentos de investigación y primeros workloads en producción.</p>
+                  <button
+                    class="nt-hw-card__spec-btn"
+                    data-sim-trigger
+                    data-sim-name="Hopper"
+                    data-sim-type="Simulador cuántico"
+                    data-sim-qubits="20 Qubits"
+                    data-sim-specs='[
+                      {"label":"Qubits","value":"20"},
+                      {"label":"Procesador","value":"Curiosity"},
+                      {"label":"Tecnología","value":"Iones atrapados"},
+                      {"label":"Fidelidad de compuerta (1Q)","value":"99.8%"},
+                      {"label":"Fidelidad de compuerta (2Q)","value":"98.5%"},
+                      {"label":"T₁ (coherencia)","value":"~120 µs"},
+                      {"label":"T₂ (decoherencia)","value":"~80 µs"},
+                      {"label":"Tiempo de compuerta nativa","value":"50 µs"},
+                      {"label":"Conectividad","value":"All-to-all"},
+                      {"label":"Backend","value":"Harmoniq Cloud"}
+                    ]'
+                  >
+                    <i class="ph ph-list-bullets" aria-hidden="true"></i>
+                    Ver especificaciones
+                  </button>
+                </div>
+                <div class="nt-hw-card__img-wrap">
+                  <img src="../assets/hopper.png" alt="Simulador Hopper — PlanQ" class="nt-hw-card__img" loading="lazy" decoding="async" />
+                </div>
+              </div>
+
+              <div class="nt-hw-card">
+                <div class="nt-hw-card__body">
+                  <p class="nt-hw-card__qubits">70 Qubits</p>
+                  <h3 class="nt-hw-card__name">Hermann</h3>
+                  <p class="nt-hw-card__processor">Procesador — Discovery</p>
+                  <p class="nt-hw-card__desc">Simulador de 70 qubits orientado a algoritmos de optimización y simulación química de alta fidelidad.</p>
+                  <button
+                    class="nt-hw-card__spec-btn"
+                    data-sim-trigger
+                    data-sim-name="Hermann"
+                    data-sim-type="Simulador cuántico"
+                    data-sim-qubits="70 Qubits"
+                    data-sim-specs='[
+                      {"label":"Qubits","value":"70"},
+                      {"label":"Procesador","value":"Discovery"},
+                      {"label":"Tecnología","value":"Iones atrapados"},
+                      {"label":"Fidelidad de compuerta (1Q)","value":"99.6%"},
+                      {"label":"Fidelidad de compuerta (2Q)","value":"97.9%"},
+                      {"label":"T₁ (coherencia)","value":"~200 µs"},
+                      {"label":"T₂ (decoherencia)","value":"~140 µs"},
+                      {"label":"Tiempo de compuerta nativa","value":"45 µs"},
+                      {"label":"Conectividad","value":"All-to-all"},
+                      {"label":"Backend","value":"Harmoniq Cloud"}
+                    ]'
+                  >
+                    <i class="ph ph-list-bullets" aria-hidden="true"></i>
+                    Ver especificaciones
+                  </button>
+                </div>
+                <div class="nt-hw-card__img-wrap">
+                  <img src="../assets/hermann-procesador.png" alt="Procesador Hermann — 70 Qubits — PlanQ" class="nt-hw-card__img" loading="lazy" decoding="async" />
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ── COMPUTADORAS CUÁNTICAS REALES ── -->
+          <section id="nt-hardware" class="nt-section">
+            <div class="nt-section-head">
+              <h2 class="nt-section-title">Computadoras cuánticas reales</h2>
+              <p class="nt-section-lead">Acceso directo a procesadores de hardware cuántico a través de Harmoniq Cloud.</p>
+            </div>
+            <div class="nt-hw-soon-block">
+              <div class="nt-hw-soon-block__icon" aria-hidden="true">
+                <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="22" y="22" width="36" height="36" stroke="currentColor" stroke-width="1.4"/>
+                  <rect x="29" y="29" width="22" height="22" stroke="currentColor" stroke-width="0.9" opacity="0.5"/>
+                  <circle cx="40" cy="40" r="7" stroke="currentColor" stroke-width="1.4" class="nt-hw-soon-block__core"/>
+                  <path d="M6 28 L22 28 M6 34 L22 34 M6 40 L22 40 M6 46 L22 46 M6 52 L22 52" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  <path d="M58 28 L74 28 M58 34 L74 34 M58 40 L74 40 M58 46 L74 46 M58 52 L74 52" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  <path d="M28 6 L28 22 M34 6 L34 22 M40 6 L40 22 M46 6 L46 22 M52 6 L52 22" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  <path d="M28 58 L28 74 M34 58 L34 74 M40 58 L40 74 M46 58 L46 74 M52 58 L52 74" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="nt-hw-soon-block__label">Próximamente</p>
+              <p class="nt-hw-soon-block__desc">Los procesadores de hardware cuántico real de PlanQ estarán disponibles próximamente a través de Harmoniq Cloud.</p>
+            </div>
+          </section>
+        </article>
+      </main>
+
+      <aside class="right-toc">
+        <div class="right-toc-head">
+          <i class="ph ph-article" aria-hidden="true"></i>
+          <span class="right-toc-title" data-i18n="right.title">En esta página</span>
+        </div>
+        <nav class="right-toc-body" data-i18n-aria-label="right.title" aria-label="En esta página">
+          <a href="#page-body" class="right-toc-link right-toc-link--lead">
+            <span class="right-toc-marker" aria-hidden="true"></span>
+            <span>Introducción</span>
+          </a>
+          <a href="#nt-simuladores" class="right-toc-sublink">Simuladores</a>
+          <a href="#nt-hardware" class="right-toc-sublink">Hardware cuántico</a>
+        </nav>
+      </aside>
+      <div class="layout-right-gutter" aria-hidden="true"></div>
+
+    </div>
+
+    <div class="theme-switch" id="themeSwitch" role="group" aria-label="Selector de tema">
+      <button type="button" class="theme-btn" data-theme="light" data-i18n-aria-label="theme.light">
+        <i class="ph ph-sun"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="system" data-i18n-aria-label="theme.system">
+        <i class="ph ph-desktop"></i>
+      </button>
+      <button type="button" class="theme-btn" data-theme="dark" data-i18n-aria-label="theme.dark">
+        <i class="ph ph-moon"></i>
+      </button>
+    </div>
+
+    <!-- Spec sheet de simuladores -->
+    <div class="nt-spec-sheet" id="ntSpecSheet" aria-hidden="true">
+      <div class="nt-spec-sheet__backdrop" data-sim-close></div>
+      <div class="nt-spec-sheet__dialog" role="dialog" aria-modal="true" aria-labelledby="ntSpecTitle">
+        <div class="nt-spec-sheet__header">
+          <div class="nt-spec-sheet__header-copy">
+            <span class="nt-spec-sheet__type" id="ntSpecType"></span>
+            <h2 class="nt-spec-sheet__title" id="ntSpecTitle"></h2>
+            <p class="nt-spec-sheet__qubits" id="ntSpecQubits"></p>
+          </div>
+          <button type="button" class="nt-spec-sheet__close" data-sim-close aria-label="Cerrar">
+            <i class="ph ph-x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <dl class="nt-spec-sheet__dl" id="ntSpecDl"></dl>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <script src="../firebase-init.bundle.js?v=2"></script>
+    <script src="../script.js?v=49"></script>
+    <script>
+      (function () {
+        function runKatex() {
+          if (typeof renderMathInElement !== "function") return;
+          var root = document.querySelector(".qubits-article-inner");
+          if (!root) return;
+          renderMathInElement(root, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\\\(", right: "\\\\)", display: false },
+            ],
+            throwOnError: false,
+            strict: "ignore",
+          });
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runKatex);
+        else runKatex();
+      })();
+
+      (function () {
+        var TECH_ARTICLE_PDF_URL = "../assets/modelado-sistemas-cuanticos-iones-atrapados.pdf";
+        var a = document.getElementById("techArticleDownload");
+        if (!a) return;
+        if (TECH_ARTICLE_PDF_URL) {
+          a.href = TECH_ARTICLE_PDF_URL;
+          a.setAttribute("download", "modelado-sistemas-cuanticos-iones-atrapados.pdf");
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener noreferrer");
+          a.classList.remove("qubits-btn-articulo--disabled");
+          a.removeAttribute("aria-disabled");
+        } else {
+          a.classList.add("qubits-btn-articulo--disabled");
+          a.setAttribute("aria-disabled", "true");
+          a.removeAttribute("download");
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+          });
+        }
+      })();
+
+      /* ── Spec sheet de simuladores ── */
+      (function () {
+        var sheet = document.getElementById("ntSpecSheet");
+        if (!sheet) return;
+
+        function openSheet(btn) {
+          var name    = btn.getAttribute("data-sim-name")   || "";
+          var qubits  = btn.getAttribute("data-sim-qubits") || "";
+          var type    = btn.getAttribute("data-sim-type")   || "";
+          var rawSpecs = btn.getAttribute("data-sim-specs") || "[]";
+          var specs;
+          try { specs = JSON.parse(rawSpecs); } catch (e) { specs = []; }
+
+          document.getElementById("ntSpecTitle").textContent  = name;
+          document.getElementById("ntSpecQubits").textContent = qubits;
+          document.getElementById("ntSpecType").textContent   = type;
+
+          var dl = document.getElementById("ntSpecDl");
+          dl.innerHTML = "";
+          specs.forEach(function (s) {
+            var row = document.createElement("div");
+            row.className = "nt-spec-sheet__row";
+            var dt = document.createElement("dt");
+            dt.className = "nt-spec-sheet__dt";
+            dt.textContent = s.label;
+            var dd = document.createElement("dd");
+            dd.className = "nt-spec-sheet__dd";
+            dd.textContent = s.value;
+            row.appendChild(dt);
+            row.appendChild(dd);
+            dl.appendChild(row);
+          });
+
+          sheet.classList.add("is-open");
+          sheet.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          sheet.querySelector(".nt-spec-sheet__close").focus();
+        }
+
+        function closeSheet() {
+          sheet.classList.remove("is-open");
+          window.setTimeout(function () {
+            sheet.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+          }, 240);
+        }
+
+        document.addEventListener("click", function (e) {
+          var trigger = e.target && e.target.closest ? e.target.closest("[data-sim-trigger]") : null;
+          if (trigger) { openSheet(trigger); return; }
+          var close = e.target && e.target.closest ? e.target.closest("[data-sim-close]") : null;
+          if (close && sheet.classList.contains("is-open")) closeSheet();
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && sheet.classList.contains("is-open")) closeSheet();
+        });
+      })();
+    </script>
+  </body>
+</html>
