@@ -1,6 +1,10 @@
 (function () {
   try {
     if (typeof window === "undefined" || window.location.protocol === "file:") return;
+    
+    // En desarrollo (Vite), desactivamos el redirect automático
+    if (typeof import.meta !== "undefined" && typeof import.meta.env !== "undefined") return;
+    
     const p = window.location.pathname;
     if (p === "/" || p.endsWith("/")) return;
     const lastSeg = p.split("/").pop() || "";
