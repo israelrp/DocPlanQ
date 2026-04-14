@@ -5,6 +5,21 @@
     if (p === "/" || p.endsWith("/")) return;
     const lastSeg = p.split("/").pop() || "";
     if (lastSeg.includes(".")) return;
+    
+    // Todas las rutas de documentación (sin extensión .html)
+    const docRoutes = new Set([
+      // Raíz
+      "index", "articulos", "referencias-api", "tutoriales", "programacion-cuantica", "learning",
+      // Páginas
+      "api", "base-algoritmos", "base-circuitos-puertas", "base-incertidumbre", "base-superposicion",
+      "casos-uso-cuanticos", "code-examples", "compositor", "curso-circuitos-simulacion",
+      "curso-fundamentos-informacion-cuantica", "ejemplo-bell-state", "ejemplo-deutsch-jozsa",
+      "ejemplo-grover", "fundamento-teorico", "overview", "qubits", "simuladores", "source",
+      "teoria-cuantica", "workflow"
+    ]);
+    
+    if (docRoutes.has(lastSeg)) return;
+    
     window.location.replace(p + "/" + window.location.search + window.location.hash);
   } catch {
     /* ignore */
