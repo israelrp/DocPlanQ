@@ -1,9 +1,8 @@
 (function () {
   try {
+    // En desarrollo (Vite), no necesitamos esta redirección
     if (typeof window === "undefined" || window.location.protocol === "file:") return;
-    
-    // En desarrollo (Vite), desactivamos el redirect automático
-    if (typeof import.meta !== "undefined" && typeof import.meta.env !== "undefined") return;
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return;
     
     const p = window.location.pathname;
     if (p === "/" || p.endsWith("/")) return;
